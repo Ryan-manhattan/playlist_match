@@ -1,3 +1,96 @@
+# Playlist Match
+
+음악 취향 매칭 및 플레이리스트 공유 플랫폼
+
+## 프로젝트 구조 (2024-04-29 기준)
+
+```
+playlist-match/
+├── app/
+│   ├── chart/
+│   │   └── page.tsx        # 음악 차트 페이지 (차트 리스트, 모달, 헤더 포함)
+│   ├── login/
+│   │   └── page.tsx        # 로그인 페이지
+│   ├── signup/
+│   │   └── page.tsx        # 회원가입 페이지
+│   ├── components/
+│   │   ├── Header.tsx      # 공통 헤더 컴포넌트
+│   │   └── TrackModal.tsx  # 트랙 상세 정보 모달 컴포넌트
+│   ├── layout.tsx          # 전체 레이아웃
+│   ├── page.tsx            # 랜딩(메인) 페이지
+│   ├── globals.css         # 글로벌 스타일
+│   └── favicon.ico         # 파비콘
+├── src/
+│   ├── components/
+│   │   └── chart/
+│   │       └── ChartSection.tsx # 차트 섹션 컴포넌트 (Spotify API fetch, 콘솔로그 포함)
+│   └── lib/
+│       └── spotify.ts      # Spotify API 유틸리티 함수 (getTopTracks 등 구현)
+├── public/
+├── .env                    # 환경 변수 (Spotify API 키 등, 현재 미존재)
+└── package.json            # 프로젝트 의존성
+```
+
+## 현재 진행 상황 (2024-04-29 기준)
+
+### 완료된 작업
+1. 프로젝트 기본 구조 설정 (Next.js, TypeScript, TailwindCSS, ESLint)
+2. chart, login, signup, 랜딩(메인) 페이지 및 라우팅 정상화
+3. app 폴더 구조 정리 및 중첩 app 폴더 제거
+4. ChartSection, spotify.ts 등 주요 컴포넌트/유틸리티 구현
+5. next.config.js 환경변수, 이미지 도메인, 경로 별칭 등 설정
+6. 콘솔로그로 각 이벤트/에러 추적 가능하도록 구현
+7. 차트 페이지 UI/UX 개선
+   - 트랙 상세 정보 모달 구현
+   - 반응형 디자인 적용
+   - 로딩/에러 상태 UI 개선
+   - 헤더 컴포넌트 통합
+
+### 오늘 진행한 작업 (2024-04-29)
+1. 차트 페이지 개선
+   - 헤더 컴포넌트 추가 및 스타일링
+   - 트랙 상세 정보 모달 UI 개선 (반투명 배경, 좌우 분할 레이아웃)
+   - 차트 리스트 디자인 개선 (그리드 시스템, 호버 효과)
+   - 로딩/에러 상태 UI 개선
+2. 코드 구조 개선
+   - TypeScript 인터페이스 추가 (TrackModalInfo 등)
+   - 컴포넌트 구조 최적화
+3. README 최신화
+
+### 발견된 문제/이슈
+1. .env 파일 미존재로 Spotify API 연동 불가
+2. 환경변수는 next.config.js 및 코드에서 참조, 실제 값 필요
+3. ChartSection 등에서 콘솔로그로 상태 추적 가능
+
+### 해야 할 작업 (우선순위)
+1. .env 파일 생성 및 환경변수 값 입력 (Spotify API 연동 정상화)
+2. 차트 페이지 실제 데이터 연동
+3. 사용자 인증, 플레이리스트 매칭/공유 기능 구현
+4. 테스트 자동화 및 Playwright 기반 E2E 테스트 작성
+5. README 최신화 및 문서화
+
+## 환경 설정
+
+### 필수 환경 변수 (반드시 .env 파일로 관리, gitignore에 포함됨)
+```env
+NEXT_PUBLIC_SPOTIFY_CLIENT_ID=your_client_id
+SPOTIFY_CLIENT_SECRET=your_client_secret
+SPOTIFY_REFRESH_TOKEN=your_refresh_token
+```
+
+## 실행 방법
+
+```bash
+npm install
+npm run dev
+```
+
+## 알려진 이슈
+1. .env 미존재로 인한 API 연동 불가
+2. 환경변수 값 누락 시 Spotify API fetch 실패
+
+---
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started

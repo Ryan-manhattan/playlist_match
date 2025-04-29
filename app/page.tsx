@@ -1,103 +1,76 @@
-import Image from "next/image";
+import React from 'react';
+import Link from 'next/link';
+import Header from "./components/Header";
+import Footer from "./components/Footer";
 
 export default function Home() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
+    <>
+      <Header />
+      <main id="landingPage">
+        <section className="gradient-bg text-white flex items-center justify-center hero-section relative overflow-hidden">
+          <svg className="motion-graphic-svg absolute bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-3xl h-auto z-5 pointer-events-none" viewBox="0 0 800 200" preserveAspectRatio="xMidYMax meet">
+            <defs>
+              <linearGradient id="waveGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor="rgba(255,255,255,0.1)" />
+                <stop offset="50%" stopColor="rgba(255,255,255,0.3)" />
+                <stop offset="100%" stopColor="rgba(255,255,255,0.1)" />
+              </linearGradient>
+            </defs>
+            {[0,1,2,3].map(i => (
+              <circle key={i} cx="400" cy="150" r="5" fill="none" stroke="url(#waveGradient)" strokeWidth="2">
+                <animate attributeName="r" from="5" to="300" dur="4s" repeatCount="indefinite" begin={`${i}s`} />
+                <animate attributeName="opacity" from="1" to="0" dur="4s" repeatCount="indefinite" begin={`${i}s`} />
+              </circle>
+            ))}
+          </svg>
+          <div className="text-center px-6 py-16 relative z-10">
+            <h1 className="text-4xl md:text-5xl font-bold mb-4 leading-tight">당신의 플레이리스트,<br className="md:hidden" /> 새로운 인연의 시작</h1>
+            <p className="text-lg md:text-xl mb-8 font-light text-indigo-100">좋아하는 음악으로 당신과 꼭 맞는 사람을 찾아보세요.</p>
+            <Link href="/chart">
+              <button className="bg-white hover:bg-gray-100 text-indigo-600 font-bold py-3 px-8 rounded-full text-lg transition duration-150 ease-in-out shadow-md">
+                음악 차트 둘러보기
+              </button>
+            </Link>
+          </div>
+        </section>
+        <section className="py-16 md:py-24 bg-white">
+          <div className="container mx-auto px-6 text-center">
+            <h2 className="text-3xl font-bold mb-4 text-gray-800">음악 취향, 어떻게 인연이 되나요?</h2>
+            <p className="text-gray-600 mb-12 max-w-2xl mx-auto">Playlist Match는 당신의 음악 스트리밍 서비스 플레이리스트를 분석하여<br />가장 잘 맞는 음악적 감성의 상대를 찾아줍니다.</p>
+            <div className="grid md:grid-cols-3 gap-8 text-left">
+              <div className="bg-gray-50 p-6 rounded-lg shadow-sm hover:shadow-md transition duration-150 ease-in-out">
+                <div className="text-indigo-500 mb-3">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
+                  </svg>
+                </div>
+                <h3 className="text-xl font-semibold mb-2">플레이리스트 연동</h3>
+                <p className="text-gray-600 text-sm">Spotify, YouTube Music 등 즐겨 사용하는 서비스의 플레이리스트를 간편하게 연결하세요.</p>
+              </div>
+              <div className="bg-gray-50 p-6 rounded-lg shadow-sm hover:shadow-md transition duration-150 ease-in-out">
+                <div className="text-indigo-500 mb-3">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <h3 className="text-xl font-semibold mb-2">'음악 궁합' 분석</h3>
+                <p className="text-gray-600 text-sm">좋아하는 장르, 아티스트, 곡 분위기를 분석하여 당신과 음악적 케미가 높은 상대를 찾아냅니다.</p>
+              </div>
+              <div className="bg-gray-50 p-6 rounded-lg shadow-sm hover:shadow-md transition duration-150 ease-in-out">
+                <div className="text-indigo-500 mb-3">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
+                  </svg>
+                </div>
+                <h3 className="text-xl font-semibold mb-2">의미있는 대화 시작</h3>
+                <p className="text-gray-600 text-sm">음악이라는 공통 관심사로 자연스럽게 대화를 시작하고 서로를 알아가세요.</p>
+              </div>
+            </div>
+          </div>
+        </section>
       </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+      <Footer />
+    </>
   );
 }
