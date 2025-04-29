@@ -63,32 +63,40 @@ playlist-match/
 3. ChartSection 등에서 콘솔로그로 상태 추적 가능
 
 ### 해야 할 작업 (우선순위)
-1. 차트 데이터 연동 개선
+1. 사용자 인증 시스템 구축
+   - NextAuth.js 설정 및 환경변수 구성
+   - 소셜 로그인 (Google, Spotify) 연동
+   - 이메일/비밀번호 회원가입 구현
+   - 사용자 프로필 관리 기능
+   - 인증 상태 관리 및 보호된 라우트 설정
+   - 세션 관리 및 토큰 갱신 로직
+
+2. 차트 데이터 연동 개선
    - Spotify API 연동 최적화
    - 에러 처리 및 재시도 로직 구현
    - 데이터 캐싱 구현
 
-2. 곡 정보 분석 기능 강화
+3. 곡 정보 분석 기능 강화
    - 곡 상세 분석 항목 확장 (BPM, 키, 장르 등)
    - 오디오 특성 분석 API 연동
    - 분석 결과 시각화 구현
 
-3. 플레이리스트 관리 기능 개발
+4. 플레이리스트 관리 기능 개발
    - 플레이리스트 생성/수정/삭제 기능
    - 곡 추가/제거 기능
    - 플레이리스트 공유 기능
 
-4. 음악 취향 분석 시스템 개발
+5. 음악 취향 분석 시스템 개발
    - 사용자 플레이리스트 분석 알고리즘
    - 곡 선호도 패턴 분석
    - 장르/아티스트 선호도 가중치 시스템
 
-5. 매칭 시스템 구현
+6. 매칭 시스템 구현
    - 사용자 간 음악 취향 유사도 계산
    - 매칭 추천 알고리즘 개발
    - 매칭 결과 표시 UI 구현
 
-6. 테스트 및 문서화
+7. 테스트 및 문서화
    - 단위 테스트 작성
    - E2E 테스트 구현
    - API 문서화
@@ -98,9 +106,21 @@ playlist-match/
 
 ### 필수 환경 변수 (반드시 .env 파일로 관리, gitignore에 포함됨)
 ```env
+# Spotify API
 NEXT_PUBLIC_SPOTIFY_CLIENT_ID=your_client_id
 SPOTIFY_CLIENT_SECRET=your_client_secret
 SPOTIFY_REFRESH_TOKEN=your_refresh_token
+
+# NextAuth.js
+NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_SECRET=your_nextauth_secret
+
+# OAuth Providers
+GOOGLE_CLIENT_ID=your_google_client_id
+GOOGLE_CLIENT_SECRET=your_google_client_secret
+
+# Database (선택: MongoDB/PostgreSQL)
+DATABASE_URL=your_database_url
 ```
 
 ## 실행 방법
