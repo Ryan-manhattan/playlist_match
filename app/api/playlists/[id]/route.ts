@@ -23,7 +23,7 @@ export async function GET(
       include: {
         tracks: {
           orderBy: {
-            order: 'asc',
+            createdAt: 'asc',
           },
         },
         user: {

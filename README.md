@@ -67,58 +67,35 @@ playlist-match/
    - 드롭다운 메뉴 (프로필, 플레이리스트, 로그아웃)
    - 로딩 상태 표시
 
-### 최근 완료/진행된 작업
+### 오늘 진행한 작업 (2024-04-30)
+1. 사용자 인증 시스템 구축
+   - Google OAuth 로그인 구현
+   - NextAuth 설정
+   - SessionProvider 추가
+   - 미들웨어로 보호된 라우트 설정
 
-1. 공통 레이아웃 개선
-   - Header, Footer 컴포넌트를 `app/layout.tsx`에 공통으로 추가하여 모든 페이지에서 자동으로 표시
-   - 각 페이지에서 Header/Footer 중복 import 및 사용 코드 제거
+2. 데이터베이스 설정
+   - PostgreSQL 설치 및 설정
+   - Prisma 스키마 정의
+   - 초기 마이그레이션 실행
 
-2. 프로필 페이지(/profile)
-   - 사용자 정보(이름, 프로필 이미지) 표시 및 수정 기능 구현
-   - 프로필 이미지 파일 업로드 및 DB 연동
-   - API 연동(GET/PUT /api/user)
-   - 메인 페이지로 돌아가기 버튼 추가
+3. UI 개선
+   - 헤더 컴포넌트에 로그인 상태 표시
+   - 사용자 프로필 드롭다운 메뉴 구현
+   - 로그아웃 기능 구현
 
-3. 플레이리스트 페이지(/playlists)
-   - UI/UX 구현
-     - 카드/폴더형 UI로 플레이리스트 목록 표시
-     - 플레이리스트 생성 모달 구현 (제목, 설명, 썸네일)
-     - 로딩/에러 상태 처리
-     - 반응형 그리드 레이아웃
+### 발견된 문제/이슈
+1. 환경변수 설정 필요 (.env 파일)
+   - DATABASE_URL
+   - NEXTAUTH_URL
+   - NEXTAUTH_SECRET
+   - GOOGLE_CLIENT_ID
+   - GOOGLE_CLIENT_SECRET
 
-   - 기능 구현
-     - 플레이리스트 목록 조회 (GET /api/playlists)
-     - 플레이리스트 생성 (POST /api/playlists)
-     - 썸네일 이미지 업로드 처리
-     - 트랙 정렬 기능 (생성일 기준 오름차순)
-
-   - 데이터베이스
-     - Playlist 모델 스키마 업데이트
-       - thumbnail 필드 추가 (String, Optional)
-       - Track 모델과 N:M 관계 설정
-     - 마이그레이션 실행 및 적용
-
-   - 타입 시스템
-     - Prisma 생성 타입 동기화
-     - 커스텀 타입 정의 (PlaylistWithThumbnail, PlaylistWithDetails)
-     - 타입 매핑 함수 구현 (mapPlaylistWithTracks)
-
-   - API 엔드포인트
-     - GET /api/playlists: 사용자의 플레이리스트 목록 조회
-     - POST /api/playlists: 새 플레이리스트 생성
-     - GET /api/playlists/[id]: 특정 플레이리스트 상세 조회
-
-4. 기타
-   - 모든 페이지에서 Header/Footer가 중복 렌더링되는 문제 해결
-   - 기본 썸네일 이미지는 `/public/default-playlist.png`로 지정
-   - Prisma Client 타입 오류 해결 (thumbnail 필드 관련)
-
-5. 2024-05-XX: app/lib로 authOptions, prisma 이동 및 tsconfig.json include에 app/lib/**/* 추가, import 오류 해결
-   - app/api/user/route.ts 등에서 '../lib/authOptions', '../lib/prisma' import 시 모듈을 찾지 못하는 오류 발생
-   - lib/authOptions.ts, lib/prisma.ts를 app/lib/로 이동
-   - import 경로를 '../lib/authOptions', '../lib/prisma'로 수정
-   - tsconfig.json의 include에 'app/lib/**/*' 추가하여 타입스크립트가 app/lib 폴더 인식하도록 조치
-   - Next.js app router 구조에서 app/lib로 핵심 모듈 이동이 가장 안전함
+2. 보호된 라우트
+   - /profile
+   - /playlists/*
+   - /chart
 
 ### 해야 할 작업 (우선순위)
 1. 플레이리스트 기능 고도화
