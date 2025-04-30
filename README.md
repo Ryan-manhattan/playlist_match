@@ -2,137 +2,159 @@
 
 음악 취향 매칭 및 플레이리스트 공유 플랫폼
 
-## 프로젝트 구조 (2024-04-29 기준)
+## 프로젝트 구조 (2024-04-30 기준)
 
 ```
 playlist-match/
 ├── app/
+│   ├── api/
+│   │   └── auth/
+│   │       └── [...nextauth]/
+│   │           └── route.ts  # NextAuth API 라우트
 │   ├── chart/
-│   │   └── page.tsx        # 음악 차트 페이지 (차트 리스트, 모달, 헤더 포함)
+│   │   └── page.tsx        # 음악 차트 페이지
 │   ├── login/
 │   │   └── page.tsx        # 로그인 페이지
 │   ├── signup/
 │   │   └── page.tsx        # 회원가입 페이지
 │   ├── components/
-│   │   ├── Header.tsx      # 공통 헤더 컴포넌트
+│   │   ├── Header.tsx      # 공통 헤더 컴포넌트 (로그인 상태 관리 포함)
 │   │   └── TrackModal.tsx  # 트랙 상세 정보 모달 컴포넌트
+│   ├── client-layout.tsx   # 클라이언트 레이아웃 (SessionProvider)
 │   ├── layout.tsx          # 전체 레이아웃
 │   ├── page.tsx            # 랜딩(메인) 페이지
 │   ├── globals.css         # 글로벌 스타일
 │   └── favicon.ico         # 파비콘
+├── prisma/
+│   ├── schema.prisma       # Prisma 스키마
+│   └── migrations/         # 데이터베이스 마이그레이션
 ├── src/
 │   ├── components/
 │   │   └── chart/
-│   │       └── ChartSection.tsx # 차트 섹션 컴포넌트 (Spotify API fetch, 콘솔로그 포함)
+│   │       └── ChartSection.tsx # 차트 섹션 컴포넌트
 │   └── lib/
-│       └── spotify.ts      # Spotify API 유틸리티 함수 (getTopTracks 등 구현)
-├── public/
-├── .env                    # 환경 변수 (Spotify API 키 등, 현재 미존재)
-└── package.json            # 프로젝트 의존성
+│       └── spotify.ts      # Spotify API 유틸리티 함수
+├── middleware.ts           # 인증 미들웨어 (보호된 라우트)
+├── next.config.js         # Next.js 설정
+├── .env                   # 환경 변수
+└── package.json           # 프로젝트 의존성
 ```
 
-## 현재 진행 상황 (2024-04-29 기준)
+## 현재 진행 상황 (2024-04-30 기준)
 
 ### 완료된 작업
-1. 프로젝트 기본 구조 설정 (Next.js, TypeScript, TailwindCSS, ESLint)
-2. chart, login, signup, 랜딩(메인) 페이지 및 라우팅 정상화
-3. app 폴더 구조 정리 및 중첩 app 폴더 제거
-4. ChartSection, spotify.ts 등 주요 컴포넌트/유틸리티 구현
-5. next.config.js 환경변수, 이미지 도메인, 경로 별칭 등 설정
-6. 콘솔로그로 각 이벤트/에러 추적 가능하도록 구현
-7. 차트 페이지 UI/UX 개선
-   - 트랙 상세 정보 모달 구현
-   - 반응형 디자인 적용
-   - 로딩/에러 상태 UI 개선
-   - 헤더 컴포넌트 통합
+1. 프로젝트 기본 구조 설정
+   - Next.js, TypeScript, TailwindCSS, ESLint
+   - Prisma ORM 설정
+   - NextAuth.js 설정
+   - PostgreSQL 데이터베이스 연결
 
-### 오늘 진행한 작업 (2024-04-29)
-1. 차트 페이지 개선
-   - 헤더 컴포넌트 추가 및 스타일링
-   - 트랙 상세 정보 모달 UI 개선 (반투명 배경, 좌우 분할 레이아웃)
-   - 차트 리스트 디자인 개선 (그리드 시스템, 호버 효과)
-   - 로딩/에러 상태 UI 개선
-2. 코드 구조 개선
-   - TypeScript 인터페이스 추가 (TrackModalInfo 등)
-   - 컴포넌트 구조 최적화
-3. README 최신화
+2. 사용자 인증 시스템 구축
+   - Google OAuth 로그인 구현
+   - NextAuth 설정 및 환경변수 구성
+   - 사용자 세션 관리
+   - 보호된 라우트 설정 (미들웨어)
+
+3. 데이터베이스 설정
+   - Prisma 스키마 정의 (User, Account, Session, Playlist, Track 모델)
+   - 초기 마이그레이션 실행
+   - PostgreSQL 서버 설정
+
+4. UI/UX 개선
+   - 로그인 페이지 구현
+   - 헤더에 사용자 프로필 표시
+   - 드롭다운 메뉴 (프로필, 플레이리스트, 로그아웃)
+   - 로딩 상태 표시
+
+### 오늘 진행한 작업 (2024-04-30)
+1. 사용자 인증 시스템 구축
+   - Google OAuth 로그인 구현
+   - NextAuth 설정
+   - SessionProvider 추가
+   - 미들웨어로 보호된 라우트 설정
+
+2. 데이터베이스 설정
+   - PostgreSQL 설치 및 설정
+   - Prisma 스키마 정의
+   - 초기 마이그레이션 실행
+
+3. UI 개선
+   - 헤더 컴포넌트에 로그인 상태 표시
+   - 사용자 프로필 드롭다운 메뉴 구현
+   - 로그아웃 기능 구현
 
 ### 발견된 문제/이슈
-1. .env 파일 미존재로 Spotify API 연동 불가
-2. 환경변수는 next.config.js 및 코드에서 참조, 실제 값 필요
-3. ChartSection 등에서 콘솔로그로 상태 추적 가능
+1. 환경변수 설정 필요 (.env 파일)
+   - DATABASE_URL
+   - NEXTAUTH_URL
+   - NEXTAUTH_SECRET
+   - GOOGLE_CLIENT_ID
+   - GOOGLE_CLIENT_SECRET
+
+2. 보호된 라우트
+   - /profile
+   - /playlists/*
+   - /chart
 
 ### 해야 할 작업 (우선순위)
-1. 사용자 인증 시스템 구축
-   - NextAuth.js 설정 및 환경변수 구성
-   - 소셜 로그인 (Google, Spotify) 연동
-   - 이메일/비밀번호 회원가입 구현
-   - 사용자 프로필 관리 기능
-   - 인증 상태 관리 및 보호된 라우트 설정
-   - 세션 관리 및 토큰 갱신 로직
+1. 프로필 페이지 구현 (/profile)
+   - 사용자 정보 표시
+   - 프로필 수정 기능
 
-2. 차트 데이터 연동 개선
-   - Spotify API 연동 최적화
-   - 에러 처리 및 재시도 로직 구현
-   - 데이터 캐싱 구현
+2. 플레이리스트 페이지 구현 (/playlists)
+   - 플레이리스트 목록 표시
+   - 플레이리스트 생성/수정/삭제
 
-3. 곡 정보 분석 기능 강화
-   - 곡 상세 분석 항목 확장 (BPM, 키, 장르 등)
-   - 오디오 특성 분석 API 연동
-   - 분석 결과 시각화 구현
+3. 음악 차트 페이지 구현 (/chart)
+   - Spotify API 연동
+   - 인기 음악 목록 표시
+   - 플레이리스트에 추가 기능
 
-4. 플레이리스트 관리 기능 개발
-   - 플레이리스트 생성/수정/삭제 기능
-   - 곡 추가/제거 기능
-   - 플레이리스트 공유 기능
-
-5. 음악 취향 분석 시스템 개발
-   - 사용자 플레이리스트 분석 알고리즘
-   - 곡 선호도 패턴 분석
-   - 장르/아티스트 선호도 가중치 시스템
-
-6. 매칭 시스템 구현
-   - 사용자 간 음악 취향 유사도 계산
-   - 매칭 추천 알고리즘 개발
-   - 매칭 결과 표시 UI 구현
-
-7. 테스트 및 문서화
-   - 단위 테스트 작성
-   - E2E 테스트 구현
-   - API 문서화
-   - 사용자 가이드 작성
+4. 추가 인증 기능
+   - Spotify OAuth 연동
+   - 이메일/비밀번호 회원가입
 
 ## 환경 설정
 
-### 필수 환경 변수 (반드시 .env 파일로 관리, gitignore에 포함됨)
+### 필수 환경 변수 (.env)
 ```env
-# Spotify API
-NEXT_PUBLIC_SPOTIFY_CLIENT_ID=your_client_id
-SPOTIFY_CLIENT_SECRET=your_client_secret
-SPOTIFY_REFRESH_TOKEN=your_refresh_token
+# Database
+DATABASE_URL="postgresql://kimjunhyeong@localhost:5432/playlist_match?schema=public"
 
 # NextAuth.js
-NEXTAUTH_URL=http://localhost:3000
-NEXTAUTH_SECRET=your_nextauth_secret
+NEXTAUTH_URL="http://localhost:3000"
+NEXTAUTH_SECRET="your_nextauth_secret"
 
 # OAuth Providers
-GOOGLE_CLIENT_ID=your_google_client_id
-GOOGLE_CLIENT_SECRET=your_google_client_secret
+GOOGLE_CLIENT_ID="your_google_client_id"
+GOOGLE_CLIENT_SECRET="your_google_client_secret"
 
-# Database (선택: MongoDB/PostgreSQL)
-DATABASE_URL=your_database_url
+# Spotify API (추후 설정)
+NEXT_PUBLIC_SPOTIFY_CLIENT_ID=
+SPOTIFY_CLIENT_SECRET=
+SPOTIFY_REFRESH_TOKEN=
 ```
 
 ## 실행 방법
 
 ```bash
+# PostgreSQL 서버 시작
+brew services start postgresql@14
+
+# 의존성 설치
 npm install
+
+# 데이터베이스 마이그레이션
+npx prisma migrate dev
+
+# 개발 서버 실행
 npm run dev
 ```
 
 ## 알려진 이슈
-1. .env 미존재로 인한 API 연동 불가
-2. 환경변수 값 누락 시 Spotify API fetch 실패
+1. 프로필 페이지 미구현
+2. 플레이리스트 기능 미구현
+3. Spotify API 연동 미구현
 
 ---
 

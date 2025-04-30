@@ -2,7 +2,10 @@ const path = require('path');
 
 const nextConfig = {
   images: {
-    domains: ['i.scdn.co'], // Spotify 이미지 도메인 허용
+    domains: [
+      'i.scdn.co', // Spotify 이미지 도메인 허용
+      'lh3.googleusercontent.com', // Google 프로필 이미지 도메인 허용
+    ],
   },
   env: {
     NEXT_PUBLIC_SPOTIFY_CLIENT_ID: process.env.NEXT_PUBLIC_SPOTIFY_CLIENT_ID,

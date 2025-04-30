@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Playlist Match - 음악으로 찾는 인연</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* 공통 스타일 (모든 페이지에 필요) */
+        body { font-family: 'Poppins', 'Noto Sans KR', sans-serif; background-color: #f8f9fa; }
+        .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); position: relative; overflow: hidden; }
+        .hero-section { min-height: 60vh; position: relative; z-index: 10; }
+        .motion-graphic-svg { position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 800px; height: auto; z-index: 5; pointer-events: none; }
+        /* ... (다른 공통 스타일: auth-form, modal 등 필요한 경우 여기에 포함) ... */
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="index.html" class="text-2xl font-bold text-indigo-600">Playlist Match</a>
+            <div>
+                <a href="chart.html" class="text-gray-600 hover:text-indigo-600 mr-4">음악 차트</a>
+                <a href="login.html" class="text-gray-600 hover:text-indigo-600 mr-4">로그인</a>
+                <a href="signup.html" class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-lg transition duration-150 ease-in-out">회원가입</a>
+            </div>
+        </nav>
+    </header>
+
+    <main id="landingPage">
+        <section class="gradient-bg text-white flex items-center justify-center hero-section">
+            <svg class="motion-graphic-svg" viewBox="0 0 800 200" preserveAspectRatio="xMidYMax meet">
+              <defs>
+                <linearGradient id="waveGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" style="stop-color:rgba(255,255,255,0.1)" />
+                  <stop offset="50%" style="stop-color:rgba(255,255,255,0.3)" />
+                  <stop offset="100%" style="stop-color:rgba(255,255,255,0.1)" />
+                </linearGradient>
+              </defs>
+              <circle cx="400" cy="150" r="5" fill="none" stroke="url(#waveGradient)" stroke-width="2">
+                <animate attributeName="r" from="5" to="300" dur="4s" repeatCount="indefinite" begin="0s"/>
+                <animate attributeName="opacity" from="1" to="0" dur="4s" repeatCount="indefinite" begin="0s"/>
+              </circle>
+              <circle cx="400" cy="150" r="5" fill="none" stroke="url(#waveGradient)" stroke-width="2">
+                <animate attributeName="r" from="5" to="300" dur="4s" repeatCount="indefinite" begin="1s"/>
+                <animate attributeName="opacity" from="1" to="0" dur="4s" repeatCount="indefinite" begin="1s"/>
+              </circle>
+              <circle cx="400" cy="150" r="5" fill="none" stroke="url(#waveGradient)" stroke-width="2">
+                <animate attributeName="r" from="5" to="300" dur="4s" repeatCount="indefinite" begin="2s"/>
+                <animate attributeName="opacity" from="1" to="0" dur="4s" repeatCount="indefinite" begin="2s"/>
+              </circle>
+               <circle cx="400" cy="150" r="5" fill="none" stroke="url(#waveGradient)" stroke-width="2">
+                <animate attributeName="r" from="5" to="300" dur="4s" repeatCount="indefinite" begin="3s"/>
+                <animate attributeName="opacity" from="1" to="0" dur="4s" repeatCount="indefinite" begin="3s"/>
+              </circle>
+            </svg>
+            <div class="text-center px-6 py-16 relative z-10">
+                <h1 class="text-4xl md:text-5xl font-bold mb-4 leading-tight">당신의 플레이리스트, <br class="md:hidden"> 새로운 인연의 시작</h1>
+                <p class="text-lg md:text-xl mb-8 font-light text-indigo-100">좋아하는 음악으로 당신과 꼭 맞는 사람을 찾아보세요.</p>
+                <a href="chart.html" class="inline-block bg-white hover:bg-gray-100 text-indigo-600 font-bold py-3 px-8 rounded-full text-lg transition duration-150 ease-in-out shadow-md">음악 차트 둘러보기</a>
+            </div>
+        </section>
+        <section class="py-16 md:py-24 bg-white">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="text-3xl font-bold mb-4 text-gray-800">음악 취향, 어떻게 인연이 되나요?</h2>
+                <p class="text-gray-600 mb-12 max-w-2xl mx-auto">Playlist Match는 당신의 음악 스트리밍 서비스 플레이리스트를 분석하여<br>가장 잘 맞는 음악적 감성의 상대를 찾아줍니다.</p>
+                <div class="grid md:grid-cols-3 gap-8 text-left">
+                    <div class="bg-gray-50 p-6 rounded-lg shadow-sm hover:shadow-md transition duration-150 ease-in-out">
+                        <div class="text-indigo-500 mb-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                              <path stroke-linecap="round" stroke-linejoin="round" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2">플레이리스트 연동</h3>
+                        <p class="text-gray-600 text-sm">Spotify, YouTube Music 등 즐겨 사용하는 서비스의 플레이리스트를 간편하게 연결하세요.</p>
+                    </div>
+                    <div class="bg-gray-50 p-6 rounded-lg shadow-sm hover:shadow-md transition duration-150 ease-in-out">
+                         <div class="text-indigo-500 mb-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                              <path stroke-linecap="round" stroke-linejoin="round" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2">'음악 궁합' 분석</h3>
+                        <p class="text-gray-600 text-sm">좋아하는 장르, 아티스트, 곡 분위기를 분석하여 당신과 음악적 케미가 높은 상대를 찾아냅니다.</p>
+                    </div>
+                    <div class="bg-gray-50 p-6 rounded-lg shadow-sm hover:shadow-md transition duration-150 ease-in-out">
+                         <div class="text-indigo-500 mb-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                              <path stroke-linecap="round" stroke-linejoin="round" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2">의미있는 대화 시작</h3>
+                        <p class="text-gray-600 text-sm">음악이라는 공통 관심사로 자연스럽게 대화를 시작하고 서로를 알아가세요.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-gray-800 text-gray-400 py-8">
+        <div class="container mx-auto px-6 text-center text-sm">
+            © 2025 Playlist Match. All rights reserved.
+            <div class="mt-2">
+                <a href="#" class="hover:text-gray-300 mx-2">이용약관</a> |
+                <a href="#" class="hover:text-gray-300 mx-2">개인정보처리방침</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 랜딩 페이지 관련 JavaScript (필요한 경우 추가)
+    </script>
+
+</body>
+</html>
+```
+
+**2. 음악 차트 페이지 (`chart.html`)**
+
+
+```html
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>음악 차트 - Playlist Match</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* 공통 스타일 */
+        body { font-family: 'Poppins', 'Noto Sans KR', sans-serif; background-color: #f8f9fa; }
+        /* 모달 스타일 */
+        .modal { position: fixed; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); display: flex; justify-content: center; align-items: center; z-index: 1000; opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease; }
+        .modal.visible { opacity: 1; visibility: visible; }
+        .modal-content { background-color: white; padding: 30px; border-radius: 12px; width: 90%; max-width: 500px; max-height: 80vh; overflow-y: auto; box-shadow: 0 5px 15px rgba(0,0,0,0.2); transform: scale(0.9); transition: transform 0.3s ease; }
+        .modal.visible .modal-content { transform: scale(1); }
+        .modal-close-btn { position: absolute; top: 15px; right: 15px; background: none; border: none; font-size: 1.5rem; color: #6c757d; cursor: pointer; }
+        /* 차트 아이템 스타일 */
+        .chart-item { display: flex; align-items: center; padding: 16px; background-color: #ffffff; border-radius: 8px; transition: background-color 0.2s ease-in-out; margin-bottom: 12px; border-bottom: 1px solid #e9ecef; }
+        .chart-item:last-child { border-bottom: none; }
+        .chart-item:hover { background-color: #f8f9fa; }
+        .rank-badge { width: 32px; height: 32px; border-radius: 6px; background-color: #e9ecef; color: #495057; font-weight: 500; font-size: 0.875rem; display: flex; align-items: center; justify-content: center; margin-right: 16px; flex-shrink: 0; transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out; }
+        .rank-1 { background-color: #ffc107; color: #fff; }
+        .rank-2 { background-color: #adb5bd; color: #fff; }
+        .rank-3 { background-color: #fd7e14; color: #fff; }
+        .song-info { flex-grow: 1; min-width: 0; }
+        .song-title, .song-artist { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: pointer; }
+        .song-title { font-weight: 500; color: #343a40; font-size: 1rem; }
+        .song-artist { font-size: 0.875rem; color: #6c757d; font-weight: 400; }
+        .song-title:hover, .song-artist:hover { text-decoration: underline; color: #0d6efd; }
+        /* 모달 내용 스타일 */
+        .modal-body p { margin-bottom: 8px; }
+        .modal-body strong { color: #495057; }
+        .disclaimer { color: #dc3545; font-weight: 500;}
+        .lyrics-section { margin-top: 16px; padding-top: 16px; border-top: 1px solid #e9ecef; }
+        .lyrics-content { white-space: pre-wrap; font-size: 0.875rem; line-height: 1.6; color: #495057; max-height: 150px; overflow-y: auto; background-color: #f8f9fa; padding: 10px; border-radius: 6px; }
+        details > summary { list-style: none; cursor: pointer; font-weight: 500; color: #0d6efd; margin-bottom: 8px; }
+        details > summary::-webkit-details-marker { display: none; }
+        details > summary::before { content: '▶ '; font-size: 0.8em; margin-right: 4px; display: inline-block; transition: transform 0.2s ease-in-out; }
+        details[open] > summary::before { transform: rotate(90deg); }
+        /* YouTube 재생 버튼 스타일 */
+        .youtube-button { background-color: #FF0000; color: white; font-size: 0.75rem; font-weight: 500; padding: 6px 10px; border-radius: 9999px; transition: background-color 0.2s ease-in-out; cursor: pointer; border: none; display: inline-flex; align-items: center; }
+        .youtube-button:hover { background-color: #CC0000; }
+        .youtube-button svg { width: 14px; height: 14px; margin-right: 4px; }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="index.html" class="text-2xl font-bold text-indigo-600">Playlist Match</a>
+            <div>
+                <a href="chart.html" class="text-indigo-600 font-semibold mr-4">음악 차트</a> <a href="login.html" class="text-gray-600 hover:text-indigo-600 mr-4">로그인</a>
+                <a href="signup.html" class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-lg transition duration-150 ease-in-out">회원가입</a>
+            </div>
+        </nav>
+    </header>
+
+    <main id="chartPage" class="py-12 md:py-16">
+        <div class="container mx-auto px-6">
+            <h2 class="text-3xl font-bold mb-8 text-center text-gray-800">주간 인기 음악 차트 TOP 10</h2>
+            <div class="max-w-3xl mx-auto bg-white p-6 rounded-lg shadow-md">
+                <ul id="chartList">
+                    <li class="text-center text-gray-500 py-4">차트 로딩 중...</li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-gray-800 text-gray-400 py-8">
+        <div class="container mx-auto px-6 text-center text-sm">
+            © 2025 Playlist Match. All rights reserved.
+            <div class="mt-2">
+                <a href="#" class="hover:text-gray-300 mx-2">이용약관</a> |
+                <a href="#" class="hover:text-gray-300 mx-2">개인정보처리방침</a>
+            </div>
+        </div>
+    </footer>
+
+    <div id="analysisModal" class="modal">
+        <div class="modal-content relative">
+            <button class="modal-close-btn" onclick="closeModal()">×</button>
+            <h3 id="modalTitle" class="text-xl font-semibold mb-4">분석 정보</h3>
+            <div id="modalBody" class="modal-body text-sm text-gray-700">
+                </div>
+        </div>
+    </div>
+
+    <script>
+        // --- 음악 차트 데이터 (예시) ---
+        const mockChartData = [
+             { rank: 1, title: "Like That", artist: "Future, Metro Boomin & Kendrick Lamar", analysis: { genre: "Hip-Hop/Rap", mood: "Energetic, Confident", tempo: "Fast", lyricKeywords: ["money", "power", "rivalry"], artistBackground: ["Atlanta hip-hop scene", "Collaborative projects"], lyrics: "[Intro: Future]\nYeah, yeah, yeah, Pluto\n\n[Verse 1: Future]\nStickin' the key in the ignition, turn it\nI'm on a mission, I get the birdies and I serve 'em..." } },
+             { rank: 2, title: "Type Shit", artist: "Future, Metro Boomin, Travis Scott & Playboi Carti", analysis: { genre: "Hip-Hop/Rap", mood: "Dark, Hype", tempo: "Medium-Fast", lyricKeywords: ["luxury", "party", "trap"], artistBackground: ["Trap music pioneers", "Multiple high-profile features"], lyrics: "[Intro: Future]\nYeah, Metro\nType shit, type shit\nType shit...\n(Lyrics are often explicit and repetitive)"} },
+             { rank: 3, title: "Beautiful Things", artist: "Benson Boone", analysis: { genre: "Pop", mood: "Emotional, Powerful", tempo: "Medium", lyricKeywords: ["love", "loss", "memory"], artistBackground: ["TikTok discovery", "Young emerging artist"], lyrics: "[Verse 1]\nFor a while there, it was rough\nBut lately, I've been doin' better\nThan the last four years, recoverin'\nAnd feelin' like my old self..." } },
+             { rank: 4, title: "Lose Control", artist: "Teddy Swims", analysis: { genre: "R&B/Soul", mood: "Passionate, Soulful", tempo: "Slow", lyricKeywords: ["heartbreak", "longing", "vulnerability"], artistBackground: ["YouTube covers", "Genre-blending style"], lyrics: "[Verse 1]\nSomething's got a hold of me lately\nNo, I don't know myself anymore\nFeels like the walls are all closin' in\nAnd the ceiling is familiar..." } },
+             { rank: 5, title: "Too Sweet", artist: "Hozier", analysis: { genre: "Alternative/Indie", mood: "Groovy, Smooth", tempo: "Medium", lyricKeywords: ["desire", "contrast", "whiskey"], artistBackground: ["Irish singer-songwriter", "Lyrical depth"], lyrics: "[Verse 1]\nIt can't be said I'm an early bird\nIt's ten o'clock before I speak\nBut I think you know the kinda work I do\nI like my whiskey neat..." } },
+             { rank: 10, title: "Texas Hold 'Em", artist: "Beyoncé", analysis: { genre: "Country/Pop", mood: "Upbeat, Joyful", tempo: "Medium-Fast", lyricKeywords: ["dance", "Texas", "celebration"], artistBackground: ["Global icon", "Crossing genres"], lyrics: "[Intro]\nWoo\nThis ain't Texas (Woo), ain't no hold 'em (Hey)\nSo lay your cards down, down, down, down\nSo park your Lexus (Woo) and throw your keys up (Hey)..." } }
+        ];
+
+        /**
+         * 차트 데이터를 받아와서 HTML 리스트로 표시합니다.
+         */
+        function displayChart(chartData) {
+            const chartListElement = document.getElementById('chartList');
+            chartListElement.innerHTML = '';
+            if (!chartData || chartData.length === 0) {
+                chartListElement.innerHTML = '<li class="text-center text-gray-500 py-4">차트 데이터가 없습니다.</li>';
+                return;
+            }
+            chartData.forEach(song => {
+                const listItem = document.createElement('li');
+                listItem.className = 'chart-item';
+                let rankBadgeClass = 'rank-badge';
+                if (song.rank === 1) rankBadgeClass += ' rank-1';
+                else if (song.rank === 2) rankBadgeClass += ' rank-2';
+                else if (song.rank === 3) rankBadgeClass += ' rank-3';
+                listItem.innerHTML = `
+                    <div class="${rankBadgeClass}">${song.rank}</div>
+                    <div class="song-info">
+                        <p class="song-title" onclick='showAnalysis(${JSON.stringify(song)}, "title")'>${song.title}</p>
+                        <p class="song-artist" onclick='showAnalysis(${JSON.stringify(song)}, "artist")'>${song.artist}</p>
+                    </div>
+                    <button class="youtube-button" onclick="playOnYouTube('${song.title}', '${song.artist}')">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+                          <path fill-rule="evenodd" d="M19.806 6.104a2.457 2.457 0 0 0-1.732-1.732C16.601 4 12 4 12 4s-4.601 0-6.074.372a2.457 2.457 0 0 0-1.732 1.732C4 7.577 4 12 4 12s0 4.423.372 5.896a2.457 2.457 0 0 0 1.732 1.732C7.599 20 12 20 12 20s4.601 0 6.074-.372a2.457 2.457 0 0 0 1.732-1.732C20 16.423 20 12 20 12s0-4.423-.194-5.896zM9.75 15.125V8.875l5.25 3.125-5.25 3.125z" clip-rule="evenodd" />
+                        </svg>
+                        Play
+                    </button>
+                `;
+                chartListElement.appendChild(listItem);
+            });
+        }
+
+        // --- 분석 정보 모달 관련 로직 ---
+        const modal = document.getElementById('analysisModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalBody = document.getElementById('modalBody');
+
+        /**
+         * 곡 분석 정보와 가사를 모달 창에 표시합니다.
+         */
+        function showAnalysis(songData, clickedElement) {
+            if (clickedElement === 'title') {
+                 modalTitle.textContent = `"${songData.title}" 분석 정보`;
+            } else if (clickedElement === 'artist') {
+                 modalTitle.textContent = `${songData.artist} 분석 정보`;
+            } else {
+                 return; // 버튼 클릭 시 분석 모달 안 띄움
+            }
+            const lyricsHTML = songData.analysis.lyrics
+                ? `<div class="lyrics-section">
+                     <details>
+                       <summary>가사 보기</summary>
+                       <div class="lyrics-content">${songData.analysis.lyrics.replace(/\n/g, '<br>')}</div>
+                     </details>
+                   </div>`
+                : '<p class="text-xs text-gray-500 mt-4">가사 정보가 없습니다.</p>';
+            modalBody.innerHTML = `
+                <p><strong>장르:</strong> ${songData.analysis.genre || '정보 없음'}</p>
+                <p><strong>음악 분위기:</strong> ${songData.analysis.mood || '정보 없음'}</p>
+                <p><strong>템포:</strong> ${songData.analysis.tempo || '정보 없음'}</p>
+                <p><strong>가사 주요 키워드:</strong> ${songData.analysis.lyricKeywords ? songData.analysis.lyricKeywords.join(', ') : '정보 없음'}</p>
+                <p><strong>아티스트 배경/특징:</strong> ${songData.analysis.artistBackground ? songData.analysis.artistBackground.join(', ') : '정보 없음'}</p>
+                ${lyricsHTML} <br>
+                <p class="text-xs text-gray-500 mt-4">*실제 서비스에서는 더 상세한 분석 정보와<br> 매칭 관련 데이터를 제공할 수 있습니다.</p>
+                <p class="text-xs disclaimer mt-2">⚠️ 아티스트 배경 정보는 주관적이거나 민감할 수 있습니다.</p>
+            `;
+            modal.classList.add('visible');
+        }
+
+        /**
+         * 모달 창을 닫습니다.
+         */
+        function closeModal() {
+            modal.classList.remove('visible');
+        }
+
+        // 모달 창 외부 클릭 시 닫기
+        modal.addEventListener('click', (event) => {
+            if (event.target === modal) {
+                closeModal();
+            }
+        });
+
+        // --- YouTube 재생 함수 ---
+        function playOnYouTube(title, artist) {
+            const query = encodeURIComponent(`${title} ${artist}`);
+            const youtubeUrl = `https://www.youtube.com/embed?listType=search&list=QUERY{query}`;
+            window.open(youtubeUrl, '_blank');
+        }
+
+        // --- 초기화 로직 ---
+        // 페이지 로드 시 차트 표시
+        document.addEventListener('DOMContentLoaded', () => {
+            displayChart(mockChartData);
+        });
+    </script>
+
+</body>
+</html>
+```
+
+**3. 로그인 페이지 (`login.html`)**
+
+
+```html
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>로그인 - Playlist Match</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* 공통 스타일 */
+        body { font-family: 'Poppins', 'Noto Sans KR', sans-serif; background-color: #f8f9fa; }
+        /* 로그인/회원가입 폼 공통 스타일 */
+        .auth-form-container { max-width: 400px; margin: 0 auto; background-color: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.07); }
+        .auth-input { width: 100%; padding: 12px 15px; border: 1px solid #ced4da; border-radius: 8px; margin-bottom: 16px; font-size: 0.9rem; transition: border-color 0.2s ease-in-out; }
+        .auth-input:focus { outline: none; border-color: #667eea; }
+        .auth-button { width: 100%; padding: 12px 15px; background-color: #667eea; color: white; border: none; border-radius: 8px; font-weight: 500; font-size: 1rem; cursor: pointer; transition: background-color 0.2s ease-in-out; }
+        .auth-button:hover { background-color: #5a6bc0; }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="index.html" class="text-2xl font-bold text-indigo-600">Playlist Match</a>
+            <div>
+                <a href="chart.html" class="text-gray-600 hover:text-indigo-600 mr-4">음악 차트</a>
+                <a href="login.html" class="text-indigo-600 font-semibold mr-4">로그인</a> <a href="signup.html" class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-lg transition duration-150 ease-in-out">회원가입</a>
+            </div>
+        </nav>
+    </header>
+
+    <main id="loginPage" class="py-12 md:py-24">
+        <div class="container mx-auto px-6">
+            <div class="auth-form-container">
+                <h2 class="text-2xl font-bold mb-6 text-center text-gray-800">로그인</h2>
+                <form onsubmit="handleLogin(event)">
+                    <div>
+                        <label for="login-email" class="block text-sm font-medium text-gray-700 mb-1">이메일</label>
+                        <input type="email" id="login-email" name="email" required class="auth-input" placeholder="you@example.com">
+                    </div>
+                    <div>
+                        <label for="login-password" class="block text-sm font-medium text-gray-700 mb-1">비밀번호</label>
+                        <input type="password" id="login-password" name="password" required class="auth-input" placeholder="********">
+                    </div>
+                    <div class="text-right mb-4">
+                        <a href="#" class="text-sm text-indigo-600 hover:underline">비밀번호를 잊으셨나요?</a>
+                    </div>
+                    <button type="submit" class="auth-button">로그인</button>
+                </form>
+                <p class="text-center text-sm text-gray-600 mt-6">
+                    계정이 없으신가요? <a href="signup.html" class="text-indigo-600 hover:underline font-medium">회원가입</a> </p>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-gray-800 text-gray-400 py-8 mt-auto"> <div class="container mx-auto px-6 text-center text-sm">
+            © 2025 Playlist Match. All rights reserved.
+            <div class="mt-2">
+                <a href="#" class="hover:text-gray-300 mx-2">이용약관</a> |
+                <a href="#" class="hover:text-gray-300 mx-2">개인정보처리방침</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // --- 로그인 폼 제출 처리 (예시) ---
+        function handleLogin(event) {
+            event.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            console.log('로그인 시도:', { email, password });
+            alert('로그인 기능은 구현되지 않았습니다.');
+            // 실제 로그인 성공 시 다른 페이지로 이동:
+            // window.location.href = 'index.html';
+        }
+    </script>
+
+</body>
+</html>
+```
+
+**4. 회원가입 페이지 (`signup.html`)**
+
+
+```html
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원가입 - Playlist Match</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* 공통 스타일 */
+        body { font-family: 'Poppins', 'Noto Sans KR', sans-serif; background-color: #f8f9fa; }
+        /* 로그인/회원가입 폼 공통 스타일 */
+        .auth-form-container { max-width: 400px; margin: 0 auto; background-color: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.07); }
+        .auth-input { width: 100%; padding: 12px 15px; border: 1px solid #ced4da; border-radius: 8px; margin-bottom: 16px; font-size: 0.9rem; transition: border-color 0.2s ease-in-out; }
+        .auth-input:focus { outline: none; border-color: #667eea; }
+        .auth-button { width: 100%; padding: 12px 15px; background-color: #667eea; color: white; border: none; border-radius: 8px; font-weight: 500; font-size: 1rem; cursor: pointer; transition: background-color 0.2s ease-in-out; }
+        .auth-button:hover { background-color: #5a6bc0; }
+        /* 오류 메시지 스타일 */
+        .error-message { color: #dc3545; font-size: 0.8rem; margin-top: -10px; margin-bottom: 10px; }
+        .hidden { display: none; } /* 오류 메시지 숨김 클래스 */
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="index.html" class="text-2xl font-bold text-indigo-600">Playlist Match</a>
+            <div>
+                <a href="chart.html" class="text-gray-600 hover:text-indigo-600 mr-4">음악 차트</a>
+                <a href="login.html" class="text-gray-600 hover:text-indigo-600 mr-4">로그인</a>
+                <a href="signup.html" class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-lg transition duration-150 ease-in-out">회원가입</a> </div>
+        </nav>
+    </header>
+
+    <main id="signupPage" class="py-12 md:py-24">
+        <div class="container mx-auto px-6">
+            <div class="auth-form-container">
+                <h2 class="text-2xl font-bold mb-6 text-center text-gray-800">회원가입</h2>
+                <form id="signup-form" onsubmit="handleSignup(event)">
+                    <div>
+                        <label for="signup-email" class="block text-sm font-medium text-gray-700 mb-1">이메일</label>
+                        <input type="email" id="signup-email" name="email" required class="auth-input" placeholder="you@example.com">
+                    </div>
+                    <div>
+                        <label for="signup-password" class="block text-sm font-medium text-gray-700 mb-1">비밀번호</label>
+                        <input type="password" id="signup-password" name="password" required class="auth-input" placeholder="********">
+                    </div>
+                    <div>
+                        <label for="signup-password-confirm" class="block text-sm font-medium text-gray-700 mb-1">비밀번호 확인</label>
+                        <input type="password" id="signup-password-confirm" name="passwordConfirm" required class="auth-input" placeholder="********">
+                        <p id="password-error" class="error-message hidden">비밀번호가 일치하지 않습니다.</p>
+                    </div>
+                    <button type="submit" class="auth-button mt-4">회원가입</button>
+                </form>
+                <p class="text-center text-sm text-gray-600 mt-6">
+                    이미 계정이 있으신가요? <a href="login.html" class="text-indigo-600 hover:underline font-medium">로그인</a> </p>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-gray-800 text-gray-400 py-8 mt-auto">
+        <div class="container mx-auto px-6 text-center text-sm">
+            © 2025 Playlist Match. All rights reserved.
+            <div class="mt-2">
+                <a href="#" class="hover:text-gray-300 mx-2">이용약관</a> |
+                <a href="#" class="hover:text-gray-300 mx-2">개인정보처리방침</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // --- 회원가입 폼 제출 처리 (예시) ---
+        function handleSignup(event) {
+            event.preventDefault();
+            const email = document.getElementById('signup-email').value;
+            const password = document.getElementById('signup-password').value;
+            const passwordConfirm = document.getElementById('signup-password-confirm').value;
+            const passwordError = document.getElementById('password-error');
+
+            if (password !== passwordConfirm) {
+                passwordError.classList.remove('hidden');
+                return;
+            } else {
+                passwordError.classList.add('hidden');
+            }
+
+            console.log('회원가입 시도:', { email, password });
+            alert('회원가입 기능은 구현되지 않았습니다.');
+            // 성공 시 로그인 페이지로 이동 (예시):
+            // window.location.href = 'login.html';
+        }
+    </script>
+
+</body>
+</html>
+```
+
+이제 각 파일을 별도로 저장하고 `index.html` 파일을 열면, 헤더의 링크를 통해 다른 페이지로 이동할 수 있습
