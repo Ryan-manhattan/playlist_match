@@ -46,7 +46,7 @@ export async function GET(
       return new NextResponse('Forbidden', { status: 403 })
     }
 
-    console.log('Successfully fetched playlist:', playlist.title)
+    console.log('Successfully fetched playlist:', playlist.name)
     return NextResponse.json(playlist)
   } catch (error) {
     console.error('Error fetching playlist:', error)
