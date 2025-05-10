@@ -19,7 +19,7 @@ export async function generateMetadata({ params }: PlaylistPageProps): Promise<M
   }
 
   return {
-    title: `${playlist.title} - Playlist Match`,
+    title: `${playlist.name} - Playlist Match`,
     description: playlist.description || 'A playlist on Playlist Match',
   }
 }

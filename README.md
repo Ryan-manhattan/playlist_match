@@ -222,3 +222,8 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+### 최근 작업 및 문제 해결 (2024-05-10)
+- Vercel 배포 시 Prisma Client 자동 생성 문제 해결: package.json의 build 스크립트에 'prisma generate' 추가
+- Google OAuth 로그인 400 오류(redirect_uri_mismatch): Vercel 배포 URL과 Google Cloud Console의 redirect URI가 일치하지 않아 발생
+- 해결 방법: Google Cloud Console에 실제 배포 URL의 redirect URI 추가, Vercel 환경변수(NEXTAUTH_URL 등)도 실제 배포 URL로 맞추기
