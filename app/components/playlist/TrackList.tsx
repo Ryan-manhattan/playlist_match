@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import { TrackWithDetails } from '@/types/playlist'
+import { TrackWithDetails } from '../../../types/playlist'
 
 interface TrackListProps {
   tracks: TrackWithDetails[]

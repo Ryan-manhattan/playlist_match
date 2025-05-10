@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { getTopTracks } from '@/lib/spotify';
+import { getTopTracks } from '../../lib/spotify';
 
 interface Track {
   id: string;

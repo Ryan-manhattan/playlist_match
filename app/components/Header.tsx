@@ -3,15 +3,42 @@
 import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function Header() {
   const { data: session, status } = useSession();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [userInfo, setUserInfo] = useState<{ name?: string; image?: string; email?: string } | null>(null);
+  const [userLoading, setUserLoading] = useState(false);
+  const [userError, setUserError] = useState<string | null>(null);
 
   const handleSignOut = async () => {
     await signOut({ callbackUrl: '/' });
   };
+
+  useEffect(() => {
+    if (status === 'authenticated') {
+      setUserLoading(true);
+      setUserError(null);
+      fetch('/api/user')
+        .then(res => {
+          if (!res.ok) throw new Error('사용자 정보 fetch 실패');
+          return res.json();
+        })
+        .then(data => {
+          setUserInfo(data);
+          console.log('[Header] 최신 사용자 정보 fetch:', data);
+        })
+        .catch(err => {
+          setUserError((err as Error).message);
+          setUserInfo(null);
+          console.error('[Header] 사용자 정보 fetch 에러:', err);
+        })
+        .finally(() => setUserLoading(false));
+    } else {
+      setUserInfo(null);
+    }
+  }, [status]);
 
   return (
     <header className="bg-white shadow-sm sticky top-0 z-50">
@@ -32,9 +59,11 @@ export default function Header() {
                 className="flex items-center space-x-2 focus:outline-none"
               >
                 <div className="w-8 h-8 rounded-full overflow-hidden">
-                  {session.user.image ? (
+                  {userLoading ? (
+                    <div className="w-full h-full bg-gray-200 animate-pulse"></div>
+                  ) : userInfo?.image ? (
                     <Image
-                      src={session.user.image}
+                      src={userInfo.image}
                       alt="Profile"
                       width={32}
                       height={32}
@@ -42,11 +71,11 @@ export default function Header() {
                     />
                   ) : (
                     <div className="w-full h-full bg-indigo-200 flex items-center justify-center text-indigo-600">
-                      {session.user.name?.[0] || session.user.email?.[0] || '?'}
+                      {userInfo?.name?.[0] || userInfo?.email?.[0] || session.user.name?.[0] || session.user.email?.[0] || '?'}
                     </div>
                   )}
                 </div>
-                <span className="text-gray-700">{session.user.name || session.user.email?.split('@')[0]}</span>
+                <span className="text-gray-700">{userInfo?.name || userInfo?.email?.split('@')[0] || session.user.name || session.user.email?.split('@')[0]}</span>
               </button>
 
               {isDropdownOpen && (

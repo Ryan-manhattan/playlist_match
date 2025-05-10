@@ -1,8 +1,6 @@
 'use client'
 
 import { signIn } from "next-auth/react";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
@@ -54,7 +52,6 @@ export default function LoginPage() {
 
   return (
     <>
-      <Header />
       <main id="loginPage" className="py-12 md:py-24 bg-gray-50 min-h-[80vh]">
         <div className="container mx-auto px-6">
           <div className="auth-form-container max-w-md mx-auto bg-white p-10 rounded-2xl shadow-lg">
@@ -132,7 +129,6 @@ export default function LoginPage() {
           </div>
         </div>
       </main>
-      <Footer />
     </>
   );
 } 

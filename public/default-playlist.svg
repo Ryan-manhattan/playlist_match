@@ -1,0 +1,14 @@
+<svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- 배경 -->
+  <rect width="200" height="200" rx="8" fill="#F3F4F6"/>
+  
+  <!-- 플레이리스트 아이콘 -->
+  <rect x="60" y="60" width="80" height="10" rx="2" fill="#9CA3AF"/>
+  <rect x="60" y="80" width="80" height="10" rx="2" fill="#9CA3AF"/>
+  <rect x="60" y="100" width="80" height="10" rx="2" fill="#9CA3AF"/>
+  <rect x="60" y="120" width="60" height="10" rx="2" fill="#9CA3AF"/>
+  
+  <!-- 음표 아이콘 -->
+  <path d="M140 95C135.029 95 131 99.0294 131 104V124C131 128.971 135.029 133 140 133C144.971 133 149 128.971 149 124V104C149 99.0294 144.971 95 140 95Z" fill="#9CA3AF"/>
+  <circle cx="131" cy="124" r="8" fill="#9CA3AF"/>
+</svg> 

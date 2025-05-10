@@ -1,7 +1,7 @@
-import { prisma } from '@/lib/prisma'
-import { mapPlaylistWithTracks } from '@/types/playlist'
+import { prisma } from '../lib/prisma'
+import { mapPlaylistWithTracks } from '../../types/playlist'
 import { getServerSession } from 'next-auth'
-import { authOptions } from '@/app/api/auth/[...nextauth]/route'
+import authOptions from '../lib/authOptions'
 
 export async function getPlaylistById(id: string) {
   console.log('Fetching playlist by ID:', id)

@@ -113,6 +113,13 @@ playlist-match/
    - 기본 썸네일 이미지는 `/public/default-playlist.png`로 지정
    - Prisma Client 타입 오류 해결 (thumbnail 필드 관련)
 
+5. 2024-05-XX: app/lib로 authOptions, prisma 이동 및 tsconfig.json include에 app/lib/**/* 추가, import 오류 해결
+   - app/api/user/route.ts 등에서 '../lib/authOptions', '../lib/prisma' import 시 모듈을 찾지 못하는 오류 발생
+   - lib/authOptions.ts, lib/prisma.ts를 app/lib/로 이동
+   - import 경로를 '../lib/authOptions', '../lib/prisma'로 수정
+   - tsconfig.json의 include에 'app/lib/**/*' 추가하여 타입스크립트가 app/lib 폴더 인식하도록 조치
+   - Next.js app router 구조에서 app/lib로 핵심 모듈 이동이 가장 안전함
+
 ### 해야 할 작업 (우선순위)
 1. 플레이리스트 기능 고도화
    - 플레이리스트 수정/삭제 기능
@@ -134,6 +141,11 @@ playlist-match/
    - 코드 리팩토링
 
 ## 환경 설정
+
+### node_modules 설치 및 경로 문제 주의
+- node_modules가 설치되어 있지 않으면 타입 선언, 모듈 해석, import 관련 오류가 발생할 수 있음
+- 반드시 프로젝트 루트(playlist-match)에서 npm install 실행 후, .next 캐시 삭제 및 서버 재시작 필요
+- import 경로 오류 발생 시, node_modules 설치 여부와 실제 파일 경로/이름을 우선 점검할 것
 
 ### 필수 환경 변수 (.env)
 ```env

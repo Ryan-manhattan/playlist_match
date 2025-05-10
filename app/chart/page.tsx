@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from "react";
 import Link from 'next/link';
-import Header from "../components/Header";
 
 interface Track {
   name: string;
@@ -138,7 +137,6 @@ export default function ChartPage() {
 
   return (
     <>
-      <Header />
       <div className="min-h-screen bg-gray-50">
         <div className="container mx-auto px-4 py-8">
           <h1 className="text-3xl font-bold text-center mb-8 text-gray-800">주간 인기 음악 차트</h1>

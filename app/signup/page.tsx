@@ -1,7 +1,5 @@
 'use client'
 
-import Header from "../components/Header";
-import Footer from "../components/Footer";
 import React, { useRef, useState } from "react";
 
 export default function SignupPage() {
@@ -23,7 +21,6 @@ export default function SignupPage() {
 
   return (
     <>
-      <Header />
       <main id="signupPage" className="py-12 md:py-24 bg-gray-50 min-h-[80vh]">
         <div className="container mx-auto px-6">
           <div className="auth-form-container max-w-md mx-auto bg-white p-10 rounded-2xl shadow-lg">
@@ -50,7 +47,6 @@ export default function SignupPage() {
           </div>
         </div>
       </main>
-      <Footer />
     </>
   );
 } 

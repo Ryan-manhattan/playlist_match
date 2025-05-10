@@ -69,6 +69,7 @@ model Playlist {
   updatedAt   DateTime  @updatedAt
   tracks      Track[]
   user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  thumbnail   String?
 }
 
 model Track {

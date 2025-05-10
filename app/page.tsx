@@ -1,12 +1,9 @@
 import React from 'react';
 import Link from 'next/link';
-import Header from "./components/Header";
-import Footer from "./components/Footer";
 
 export default function Home() {
   return (
     <>
-      <Header />
       <main id="landingPage">
         <section className="gradient-bg text-white flex items-center justify-center hero-section relative overflow-hidden">
           <svg className="motion-graphic-svg absolute bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-3xl h-auto z-5 pointer-events-none" viewBox="0 0 800 200" preserveAspectRatio="xMidYMax meet">
@@ -70,7 +67,6 @@ export default function Home() {
           </div>
         </section>
       </main>
-      <Footer />
     </>
   );
 }

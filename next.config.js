@@ -13,10 +13,7 @@ const nextConfig = {
     SPOTIFY_REFRESH_TOKEN: process.env.SPOTIFY_REFRESH_TOKEN,
   },
   webpack: (config) => {
-    config.resolve.alias = {
-      ...config.resolve.alias,
-      '@': path.join(__dirname, 'src'),
-    };
+    // alias 제거: 상대경로만 허용
     return config;
   },
 };

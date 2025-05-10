@@ -1,7 +1,7 @@
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import PlaylistDetail from '@/app/components/playlist/PlaylistDetail'
-import { getPlaylistById } from '@/app/actions/playlist'
+import PlaylistDetail from '../../components/playlist/PlaylistDetail'
+import { getPlaylistById } from '../../actions/playlist'
 
 interface PlaylistPageProps {
   params: {
