@@ -24,7 +24,10 @@ export default function ChartSection(): React.JSX.Element {
         setIsLoading(true);
         const spotifyTracks = await getTopTracks(50);
         console.log('Tracks fetched successfully:', spotifyTracks.length);
-        setTracks(spotifyTracks);
+        setTracks(spotifyTracks.map(track => ({
+          ...track,
+          previewUrl: track.previewUrl ?? ""
+        })));
       } catch (err) {
         console.error('Error fetching tracks:', err);
         setError('Failed to load tracks. Please try again later.');
