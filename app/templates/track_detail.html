@@ -2,6 +2,86 @@
 
 {% block title %}{{ track.title }} - OFF THE COMMUNITY{% endblock %}
 
+{% block extra_css %}
+<style>
+    .detail-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1.5rem;
+    }
+
+    @media (max-width: 900px) {
+        .detail-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .data-list {
+        display: grid;
+        gap: 1rem;
+    }
+
+    .data-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 1rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .data-row:last-child {
+        border-bottom: 0;
+        padding-bottom: 0;
+    }
+
+    .data-label {
+        font-size: 10px;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        opacity: 0.38;
+        min-width: 110px;
+    }
+
+    .data-value {
+        text-align: right;
+        line-height: 1.6;
+        word-break: break-word;
+    }
+
+    .stat-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.9rem;
+    }
+
+    @media (max-width: 640px) {
+        .stat-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .stat-card {
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        padding: 1rem;
+        background: rgba(255, 255, 255, 0.02);
+    }
+
+    .stat-card strong {
+        display: block;
+        font-size: 1.4rem;
+        margin-top: 0.35rem;
+        font-family: var(--font-serif);
+    }
+
+    .panel-note {
+        font-size: 11px;
+        line-height: 1.7;
+        opacity: 0.58;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 <div class="main-content-container">
     <header class="mb-12">
@@ -30,16 +110,15 @@
 
     <section class="pixel-card !p-0 overflow-hidden mb-10">
         <div class="flex flex-col md:flex-row">
-            <!-- Large Interactive Cover -->
             <div class="w-full md:w-1/3 aspect-square relative group bg-black">
                 {% if track.thumbnail_url %}
                     <img src="{{ track.thumbnail_url }}" alt="cover" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity">
                 {% else %}
                     <div class="w-full h-full flex items-center justify-center opacity-20">
-                        <span class="text-4xl">🎵</span>
+                        <span class="text-4xl">TRACK</span>
                     </div>
                 {% endif %}
-                
+
                 <div class="absolute bottom-4 left-4">
                     <span class="text-[9px] bg-black/60 px-2 py-1 uppercase tracking-widest border border-white/10">
                         Archive_Ready
@@ -47,9 +126,7 @@
                 </div>
             </div>
 
-            <!-- Track Meta Data -->
             <div class="flex-1 p-8 md:p-12 flex flex-col justify-center relative">
-                <!-- 간단한 메타데이터 (오른쪽 상단) -->
                 <div class="absolute top-8 right-8 flex flex-col gap-2 items-end">
                     <div class="text-[9px] border border-white/5 px-3 py-1.5 uppercase opacity-30">
                         Source: {{ track.source }}
@@ -62,45 +139,43 @@
                         Duration: {{ track.duration_str }}
                     </div>
                     {% endif %}
-                    {% if track.artist %}
-                    <div class="text-[9px] border border-white/5 px-3 py-1.5 uppercase opacity-30">
-                        Artist: {{ track.artist }}
-                    </div>
-                    {% endif %}
                 </div>
+
                 <div class="inline-flex items-center gap-4 mb-6">
                     <span class="text-[10px] tracking-[0.4em] uppercase opacity-40">Playback_Node</span>
                     <div class="w-12 h-[1px] bg-white/20"></div>
                 </div>
-                
+
                 <h3 class="text-3xl font-bold serif-font mb-4">{{ track.title }}</h3>
                 <p class="text-sm opacity-50 mb-8 uppercase tracking-widest">
-                    {% if track.artist %}{{ track.artist }}{% endif %} 
+                    {% if track.artist %}{{ track.artist }}{% endif %}
                     {% if track.duration_str %} · {{ track.duration_str }}{% endif %}
                 </p>
 
-                <!-- Playback Action -->
-                <div class="mb-10">
+                <div class="flex flex-col md:flex-row md:items-center gap-4 mb-6">
                     {% if embed.type == 'soundcloud' %}
-                    <button class="btn-pixel !px-8 flex items-center gap-4 group" 
-                            onclick="showSoundCloudPlayer()">
+                    <button class="btn-pixel !px-8 flex items-center gap-4 group" onclick="showSoundCloudPlayer()">
                         <span class="group-hover:translate-x-1 transition-transform">▶</span>
                         <span class="text-[10px] tracking-[0.3em]">INITIALIZE_SYSTEM_PLAYER</span>
                     </button>
                     {% else %}
-                    <button class="btn-pixel !px-8 flex items-center gap-4 group" 
-                            onclick="activateYouTube()">
+                    <button class="btn-pixel !px-8 flex items-center gap-4 group" onclick="activateYouTube()">
                         <span class="group-hover:translate-x-1 transition-transform">▶</span>
                         <span class="text-[10px] tracking-[0.3em]">INITIALIZE_SYSTEM_PLAYER</span>
                     </button>
                     {% endif %}
-                </div>
 
+                    {% if can_sync_stats %}
+                    <button class="btn-outline text-[10px] tracking-widest" id="syncTrackStatsBtn" onclick="syncTrackStats()">
+                        SYNC_STATS
+                    </button>
+                    {% endif %}
+                </div>
+                <div id="syncTrackStatsMsg" class="text-xs opacity-60"></div>
             </div>
         </div>
     </section>
 
-    <!-- YouTube Player Container -->
     <div id="youtubePlayer" class="aspect-video bg-black border-4 border-white mb-10 hidden">
         <iframe
             id="ytIframe"
@@ -114,7 +189,6 @@
         </iframe>
     </div>
 
-    <!-- SoundCloud Player Container -->
     {% if embed.type == 'soundcloud' %}
     <section class="pixel-card p-6 md:p-10 mb-10" id="soundcloudPlayerSection">
         <div class="inline-flex items-center gap-4 mb-6">
@@ -133,6 +207,77 @@
     </section>
     {% endif %}
 
+    <section class="detail-grid mb-10">
+        <article class="pixel-card p-6 md:p-10">
+            <div class="inline-flex items-center gap-4 mb-6">
+                <span class="text-[10px] tracking-[0.4em] uppercase opacity-40">Track_Data</span>
+                <div class="w-12 h-[1px] bg-white/20"></div>
+            </div>
+            <div class="data-list">
+                {% for item in track_data_items %}
+                <div class="data-row">
+                    <div class="data-label">{{ item.label }}</div>
+                    <div class="data-value">
+                        {% if item.href %}
+                        <a href="{{ item.href }}" target="_blank" rel="noreferrer noopener" class="underline underline-offset-4 hover:opacity-70">
+                            {{ item.value }}
+                        </a>
+                        {% elif item.is_datetime %}
+                        <span class="js-local-datetime" data-iso="{{ item.value }}">{{ item.value }}</span>
+                        {% else %}
+                        {{ item.value }}
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </article>
+
+        <article class="pixel-card p-6 md:p-10">
+            <div class="flex items-start justify-between gap-4 mb-6">
+                <div>
+                    <div class="inline-flex items-center gap-4 mb-4">
+                        <span class="text-[10px] tracking-[0.4em] uppercase opacity-40">Engagement_Stats</span>
+                        <div class="w-12 h-[1px] bg-white/20"></div>
+                    </div>
+                    <p class="panel-note">내부 반응과 외부 플랫폼 반응을 함께 확인할 수 있습니다.</p>
+                </div>
+                {% if track_stats.last_synced_at %}
+                <div class="text-[10px] opacity-35 uppercase tracking-widest text-right">
+                    LAST_SYNC
+                    <div class="mt-2 js-local-datetime normal-case tracking-normal text-xs opacity-70" data-iso="{{ track_stats.last_synced_at }}">
+                        {{ track_stats.last_synced_at }}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="stat-grid mb-6">
+                {% for item in track_stats.internal_items %}
+                <div class="stat-card">
+                    <span class="text-[10px] tracking-[0.16em] uppercase opacity-40">{{ item.label }}</span>
+                    <strong>{{ item.value }}</strong>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="text-[10px] uppercase tracking-[0.28em] opacity-35 mb-4">{{ track_stats.external_label }}</div>
+            {% if track_stats.has_external_stats %}
+            <div class="stat-grid">
+                {% for item in track_stats.external_items %}
+                <div class="stat-card">
+                    <span class="text-[10px] tracking-[0.16em] uppercase opacity-40">{{ item.label }}</span>
+                    <strong>{{ item.value }}</strong>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="panel-note">
+                아직 외부 지표가 동기화되지 않았습니다. `SYNC_STATS` 버튼을 눌러 최신 반응 데이터를 가져오세요.
+            </div>
+            {% endif %}
+        </article>
+    </section>
 
     <section class="pixel-card p-6 md:p-10 mb-10">
         <h3 class="text-xs uppercase tracking-[0.3em] opacity-40 mb-6">Leave a Comment</h3>
@@ -213,7 +358,7 @@ async function confirmDeleteComment(commentId) {
     if (!confirm('정말 이 코멘트를 삭제하시겠습니까?')) {
         return;
     }
-    
+
     try {
         const res = await fetch(`/api/track_comments/${commentId}`, {
             method: 'DELETE',
@@ -230,47 +375,74 @@ async function confirmDeleteComment(commentId) {
     }
 }
 
-function renderAddedAtLocal() {
-    const el = document.getElementById('addedAtLocal');
-    if (!el) return;
-    const iso = (el.getAttribute('data-iso') || '').trim();
-    if (!iso) return;
-    const d = new Date(iso);
-    if (Number.isNaN(d.getTime())) return;
-    el.textContent = d.toLocaleString();
+function renderLocalTimestamps() {
+    document.querySelectorAll('.js-local-datetime').forEach((el) => {
+        const iso = (el.getAttribute('data-iso') || '').trim();
+        if (!iso) return;
+        const parsed = new Date(iso);
+        if (Number.isNaN(parsed.getTime())) return;
+        el.textContent = parsed.toLocaleString();
+    });
 }
 
 function activateYouTube() {
     const player = document.getElementById('youtubePlayer');
     const iframe = document.getElementById('ytIframe');
-    
-    console.log('[Player] activateYouTube called');
-    
+    const sourceId = '{{ embed.source_id or "" }}';
+
+    if (!sourceId) {
+        window.open('{{ track.url }}', '_blank', 'noopener,noreferrer');
+        return;
+    }
+
     if (player && iframe) {
         player.classList.remove('hidden');
-        iframe.src = "https://www.youtube.com/embed/{{ embed.source_id }}?autoplay=1";
-        console.log('[Player] YouTube iframe src set');
-    } else {
-        console.log('[Player] YouTube elements not found');
+        iframe.src = `https://www.youtube.com/embed/${sourceId}?autoplay=1`;
     }
 }
 
 function showSoundCloudPlayer() {
     const playerSection = document.getElementById('soundcloudPlayerSection');
     const iframe = document.getElementById('soundcloudPlayer');
-    
+
     if (playerSection && iframe) {
-        // SoundCloud 플레이어 URL 설정
         const trackUrl = '{{ track.url }}';
         if (!iframe.src) {
             iframe.src = `https://w.soundcloud.com/player/?url=${encodeURIComponent(trackUrl)}&auto_play=true&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false&visual=true`;
         }
-        // 플레이어 섹션으로 스크롤
         playerSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
 }
 
-// 페이지 로드 시 SoundCloud 플레이어 초기화
+async function syncTrackStats() {
+    const btn = document.getElementById('syncTrackStatsBtn');
+    const msg = document.getElementById('syncTrackStatsMsg');
+    if (!btn || !msg) return;
+
+    btn.disabled = true;
+    btn.textContent = 'SYNCING...';
+    msg.textContent = '';
+
+    try {
+        const res = await fetch('/api/tracks/{{ track.id }}/sync-stats', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'}
+        });
+        const data = await res.json();
+        if (data.success) {
+            msg.textContent = '최신 지표를 반영했습니다.';
+            window.location.reload();
+            return;
+        }
+        msg.textContent = data.error || '동기화에 실패했습니다.';
+    } catch (error) {
+        msg.textContent = '오류가 발생했습니다.';
+    } finally {
+        btn.disabled = false;
+        btn.textContent = 'SYNC_STATS';
+    }
+}
+
 {% if embed.type == 'soundcloud' %}
 document.addEventListener('DOMContentLoaded', function() {
     const iframe = document.getElementById('soundcloudPlayer');
@@ -284,13 +456,12 @@ document.addEventListener('DOMContentLoaded', function() {
 const contentEl = document.getElementById('commentContent');
 const countEl = document.getElementById('commentCount');
 contentEl.addEventListener('input', () => { countEl.textContent = (contentEl.value || '').length; });
-renderAddedAtLocal();
+renderLocalTimestamps();
 
 async function submitComment() {
     const btn = document.getElementById('commentSubmitBtn');
     const msg = document.getElementById('commentMsg');
     const authorInput = document.getElementById('commentAuthor');
-    // 로그인한 경우 readonly이므로 value 사용, 아니면 입력값 또는 Anonymous
     const author = authorInput ? (authorInput.value || '').trim() || 'Anonymous' : 'Anonymous';
     const content = (document.getElementById('commentContent').value || '').trim();
 
@@ -322,7 +493,5 @@ async function submitComment() {
         btn.textContent = 'SAVE_COMMENT';
     }
 }
-
 </script>
 {% endblock %}
-

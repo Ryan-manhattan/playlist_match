@@ -1,0 +1,185 @@
+{% extends "base.html" %}
+
+{% block title %}Brand Studio - OFF THE COMMUNITY{% endblock %}
+{% block meta_description %}브랜드 플레이리스트, 감정 인사이트 리포트, 참여형 캠페인 협업을 위한 OFF THE COMMUNITY의 Brand Studio 페이지.{% endblock %}
+
+{% block extra_css %}
+<style>
+    .studio-grid {
+        display: grid;
+        grid-template-columns: 1.2fr 0.8fr;
+        gap: 1.5rem;
+    }
+
+    @media (max-width: 980px) {
+        .studio-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .package-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 1rem;
+    }
+
+    @media (max-width: 980px) {
+        .package-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .package-card {
+        min-height: 100%;
+    }
+
+    .package-card ul {
+        margin: 1rem 0 0;
+        padding-left: 1rem;
+        line-height: 1.9;
+        opacity: 0.72;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="main-content-container">
+    <header class="mb-10">
+        <div class="inline-flex items-center gap-4 mb-6">
+            <span class="text-[10px] tracking-[0.4em] uppercase opacity-40">Brand Studio</span>
+            <div class="w-12 h-[1px] bg-white/20"></div>
+        </div>
+        <h1 class="serif-font text-4xl md:text-6xl leading-tight mb-4">브랜드가 음악 맥락 안에서 전환되도록 설계합니다.</h1>
+        <p class="text-base opacity-68 max-w-3xl leading-relaxed">
+            OFF THE COMMUNITY는 감정 기록, 월드컵 참여, 코멘트 데이터를 바탕으로
+            브랜드가 억지 노출이 아니라 자연스러운 참여 흐름 안에 들어오도록 제안합니다.
+        </p>
+    </header>
+
+    <section class="studio-grid mb-10">
+        <article class="pixel-card p-6 md:p-8">
+            <div class="text-[10px] uppercase tracking-[0.3em] opacity-40 mb-4">Audience Snapshot</div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="border border-white/10 p-4">
+                    <div class="text-[10px] uppercase tracking-[0.2em] opacity-35">Tracks Archived</div>
+                    <div class="serif-font text-3xl mt-3">{{ growth_snapshot.total_tracks }}</div>
+                </div>
+                <div class="border border-white/10 p-4">
+                    <div class="text-[10px] uppercase tracking-[0.2em] opacity-35">Diary Entries</div>
+                    <div class="serif-font text-3xl mt-3">{{ growth_snapshot.total_posts }}</div>
+                </div>
+                <div class="border border-white/10 p-4">
+                    <div class="text-[10px] uppercase tracking-[0.2em] opacity-35">Total Votes</div>
+                    <div class="serif-font text-3xl mt-3">{{ growth_snapshot.total_votes }}</div>
+                </div>
+                <div class="border border-white/10 p-4">
+                    <div class="text-[10px] uppercase tracking-[0.2em] opacity-35">Today Visits</div>
+                    <div class="serif-font text-3xl mt-3">{{ growth_snapshot.today_visits }}</div>
+                </div>
+            </div>
+            <p class="text-sm opacity-58 leading-relaxed mt-6">
+                위 지표는 사이트 내 공개 활동을 기반으로 산출됩니다. 캠페인 제안 시에는 목표 KPI와 맞는 액션 흐름으로 다시 구성합니다.
+            </p>
+        </article>
+
+        <article class="pixel-card p-6 md:p-8">
+            <div class="text-[10px] uppercase tracking-[0.3em] opacity-40 mb-4">What Brands Buy</div>
+            <div class="space-y-4">
+                <div class="border border-white/10 p-4">
+                    <div class="serif-font text-xl">큐레이션 기반 노출</div>
+                    <p class="text-sm opacity-60 mt-2">브랜드를 감성 아카이브와 플레이리스트 경험 안에 연결합니다.</p>
+                </div>
+                <div class="border border-white/10 p-4">
+                    <div class="serif-font text-xl">참여형 캠페인</div>
+                    <p class="text-sm opacity-60 mt-2">월드컵, 기록 미션, 큐레이션 챌린지로 행동 데이터를 얻습니다.</p>
+                </div>
+                <div class="border border-white/10 p-4">
+                    <div class="serif-font text-xl">반응 요약 리포트</div>
+                    <p class="text-sm opacity-60 mt-2">기록과 코멘트에서 감정 신호를 정리해 다음 액션으로 연결합니다.</p>
+                </div>
+            </div>
+        </article>
+    </section>
+
+    <section class="mb-10">
+        <div class="inline-flex items-center gap-4 mb-6">
+            <span class="text-[10px] tracking-[0.4em] uppercase opacity-40">Packages</span>
+            <div class="w-12 h-[1px] bg-white/20"></div>
+        </div>
+        <div class="package-grid">
+            <article class="pixel-card package-card p-6">
+                <div class="text-[10px] uppercase tracking-[0.2em] opacity-35">STARTER</div>
+                <h3 class="serif-font text-2xl mt-3">Brand Studio Sprint</h3>
+                <div class="serif-font text-3xl mt-4">690,000 KRW+</div>
+                <ul>
+                    <li>브랜드 테마 플레이리스트/페이지 1종</li>
+                    <li>기본 참여형 액션 설계</li>
+                    <li>후속 액션 제안 메모 제공</li>
+                </ul>
+            </article>
+            <article class="pixel-card package-card p-6">
+                <div class="text-[10px] uppercase tracking-[0.2em] opacity-35">CAMPAIGN</div>
+                <h3 class="serif-font text-2xl mt-3">Interactive Drop</h3>
+                <div class="serif-font text-3xl mt-4">1,500,000 KRW+</div>
+                <ul>
+                    <li>월드컵/아카이브 연계 참여 캠페인</li>
+                    <li>콘텐츠 메시지와 CTA 설계</li>
+                    <li>성과 요약 리포트 제공</li>
+                </ul>
+            </article>
+            <article class="pixel-card package-card p-6">
+                <div class="text-[10px] uppercase tracking-[0.2em] opacity-35">INSIGHT</div>
+                <h3 class="serif-font text-2xl mt-3">Audience Insight Report</h3>
+                <div class="serif-font text-3xl mt-4">290,000 KRW+</div>
+                <ul>
+                    <li>반응 키워드 및 감정 톤 정리</li>
+                    <li>차기 캠페인 메시지 방향 제안</li>
+                    <li>브랜드/아티스트 협업 초안</li>
+                </ul>
+            </article>
+        </div>
+    </section>
+
+    <section class="studio-grid">
+        <article class="pixel-card p-6 md:p-8">
+            <div class="text-[10px] uppercase tracking-[0.3em] opacity-40 mb-4">Inquiry Form</div>
+            <h2 class="serif-font text-3xl mb-4">브랜드/파트너 문의</h2>
+            <p class="text-sm opacity-60 leading-relaxed mb-6">
+                예산 범위와 목표를 남겨주시면 맞는 패키지 조합으로 회신합니다.
+            </p>
+            <form data-growth-form class="space-y-4">
+                <input type="hidden" name="lead_type" value="media_kit">
+                <input type="hidden" name="source_page" value="brand_studio_page">
+                <input type="text" name="name" placeholder="담당자 이름" class="pixel-input">
+                <input type="email" name="email" placeholder="업무용 이메일" class="pixel-input" required>
+                <input type="text" name="company" placeholder="회사명" class="pixel-input">
+                <select name="budget_range" class="pixel-select">
+                    <option value="">예산 범위 선택</option>
+                    <option value="under_300k">Under 300,000 KRW</option>
+                    <option value="300k_1m">300,000 to 1,000,000 KRW</option>
+                    <option value="1m_3m">1,000,000 to 3,000,000 KRW</option>
+                    <option value="3m_plus">3,000,000 KRW+</option>
+                </select>
+                <textarea name="goal" placeholder="원하는 캠페인 목표, 제품, 일정, 참고하고 싶은 포맷" class="pixel-textarea"></textarea>
+                <button type="submit" class="btn-pixel text-xs tracking-widest justify-center">REQUEST MEDIA KIT</button>
+                <div class="status-message" data-growth-status></div>
+            </form>
+        </article>
+
+        <article class="pixel-card p-6 md:p-8">
+            <div class="text-[10px] uppercase tracking-[0.3em] opacity-40 mb-4">Next Step</div>
+            <h2 class="serif-font text-3xl mb-4">빠르게 진행하고 싶다면</h2>
+            <div class="space-y-4 text-sm opacity-65 leading-relaxed">
+                <p>1. 브랜드 목표를 한 줄로 적어 주세요. 예: 신제품 인지도, UGC 확보, 감성 포지셔닝.</p>
+                <p>2. 원하는 일정과 예산 범위를 남겨 주세요.</p>
+                <p>3. 내부 팀이 있다면 운영 담당자와 브랜드 담당자를 함께 적어 주세요.</p>
+            </div>
+            <div class="border border-white/10 p-4 mt-6">
+                <div class="text-[10px] uppercase tracking-[0.2em] opacity-35">Fast Track</div>
+                <p class="text-sm opacity-60 mt-3">홈으로 돌아가 크리에이터 멤버십과 브랜드 문의를 동시에 테스트할 수도 있습니다.</p>
+                <a href="{{ url_for('index') }}" class="btn-outline text-xs tracking-widest text-center mt-4">RETURN HOME</a>
+            </div>
+        </article>
+    </section>
+</div>
+{% endblock %}

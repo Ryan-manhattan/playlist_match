@@ -118,6 +118,40 @@ a {
     background: rgba(255, 255, 255, 0.05);
 }
 
+.pixel-input,
+.pixel-select,
+.pixel-textarea {
+    width: 100%;
+    background: var(--bg-black);
+    border: 2px solid rgba(255, 255, 255, 0.14);
+    color: var(--pixel-white);
+    padding: 0.9rem 1rem;
+    font-family: var(--font-pixel);
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.pixel-input:focus,
+.pixel-select:focus,
+.pixel-textarea:focus {
+    border-color: var(--pixel-white);
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.15);
+}
+
+.pixel-textarea {
+    min-height: 160px;
+    resize: vertical;
+    font-family: var(--font-serif);
+    line-height: 1.8;
+}
+
+.status-message {
+    min-height: 1rem;
+    font-size: 11px;
+    line-height: 1.5;
+    opacity: 0.68;
+}
+
 /* Typography Helpers */
 .serif-font { font-family: var(--font-serif); }
 .pixel-font { font-family: var(--font-pixel); }

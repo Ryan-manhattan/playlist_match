@@ -5,6 +5,7 @@ off the community - 음악 파일 처리 웹 서비스
 """
 
 import os
+import re
 
 # FFmpeg 경로를 환경 변수에 추가 (로컬 개발용)
 if os.name == 'nt':  # Windows에서만 실행
@@ -21,7 +22,7 @@ from flask_login import LoginManager, UserMixin, login_user, logout_user, login_
 # Flask-Dance 제거, Supabase Auth 사용
 # from flask_dance.contrib.google import make_google_blueprint, google
 from werkzeug.utils import secure_filename
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import Optional
 import json
 import threading
@@ -87,6 +88,15 @@ except ImportError as e:
     print(f"SupabaseClient 로드 실패: {e}")
     supabase_available = False
 
+from utils.growth_lead_store import GrowthLeadStore
+
+try:
+    from core.track_stats_service import TrackStatsService
+    track_stats_service_available = True
+except ImportError as e:
+    print(f"TrackStatsService 로드 실패: {e}")
+    track_stats_service_available = False
+
 # Flask 앱 초기화 (Windows 경로 대응)
 app = Flask(__name__, 
            template_folder='app/templates', 
@@ -107,6 +117,8 @@ app.config['PERMANENT_SESSION_LIFETIME'] = 86400  # 24시간
 # 폴더 생성 확인
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 os.makedirs(app.config['PROCESSED_FOLDER'], exist_ok=True)
+
+growth_lead_store = GrowthLeadStore(os.path.dirname(__file__))
 
 # 콘솔 로그 함수 (디버깅용)
 class console:
@@ -227,6 +239,29 @@ TRACK_COMMENT_AUTHOR_MAX_LEN = 50
 TRACK_COMMENT_MIN_INTERVAL_SECONDS = 5
 _track_last_comment_at_by_ip = {}
 
+TRACK_STATS_SYNC_MIN_INTERVAL_SECONDS = 30
+_track_last_stats_sync_at_by_ip = {}
+
+COMMUNITY_EXPLORE_SCAN_LIMIT = 300
+
+GROWTH_LEAD_MIN_INTERVAL_SECONDS = 10
+GROWTH_LEAD_EMAIL_MAX_LEN = 255
+GROWTH_LEAD_NAME_MAX_LEN = 120
+GROWTH_LEAD_COMPANY_MAX_LEN = 120
+GROWTH_LEAD_BUDGET_MAX_LEN = 80
+GROWTH_LEAD_GOAL_MAX_LEN = 2000
+GROWTH_LEAD_SOURCE_MAX_LEN = 255
+
+ALLOWED_GROWTH_LEAD_TYPES = {
+    "newsletter",
+    "creator_membership",
+    "premium_waitlist",
+    "brand_partnership",
+    "media_kit",
+    "insight_report",
+}
+_growth_last_submit_at_by_ip = {}
+
 
 def _get_client_ip() -> str:
     """프록시 환경(X-Forwarded-For) 고려한 클라이언트 IP 추출"""
@@ -268,6 +303,282 @@ def _guess_track_source(url: str) -> str:
     if "youtube.com" in u or "youtu.be" in u:
         return "youtube"
     return "unknown"
+
+
+def _safe_dict(value) -> dict:
+    """dict가 아니면 빈 dict를 반환"""
+    return value if isinstance(value, dict) else {}
+
+
+def _parse_iso_datetime(value: Optional[str]) -> Optional[datetime]:
+    """ISO 문자열을 datetime으로 파싱"""
+    if not value:
+        return None
+
+    try:
+        parsed = datetime.fromisoformat(str(value).replace("Z", "+00:00"))
+        if parsed.tzinfo is not None:
+            return parsed.astimezone().replace(tzinfo=None)
+        return parsed
+    except Exception:
+        return None
+
+
+def _format_compact_number(value: Optional[int]) -> str:
+    """숫자를 UI 친화적으로 축약 표기"""
+    if value is None:
+        return "Unavailable"
+
+    try:
+        value = int(value)
+    except Exception:
+        return "Unavailable"
+
+    if value >= 1_000_000_000:
+        return f"{value / 1_000_000_000:.1f}B"
+    if value >= 1_000_000:
+        return f"{value / 1_000_000:.1f}M"
+    if value >= 1_000:
+        return f"{value / 1_000:.1f}K"
+    return f"{value:,}"
+
+
+def _build_track_data_items(track: dict) -> list:
+    """Track detail용 데이터 패널 항목"""
+    source_label = (track.get("source") or "unknown").replace("_", " ").title()
+    metadata = _safe_dict(track.get("metadata"))
+    provider = _safe_dict(metadata.get("provider"))
+
+    artist = track.get("artist") or provider.get("uploader") or "Unknown"
+    duration_seconds = track.get("duration_seconds") or provider.get("duration_seconds")
+    duration_str = track.get("duration_str") or _format_duration(duration_seconds)
+
+    items = [
+        {"label": "Source", "value": source_label},
+        {"label": "Uploader / Artist", "value": artist},
+        {"label": "Duration", "value": duration_str or "Unknown"},
+        {
+            "label": "Added At",
+            "value": track.get("created_at") or "Unknown",
+            "is_datetime": True,
+        },
+    ]
+
+    source_link = (track.get("url") or "").strip()
+    if source_link:
+        items.append(
+            {
+                "label": "Source Link",
+                "value": source_link,
+                "href": source_link,
+            }
+        )
+
+    return items
+
+
+def _build_track_stats_view(track: dict, stored_stats: dict, comment_count: int, battle_stats: dict) -> dict:
+    """Track detail용 stats 패널 데이터 구성"""
+    source = (track.get("source") or "").strip().lower()
+    stored_stats = _safe_dict(stored_stats)
+
+    if source == "youtube":
+        external_label = "YouTube Engagement"
+        external_items = [
+            {"label": "Views", "raw": stored_stats.get("views")},
+            {"label": "Likes", "raw": stored_stats.get("likes")},
+            {"label": "Comments", "raw": stored_stats.get("comments")},
+        ]
+    elif source == "soundcloud":
+        external_label = "SoundCloud Engagement"
+        external_items = [
+            {"label": "Plays", "raw": stored_stats.get("plays")},
+            {"label": "Likes", "raw": stored_stats.get("likes")},
+            {"label": "Comments", "raw": stored_stats.get("comments")},
+        ]
+    else:
+        external_label = "External Engagement"
+        external_items = []
+
+    for item in external_items:
+        item["value"] = _format_compact_number(item.get("raw"))
+
+    return {
+        "internal_items": [
+            {"label": "Archive Comments", "value": _format_compact_number(comment_count)},
+            {"label": "Worldcup Wins", "value": _format_compact_number(battle_stats.get("wins", 0))},
+            {"label": "Battle Entries", "value": _format_compact_number(battle_stats.get("total_battles", 0))},
+            {"label": "Win Rate", "value": f"{battle_stats.get('win_rate', 0):.1f}%"},
+        ],
+        "external_label": external_label,
+        "external_items": external_items,
+        "last_synced_at": stored_stats.get("last_synced_at"),
+        "has_external_stats": any(item.get("raw") is not None for item in external_items),
+    }
+
+
+def _filter_diary_posts(posts: list, search_query: str, author_query: str, period: str, sort: str) -> list:
+    """다이어리 리스트 탐색용 필터"""
+    normalized_search = (search_query or "").strip().lower()
+    normalized_author = (author_query or "").strip().lower()
+    now = datetime.now()
+
+    filtered = []
+    for post in posts:
+        title = str(post.get("title", ""))
+        content = str(post.get("content", ""))
+        author = str(post.get("author", ""))
+        created_at = _parse_iso_datetime(post.get("created_at"))
+
+        haystack = " ".join([title, content, author]).lower()
+        if normalized_search and normalized_search not in haystack:
+            continue
+        if normalized_author and normalized_author not in author.lower():
+            continue
+
+        if period == "today":
+            if not created_at or created_at.date() != now.date():
+                continue
+        elif period == "7d":
+            if not created_at or created_at < (now - timedelta(days=7)):
+                continue
+        elif period == "30d":
+            if not created_at or created_at < (now - timedelta(days=30)):
+                continue
+
+        filtered.append(post)
+
+    if sort == "oldest":
+        filtered.sort(key=lambda item: item.get("created_at") or "")
+    elif sort == "title":
+        filtered.sort(key=lambda item: (item.get("title") or "").lower())
+    else:
+        filtered.sort(key=lambda item: item.get("created_at") or "", reverse=True)
+
+    return filtered
+
+
+def _is_valid_email(email: str) -> bool:
+    """간단한 이메일 형식 검증"""
+    return bool(re.match(r"^[^@\s]+@[^@\s]+\.[^@\s]+$", email or ""))
+
+
+def _truncate_text(value: Optional[str], max_len: int) -> Optional[str]:
+    """문자열 길이 제한"""
+    if value is None:
+        return None
+    text = str(value).strip()
+    if not text:
+        return None
+    return text[:max_len]
+
+
+def _build_public_growth_snapshot() -> dict:
+    """수익화/브랜드 페이지용 공개 성장 지표"""
+    snapshot = {
+        "total_tracks": 0,
+        "total_posts": 0,
+        "today_visits": 0,
+        "total_votes": 0,
+        "recent_battles": 0,
+    }
+
+    if not supabase_available:
+        return snapshot
+
+    try:
+        supabase = SupabaseClient()
+
+        try:
+            tracks = supabase.get_tracks(limit=10000, offset=0, user_id=None, playlist_id=None)
+            snapshot["total_tracks"] = len(tracks) if tracks else 0
+        except Exception:
+            pass
+
+        try:
+            posts = supabase.get_posts(limit=10000, offset=0, user_id=None)
+            snapshot["total_posts"] = len(posts) if posts else 0
+        except Exception:
+            pass
+
+        try:
+            worldcup_stats = supabase.get_worldcup_stats()
+            snapshot["total_votes"] = worldcup_stats.get("total_votes", 0)
+            snapshot["recent_battles"] = worldcup_stats.get("recent_battles", 0)
+        except Exception:
+            pass
+
+        try:
+            snapshot["today_visits"] = supabase.get_today_visits()
+        except Exception:
+            pass
+    except Exception:
+        pass
+
+    return snapshot
+
+
+def _normalize_growth_lead_payload(data: dict) -> tuple[Optional[dict], Optional[str]]:
+    """리드 수집 페이로드 정규화/검증"""
+    lead_type = str(data.get("lead_type", "")).strip().lower()
+    email = str(data.get("email", "")).strip().lower()
+
+    if lead_type not in ALLOWED_GROWTH_LEAD_TYPES:
+        return None, "지원하지 않는 리드 타입입니다."
+    if not email:
+        return None, "이메일을 입력해주세요."
+    if len(email) > GROWTH_LEAD_EMAIL_MAX_LEN or not _is_valid_email(email):
+        return None, "올바른 이메일 주소를 입력해주세요."
+
+    payload = {
+        "lead_type": lead_type,
+        "email": email,
+        "name": _truncate_text(data.get("name"), GROWTH_LEAD_NAME_MAX_LEN),
+        "company": _truncate_text(data.get("company"), GROWTH_LEAD_COMPANY_MAX_LEN),
+        "budget_range": _truncate_text(data.get("budget_range"), GROWTH_LEAD_BUDGET_MAX_LEN),
+        "goal": _truncate_text(data.get("goal"), GROWTH_LEAD_GOAL_MAX_LEN),
+        "source_page": _truncate_text(data.get("source_page") or request.path, GROWTH_LEAD_SOURCE_MAX_LEN),
+        "referrer": _truncate_text(data.get("referrer") or request.headers.get("Referer"), GROWTH_LEAD_SOURCE_MAX_LEN),
+    }
+
+    reserved_keys = set(payload.keys())
+    metadata = {}
+    for key, value in data.items():
+        if key in reserved_keys:
+            continue
+        if value in (None, "", []):
+            continue
+        metadata[str(key)[:60]] = value
+    payload["metadata"] = metadata
+    return payload, None
+
+
+def _persist_growth_lead(payload: dict) -> tuple[bool, Optional[str], str]:
+    """Supabase 우선, 실패 시 로컬 fallback으로 리드 저장"""
+    user_id = str(current_user.id) if current_user.is_authenticated else None
+
+    if supabase_available:
+        try:
+            supabase = SupabaseClient()
+            lead_id = supabase.create_growth_lead(
+                lead_type=payload.get("lead_type"),
+                email=payload.get("email"),
+                name=payload.get("name"),
+                company=payload.get("company"),
+                budget_range=payload.get("budget_range"),
+                goal=payload.get("goal"),
+                source_page=payload.get("source_page"),
+                referrer=payload.get("referrer"),
+                metadata=payload.get("metadata"),
+                user_id=user_id,
+            )
+            if lead_id:
+                return True, lead_id, "supabase"
+        except Exception as exc:
+            console.log(f"[WARN] Growth lead Supabase 저장 실패, fallback 사용: {exc}")
+
+    lead_id = growth_lead_store.append({**payload, "user_id": user_id})
+    return True, lead_id, "local_fallback"
 
 
 def allowed_file(filename):
@@ -648,6 +959,41 @@ def api_me():
     return jsonify({'success': False, 'message': '로그인되지 않았습니다.'}), 401
 
 
+@app.route('/api/growth/leads', methods=['POST'])
+def create_growth_lead_api():
+    """수익화 리드/브랜드 문의 저장"""
+    try:
+        data = request.get_json() or {}
+        payload, error = _normalize_growth_lead_payload(data)
+        if error:
+            return jsonify({"success": False, "error": error}), 400
+
+        ip_address = _get_client_ip()
+        now = datetime.now()
+        last_at = _growth_last_submit_at_by_ip.get(ip_address)
+        if last_at and (now - last_at).total_seconds() < GROWTH_LEAD_MIN_INTERVAL_SECONDS:
+            return jsonify({
+                "success": False,
+                "error": "너무 빠르게 제출하고 있어요. 잠시 후 다시 시도해주세요.",
+            }), 429
+
+        success, lead_id, storage = _persist_growth_lead(payload)
+        if not success:
+            return jsonify({"success": False, "error": "리드 저장에 실패했습니다."}), 500
+
+        _growth_last_submit_at_by_ip[ip_address] = now
+        return jsonify({
+            "success": True,
+            "lead_id": lead_id,
+            "storage": storage,
+        }), 201
+    except Exception as e:
+        print(f"[ERROR] growth lead 저장 실패: {e}")
+        import traceback
+        traceback.print_exc()
+        return jsonify({"success": False, "error": str(e)}), 500
+
+
 @app.route('/')
 def index():
     """랜딩 페이지"""
@@ -753,6 +1099,16 @@ def index():
         print(f"[ERROR] 인덱스 페이지 데이터 로드 실패: {e}")
         import traceback
         traceback.print_exc()
+
+    growth_snapshot = _build_public_growth_snapshot()
+    if total_tracks_count:
+        growth_snapshot["total_tracks"] = total_tracks_count
+    if today_visits:
+        growth_snapshot["today_visits"] = today_visits
+    if worldcup_stats.get("total_votes"):
+        growth_snapshot["total_votes"] = worldcup_stats.get("total_votes", 0)
+    if worldcup_stats.get("recent_battles"):
+        growth_snapshot["recent_battles"] = worldcup_stats.get("recent_battles", 0)
     
     # 오늘 날짜 포맷팅
     from datetime import datetime
@@ -768,7 +1124,18 @@ def index():
         total_tracks_count=total_tracks_count,
         today_visits=today_visits,
         today_date=today_date,
-        is_authenticated=is_authenticated
+        is_authenticated=is_authenticated,
+        growth_snapshot=growth_snapshot,
+    )
+
+
+@app.route('/brand-studio')
+def brand_studio():
+    """브랜드/제휴 수익화 페이지"""
+    snapshot = _build_public_growth_snapshot()
+    return render_template(
+        'brand_studio.html',
+        growth_snapshot=snapshot,
     )
 
 
@@ -931,6 +1298,7 @@ def diary():
     console.log("[Route] /diary - 일기 피드 페이지 요청")
     
     error_message = None
+    posts = []
 
     # 페이지네이션
     try:
@@ -951,28 +1319,54 @@ def diary():
     if per_page > COMMUNITY_PER_PAGE_MAX:
         per_page = COMMUNITY_PER_PAGE_MAX
 
-    offset = (page - 1) * per_page
+    search_query = str(request.args.get('q', '')).strip()
+    author_query = str(request.args.get('author', '')).strip()
+    period = str(request.args.get('period', 'all')).strip().lower()
+    sort = str(request.args.get('sort', 'latest')).strip().lower()
+
+    if period not in {'all', 'today', '7d', '30d'}:
+        period = 'all'
+    if sort not in {'latest', 'oldest', 'title'}:
+        sort = 'latest'
 
     try:
         if supabase_available:
             supabase = SupabaseClient()
-            # 전체 사용자의 게시글 조회 (user_id 필터 제거)
-            posts = supabase.get_posts(limit=per_page, offset=offset, user_id=None)
+            scanned_posts = supabase.get_posts(limit=COMMUNITY_EXPLORE_SCAN_LIMIT, offset=0, user_id=None)
+            filtered_posts = _filter_diary_posts(
+                scanned_posts,
+                search_query=search_query,
+                author_query=author_query,
+                period=period,
+                sort=sort,
+            )
+            total_results = len(filtered_posts)
+            offset = (page - 1) * per_page
+            posts = filtered_posts[offset:offset + per_page]
         else:
-            posts = []
+            total_results = 0
     except Exception as e:
         print(f"[ERROR] 커뮤니티 게시글 조회 실패: {e}")
         error_message = "게시글을 불러오지 못했어요. 잠시 후 다시 시도해주세요."
         posts = []
+        total_results = 0
 
-    has_next = len(posts) == per_page
+    has_next = (page * per_page) < total_results
     return render_template(
         'community.html',
         posts=posts,
         error=error_message,
         page=page,
         per_page=per_page,
-        has_next=has_next
+        has_next=has_next,
+        total_results=total_results,
+        filters={
+            'q': search_query,
+            'author': author_query,
+            'period': period,
+            'sort': sort,
+        },
+        filters_applied=bool(search_query or author_query or period != 'all' or sort != 'latest'),
     )
 
 
@@ -1057,8 +1451,8 @@ def track_detail(track_id):
     source = track.get("source")
     embed = {"type": source, "url": track.get("url"), "source_id": track.get("source_id")}
 
-    # 현재 로그인한 사용자 ID (이미 로그인 체크 완료)
-    current_user_id = str(current_user.id)
+    # 현재 로그인한 사용자 ID
+    current_user_id = str(current_user.id) if current_user.is_authenticated else None
     
     # 트랙을 추가한 사용자 ID
     track_user_id = track.get('user_id')
@@ -1071,8 +1465,26 @@ def track_detail(track_id):
         track_user_id=track_user_id,
         current_user_id=current_user_id
     )
-    
-    return render_template('track_detail.html', track=track, embed=embed, comments=comments)
+
+    track_comment_count = supabase.get_track_comment_count(track_id)
+    battle_stats = supabase.get_track_battle_stats(track_id)
+    metadata = _safe_dict(track.get("metadata"))
+    track_stats = _build_track_stats_view(
+        track=track,
+        stored_stats=_safe_dict(metadata.get("stats")),
+        comment_count=track_comment_count,
+        battle_stats=battle_stats,
+    )
+
+    return render_template(
+        'track_detail.html',
+        track=track,
+        embed=embed,
+        comments=comments,
+        track_data_items=_build_track_data_items(track),
+        track_stats=track_stats,
+        can_sync_stats=(source in {'youtube', 'soundcloud'}) and track_stats_service_available,
+    )
 
 
 @app.route('/playlist/<playlist_id>')
@@ -1568,6 +1980,84 @@ def delete_track_comment_api(comment_id):
         return jsonify({"success": True}), 200
     except Exception as e:
         print(f"[ERROR] track_comment 삭제 실패: {e}")
+        import traceback
+        traceback.print_exc()
+        return jsonify({"success": False, "error": str(e)}), 500
+
+
+@app.route('/api/tracks/<track_id>/sync-stats', methods=['POST'])
+def sync_track_stats_api(track_id):
+    """트랙 외부 지표 동기화"""
+    try:
+        if not supabase_available:
+            return jsonify({"success": False, "error": "Supabase 연결이 불가능합니다."}), 503
+
+        if not track_stats_service_available:
+            return jsonify({"success": False, "error": "트랙 통계 기능을 사용할 수 없습니다."}), 503
+
+        ip_address = _get_client_ip()
+        sync_key = f"{ip_address}:{track_id}"
+        now = datetime.now()
+        last_sync_at = _track_last_stats_sync_at_by_ip.get(sync_key)
+        if last_sync_at and (now - last_sync_at).total_seconds() < TRACK_STATS_SYNC_MIN_INTERVAL_SECONDS:
+            remaining = TRACK_STATS_SYNC_MIN_INTERVAL_SECONDS - int((now - last_sync_at).total_seconds())
+            return jsonify({
+                "success": False,
+                "error": f"잠시 후 다시 시도해주세요. 약 {max(1, remaining)}초 남았습니다.",
+            }), 429
+
+        supabase = SupabaseClient()
+        track = supabase.get_track(track_id)
+        if not track:
+            return jsonify({"success": False, "error": "곡을 찾을 수 없습니다."}), 404
+
+        stats_service = TrackStatsService(console_log=console.log)
+        result = stats_service.fetch_stats(track)
+        if not result.get("success"):
+            return jsonify({
+                "success": False,
+                "error": result.get("error") or "외부 지표를 가져오지 못했습니다.",
+            }), 502
+
+        metadata = _safe_dict(track.get("metadata"))
+        provider = _safe_dict(metadata.get("provider"))
+        provider_fields = _safe_dict(result.get("provider_fields"))
+
+        for key in ("title", "uploader", "duration_seconds", "thumbnail_url"):
+            if provider_fields.get(key) is not None:
+                provider[key] = provider_fields.get(key)
+        metadata["provider"] = provider
+
+        synced_stats = _safe_dict(result.get("stats"))
+        synced_stats["comment_count"] = supabase.get_track_comment_count(track_id)
+        synced_stats["last_synced_at"] = now.isoformat()
+        metadata["stats"] = synced_stats
+
+        update_data = {"metadata": metadata}
+
+        if result.get("source_id") and not track.get("source_id"):
+            update_data["source_id"] = result.get("source_id")
+        if provider_fields.get("thumbnail_url") and not track.get("thumbnail_url"):
+            update_data["thumbnail_url"] = provider_fields.get("thumbnail_url")
+        if provider_fields.get("duration_seconds") and not track.get("duration_seconds"):
+            update_data["duration_seconds"] = provider_fields.get("duration_seconds")
+        if provider_fields.get("uploader") and not track.get("artist"):
+            update_data["artist"] = provider_fields.get("uploader")
+        if provider_fields.get("title") and not track.get("title"):
+            update_data["title"] = provider_fields.get("title")[:TRACK_TITLE_MAX_LEN]
+
+        updated = supabase.update_track(track_id, update_data)
+        if not updated:
+            return jsonify({"success": False, "error": "통계 저장에 실패했습니다."}), 500
+
+        _track_last_stats_sync_at_by_ip[sync_key] = now
+        return jsonify({
+            "success": True,
+            "stats": synced_stats,
+            "provider": result.get("provider"),
+        }), 200
+    except Exception as e:
+        print(f"[ERROR] track stats sync 실패: {e}")
         import traceback
         traceback.print_exc()
         return jsonify({"success": False, "error": str(e)}), 500

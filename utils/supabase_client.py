@@ -95,6 +95,49 @@ class SupabaseClient:
         except Exception as e:
             print(f"[ERROR] Supabase 게시글 생성 실패: {e}")
             return None
+
+    def create_growth_lead(
+        self,
+        lead_type: str,
+        email: str,
+        name: str = None,
+        company: str = None,
+        budget_range: str = None,
+        goal: str = None,
+        source_page: str = None,
+        referrer: str = None,
+        metadata: Dict = None,
+        user_id: str = None,
+    ) -> Optional[str]:
+        """수익화/제휴 리드 생성"""
+        try:
+            data = {
+                "lead_type": lead_type,
+                "email": email,
+                "name": name,
+                "company": company,
+                "budget_range": budget_range,
+                "goal": goal,
+                "source_page": source_page,
+                "referrer": referrer,
+                "metadata": metadata or {},
+                "created_at": datetime.now().isoformat(),
+                "updated_at": datetime.now().isoformat(),
+            }
+
+            if user_id:
+                data["user_id"] = user_id
+
+            response = self.client.table("growth_leads").insert(data).execute()
+            if response.data:
+                record_id = response.data[0].get("id")
+                print(f"[INFO] Supabase growth_leads 생성 성공: {record_id}")
+                return str(record_id)
+            print("[ERROR] Supabase growth_leads 생성 실패: 응답 데이터 없음")
+            return None
+        except Exception as e:
+            print(f"[ERROR] Supabase growth_leads 생성 실패: {e}")
+            return None
     
     def get_posts(self, limit: int = 50, offset: int = 0, user_id: str = None) -> List[Dict]:
         """
@@ -391,6 +434,20 @@ class SupabaseClient:
         except Exception as e:
             print(f"[ERROR] Supabase track_comments 조회 실패: {e}")
             return []
+
+    def get_track_comment_count(self, track_id: str) -> int:
+        """곡 코멘트 총 개수 조회"""
+        try:
+            response = (
+                self.client.table("track_comments")
+                .select("id", count="exact")
+                .eq("track_id", track_id)
+                .execute()
+            )
+            return response.count if response.count else 0
+        except Exception as e:
+            print(f"[ERROR] Supabase track_comments count 조회 실패: {e}")
+            return 0
 
     def delete_track_comment(self, comment_id: str) -> bool:
         """곡 코멘트 삭제"""
@@ -949,4 +1006,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

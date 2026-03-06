@@ -1,273 +1,351 @@
 {% extends "base.html" %}
 
 {% block title %}OFF THE COMMUNITY{% endblock %}
+{% block meta_description %}음악 아카이브, 감정 기록, 월드컵 투표, 브랜드 제휴 문의까지 이어지는 수익화형 커뮤니티 플랫폼.{% endblock %}
+
+{% block extra_css %}
+<style>
+    .home-grid {
+        display: grid;
+        grid-template-columns: 1.65fr 1fr;
+        gap: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    @media (max-width: 1024px) {
+        .home-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .offer-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 1rem;
+    }
+
+    @media (max-width: 980px) {
+        .offer-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .proof-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 1rem;
+    }
+
+    @media (max-width: 900px) {
+        .proof-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+    }
+
+    @media (max-width: 640px) {
+        .proof-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .conversion-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1.5rem;
+    }
+
+    @media (max-width: 980px) {
+        .conversion-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .offer-card {
+        min-height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .offer-card ul {
+        margin: 1rem 0 1.5rem;
+        padding-left: 1rem;
+        line-height: 1.9;
+        opacity: 0.72;
+    }
+
+    .metric-value {
+        display: block;
+        font-size: 2rem;
+        font-family: var(--font-serif);
+        margin-top: 0.35rem;
+    }
+
+    .inline-code {
+        font-size: 10px;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        opacity: 0.35;
+    }
+</style>
+{% endblock %}
 
 {% block content %}
 <div class="main-content-container">
-    <!-- Top Bar / Breadcrumb -->
     <div class="hidden md:flex items-center justify-between mb-6 pb-4 border-b border-white/10">
         <div class="flex items-center gap-2 text-[10px] uppercase tracking-widest opacity-40 font-pixel">
             <span>ROOT</span>
             <span>/</span>
-            <span class="opacity-70">HOME</span>
+            <span class="opacity-70">MONETIZATION_HOME</span>
         </div>
         <div class="flex items-center gap-3">
             <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-            <span class="text-[10px] uppercase tracking-widest opacity-60 font-pixel">SERVER: STABLE</span>
+            <span class="text-[10px] uppercase tracking-widest opacity-60 font-pixel">PIPELINE: ACTIVE</span>
         </div>
     </div>
 
-    <!-- Trending / Info Bar -->
-    <div class="mb-6 md:mb-8 overflow-x-auto -mx-4 px-4 md:mx-0 md:px-0">
+    <div class="mb-8 overflow-x-auto -mx-4 px-4 md:mx-0 md:px-0">
         <div class="flex items-center gap-3 md:gap-6 text-[9px] md:text-[10px] uppercase tracking-widest opacity-50 font-pixel whitespace-nowrap">
             <span>DATE: <span class="text-red-400">{{ today_date }}</span></span>
             <span class="hidden sm:inline">///</span>
-            <span class="hidden md:inline">TODAY VISITS: <span class="text-blue-400">{{ today_visits }}</span></span>
+            <span>TODAY VISITS: <span class="text-blue-400">{{ growth_snapshot.today_visits }}</span></span>
+            <span class="hidden sm:inline">///</span>
+            <span>TOTAL VOTES: <span class="text-green-400">{{ growth_snapshot.total_votes }}</span></span>
         </div>
     </div>
 
-    <!-- Main Content Grid -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6 mb-8 md:mb-10">
-        <!-- LIVE BROADCAST - Large Card -->
-        <section class="lg:col-span-2 pixel-card p-6 md:p-8 lg:p-12 relative overflow-hidden group">
-            <div class="absolute top-3 left-3 md:top-4 md:left-4 bg-red-600/80 px-2 py-1 md:px-3 md:py-1 border-2 border-white">
-                <span class="text-[9px] md:text-[10px] uppercase tracking-widest font-bold">LIVE BROADCAST</span>
-            </div>
-            {% if featured_track %}
-            <div class="absolute top-3 right-3 md:top-4 md:right-4 text-[8px] md:text-[9px] uppercase tracking-widest opacity-40">
-                <span class="hidden sm:inline">ARCHIVE_ID #</span>{{ featured_track.id[:8] }}
-            </div>
-            
-            <div class="relative z-10 mt-10 md:mt-12">
-                <h2 class="serif-font text-3xl sm:text-4xl md:text-5xl lg:text-6xl mb-4 md:mb-6 leading-tight">{{ featured_track.title or 'NEON DREAMS' }}</h2>
-                <p class="text-xs md:text-sm opacity-70 mb-3 md:mb-4 leading-relaxed serif-font">
-                    {% if featured_track.artist %}{{ featured_track.artist }}{% else %}Explore the synthesized reality of our latest audio-visual collection.{% endif %}
-                </p>
-                {% if featured_track.duration_str %}
-                <p class="text-[9px] md:text-[10px] uppercase tracking-widest opacity-50 mb-6 md:mb-8">{{ featured_track.duration_str }}</p>
-                {% endif %}
-                <div class="flex flex-col sm:flex-row gap-3 md:gap-4">
-                    <button class="btn-pixel text-xs tracking-widest px-6 py-3 md:px-8 md:py-4 flex items-center justify-center gap-2" onclick="window.location.href='{{ url_for('track_detail', track_id=featured_track.id) }}'">
-                        <span>▶</span>
-                        <span>PLAY NOW</span>
-                    </button>
-                    <button class="btn-outline text-xs tracking-widest px-6 py-3 md:px-8 md:py-4" onclick="window.location.href='{{ url_for('track_detail', track_id=featured_track.id) }}'">
-                        VIEW DETAILS
-                    </button>
+    <div class="home-grid">
+        <section class="pixel-card p-6 md:p-10 relative overflow-hidden">
+            <div class="absolute inset-y-0 right-0 w-2/5 bg-gradient-to-l from-white/10 to-transparent pointer-events-none"></div>
+            <div class="relative z-10">
+                <div class="inline-flex items-center gap-3 mb-5">
+                    <span class="text-[10px] uppercase tracking-[0.35em] opacity-45">Emotion Commerce Stack</span>
+                    <div class="w-10 h-[1px] bg-white/20"></div>
                 </div>
-            </div>
-            {% elif is_authenticated %}
-            <!-- 로그인했지만 곡이 없는 경우 -->
-            <div class="relative z-10 mt-10 md:mt-12">
-                <h2 class="serif-font text-3xl sm:text-4xl md:text-5xl lg:text-6xl mb-4 md:mb-6 leading-tight">NO TRACKS</h2>
-                <p class="text-xs md:text-sm opacity-70 mb-6 md:mb-8 max-w-2xl leading-relaxed serif-font">
-                    아직 추가된 곡이 없습니다. 첫 번째 곡을 추가해보세요.
+                <h1 class="serif-font text-4xl md:text-6xl leading-tight mb-5">
+                    감정 기록을<br>멤버십과 브랜드 매출로 연결합니다.
+                </h1>
+                <p class="text-sm md:text-base opacity-70 leading-relaxed max-w-2xl mb-8">
+                    OFF THE COMMUNITY는 음악 아카이브, 감정 기반 다이어리, 월드컵 참여 데이터를 한 곳에 모아
+                    크리에이터 멤버십과 브랜드 협업 리드를 동시에 확보하는 구조로 확장되고 있습니다.
                 </p>
-                <div class="flex flex-col sm:flex-row gap-3 md:gap-4">
-                    <button class="btn-pixel text-xs tracking-widest px-6 py-3 md:px-8 md:py-4 flex items-center justify-center gap-2" onclick="window.location.href='{{ url_for('playlists') }}'">
-                        <span>+</span>
-                        <span>ADD TRACK</span>
-                    </button>
-                    <button class="btn-outline text-xs tracking-widest px-6 py-3 md:px-8 md:py-4" onclick="window.location.href='{{ url_for('playlists') }}'">
-                        VIEW ARCHIVE
-                    </button>
+
+                <div class="flex flex-col sm:flex-row gap-3 mb-10">
+                    {% if is_authenticated %}
+                    <a href="{{ url_for('playlists') }}" class="btn-pixel text-xs tracking-widest px-6 py-3 justify-center">ADD YOUR TRACK</a>
+                    {% else %}
+                    <a href="{{ url_for('login') }}" class="btn-pixel text-xs tracking-widest px-6 py-3 justify-center">START MEMBERSHIP FLOW</a>
+                    {% endif %}
+                    <a href="{{ url_for('brand_studio') }}" class="btn-outline text-xs tracking-widest px-6 py-3 text-center">REQUEST MEDIA KIT</a>
                 </div>
-            </div>
-            {% else %}
-            <!-- 로그인하지 않은 사용자 -->
-            <div class="relative z-10 mt-10 md:mt-12">
-                <h2 class="serif-font text-3xl sm:text-4xl md:text-5xl lg:text-6xl mb-4 md:mb-6 leading-tight">LOGIN REQUIRED</h2>
-                <p class="text-xs md:text-sm opacity-70 mb-6 md:mb-8 max-w-2xl leading-relaxed serif-font">
-                    이 섹션을 보려면 로그인이 필요합니다. 로그인하여 나만의 음악 아카이브를 만들어보세요.
-                </p>
-                <div class="flex flex-col sm:flex-row gap-3 md:gap-4">
-                    <button class="btn-pixel text-xs tracking-widest px-6 py-3 md:px-8 md:py-4 flex items-center justify-center gap-2" onclick="window.location.href='{{ url_for('login') }}'">
-                        <span>→</span>
-                        <span>LOGIN</span>
-                    </button>
-                    <button class="btn-outline text-xs tracking-widest px-6 py-3 md:px-8 md:py-4" onclick="window.location.href='{{ url_for('register') }}'">
-                        REGISTER
-                    </button>
+
+                <div class="proof-grid">
+                    <div class="border border-white/10 p-4 bg-white/3">
+                        <span class="inline-code">Tracks</span>
+                        <strong class="metric-value">{{ growth_snapshot.total_tracks }}</strong>
+                    </div>
+                    <div class="border border-white/10 p-4 bg-white/3">
+                        <span class="inline-code">Diaries</span>
+                        <strong class="metric-value">{{ growth_snapshot.total_posts }}</strong>
+                    </div>
+                    <div class="border border-white/10 p-4 bg-white/3">
+                        <span class="inline-code">Votes</span>
+                        <strong class="metric-value">{{ growth_snapshot.total_votes }}</strong>
+                    </div>
+                    <div class="border border-white/10 p-4 bg-white/3">
+                        <span class="inline-code">Today Visits</span>
+                        <strong class="metric-value">{{ growth_snapshot.today_visits }}</strong>
+                    </div>
                 </div>
-            </div>
-            {% endif %}
-            
-            <!-- Background Visual Elements -->
-            <div class="absolute right-0 top-0 w-1/2 h-full opacity-10 pointer-events-none">
-                <div class="w-full h-full bg-gradient-to-l from-white/20 to-transparent"></div>
             </div>
         </section>
 
-        <!-- Right Sidebar - Two Panels -->
-        <div class="space-y-4 md:space-y-6">
-            <!-- DAILY CURATOR -->
-            <section class="pixel-card p-4 md:p-6 {% if daily_curator_track or is_authenticated %}cursor-pointer hover:border-white/40 transition-all{% endif %}" onclick="{% if daily_curator_track %}window.location.href='{{ url_for('track_detail', track_id=daily_curator_track.id) }}'{% elif is_authenticated %}window.location.href='{{ url_for('playlists') }}'{% else %}window.location.href='{{ url_for('login') }}'{% endif %}">
-                <h3 class="text-[10px] md:text-xs uppercase tracking-[0.3em] opacity-40 mb-3 md:mb-4">DAILY CURATOR</h3>
-                {% if daily_curator_track %}
-                <div class="mb-3">
-                    <h4 class="text-xs md:text-sm font-bold mb-2 line-clamp-1">{{ daily_curator_track.title or 'Analog Warmth' }}</h4>
-                    <div class="flex items-center gap-2 md:gap-3">
-                        <div class="w-12 h-12 md:w-16 md:h-16 bg-white/5 border border-white/10 flex items-center justify-center overflow-hidden flex-shrink-0">
-                            {% if daily_curator_track.thumbnail_url %}
-                            <img src="{{ daily_curator_track.thumbnail_url }}" alt="Thumbnail" class="w-full h-full object-cover opacity-70">
-                            {% else %}
-                            <span class="text-xl md:text-2xl opacity-30">🎵</span>
-                            {% endif %}
-                        </div>
-                        <div class="flex-1 min-w-0">
-                            <div class="w-full h-2 bg-white/10 mb-2">
-                                <div class="h-full bg-white/40" style="width: 58%"></div>
-                            </div>
-                            <div class="text-[9px] md:text-[10px] uppercase tracking-widest opacity-40 truncate">
-                                {% if daily_curator_track.duration_str %}{{ daily_curator_track.duration_str }}{% else %}--:--{% endif %}
-                            </div>
-                        </div>
+        <div class="space-y-6">
+            <section class="pixel-card p-5 md:p-6">
+                <div class="text-[10px] uppercase tracking-[0.3em] opacity-40 mb-3">Live Broadcast</div>
+                {% if featured_track %}
+                <h2 class="serif-font text-2xl md:text-3xl leading-tight mb-3">{{ featured_track.title }}</h2>
+                <p class="text-sm opacity-60 mb-5">{{ featured_track.artist or 'Archive featured track' }}</p>
+                <div class="flex flex-col gap-3">
+                    <a href="{{ url_for('track_detail', track_id=featured_track.id) }}" class="btn-pixel text-xs tracking-widest justify-center">PLAY NOW</a>
+                    <div class="text-[10px] uppercase tracking-widest opacity-35">
+                        {% if featured_track.duration_str %}{{ featured_track.duration_str }} · {% endif %}{{ featured_track.source }}
                     </div>
                 </div>
                 {% elif is_authenticated %}
-                <!-- 로그인했지만 곡이 없는 경우 -->
-                <div class="mb-3">
-                    <h4 class="text-xs md:text-sm font-bold mb-2 opacity-60">No Tracks</h4>
-                    <p class="text-[9px] md:text-[10px] opacity-50">곡을 추가해주세요</p>
-                </div>
+                <h2 class="serif-font text-2xl leading-tight mb-3">새로운 트랙을 추가해보세요</h2>
+                <p class="text-sm opacity-60 mb-5">개인 아카이브가 커질수록 월드컵, 코멘트, 리드 전환 접점이 늘어납니다.</p>
+                <a href="{{ url_for('playlists') }}" class="btn-pixel text-xs tracking-widest justify-center">BUILD ARCHIVE</a>
                 {% else %}
-                <!-- 로그인하지 않은 사용자 -->
-                <div class="mb-3">
-                    <h4 class="text-xs md:text-sm font-bold mb-2 opacity-60">Login Required</h4>
-                    <p class="text-[9px] md:text-[10px] opacity-50">로그인이 필요합니다</p>
-                </div>
+                <h2 class="serif-font text-2xl leading-tight mb-3">로그인 후 아카이브를 시작하세요</h2>
+                <p class="text-sm opacity-60 mb-5">멤버십 전환과 리텐션의 시작은 직접 쌓는 아카이브입니다.</p>
+                <a href="{{ url_for('login') }}" class="btn-pixel text-xs tracking-widest justify-center">LOGIN</a>
                 {% endif %}
             </section>
 
-            <!-- ACTIVITY PULSE (월드컵 투표) -->
-            <section class="pixel-card p-4 md:p-6 cursor-pointer hover:border-white/40 transition-all relative overflow-hidden bg-gradient-to-br from-white/5 to-transparent" onclick="window.location.href='{{ url_for('worldcup') }}'">
-                <div class="absolute -right-2 -top-2 md:-right-4 md:-top-4 opacity-10">
-                    <span class="text-4xl md:text-6xl">🏆</span>
-                </div>
-                <div class="relative z-10">
-                    <h3 class="text-[10px] md:text-xs uppercase tracking-[0.3em] opacity-40 mb-3 md:mb-4">WORLD CUP VOTES</h3>
-                    <p class="text-[9px] md:text-[10px] uppercase tracking-widest opacity-50 mb-3 md:mb-4">Last 7 Days</p>
-                    <div class="flex items-end gap-1 md:gap-2 h-20 md:h-24 mb-2 md:mb-3">
-                        {% if worldcup_stats.recent_battles > 0 %}
-                            {% set max_votes = worldcup_stats.recent_battles %}
-                            {% for day in range(7) %}
-                                {% set day_votes = (worldcup_stats.recent_battles // 7) + (1 if day < (worldcup_stats.recent_battles % 7) else 0) %}
-                                {% set height_percent = (day_votes / max_votes * 100) if max_votes > 0 else 20 %}
-                                {% set opacity = 20 + (day * 10) %}
-                                <div class="flex-1 bg-white" style="height: {{ height_percent }}%; opacity: {{ opacity / 100 }};"></div>
-                            {% endfor %}
-                        {% else %}
-                            <div class="flex-1 bg-white/20" style="height: 30%"></div>
-                            <div class="flex-1 bg-white/30" style="height: 45%"></div>
-                            <div class="flex-1 bg-white/40" style="height: 60%"></div>
-                            <div class="flex-1 bg-white/50" style="height: 75%"></div>
-                            <div class="flex-1 bg-white/60" style="height: 90%"></div>
-                            <div class="flex-1 bg-white/70" style="height: 100%"></div>
-                            <div class="flex-1 bg-white/80" style="height: 85%"></div>
-                        {% endif %}
+            <section class="pixel-card p-5 md:p-6">
+                <div class="text-[10px] uppercase tracking-[0.3em] opacity-40 mb-3">Revenue Levers</div>
+                <div class="space-y-4">
+                    <div class="border border-white/8 p-4">
+                        <div class="inline-code">Membership</div>
+                        <div class="serif-font text-xl mt-2">Archive Pass Beta</div>
+                        <p class="text-sm opacity-60 mt-2">크리에이터 전용 피드, 통계 싱크, 우선 피처 출시.</p>
                     </div>
-                    <div class="text-[9px] md:text-[10px] uppercase tracking-widest text-green-400 mb-1 md:mb-2">
-                        {{ worldcup_stats.recent_battles }} VOTES
+                    <div class="border border-white/8 p-4">
+                        <div class="inline-code">B2B</div>
+                        <div class="serif-font text-xl mt-2">Brand Studio</div>
+                        <p class="text-sm opacity-60 mt-2">브랜드 플레이리스트, 감정 인사이트, 참여형 캠페인 제안.</p>
                     </div>
-                    <div class="text-[8px] md:text-[9px] uppercase tracking-widest opacity-40">
-                        {{ worldcup_stats.total_votes }} TOTAL
+                    <div class="border border-white/8 p-4">
+                        <div class="inline-code">Retention</div>
+                        <div class="serif-font text-xl mt-2">Founder List</div>
+                        <p class="text-sm opacity-60 mt-2">출시 알림, 미디어킷, 초기 가격 혜택으로 재방문 확보.</p>
                     </div>
                 </div>
             </section>
         </div>
     </div>
 
-    <!-- Content Filters -->
-    <div class="flex gap-2 mb-6 md:mb-8 border-b-2 border-white/10 pb-3 md:pb-4 overflow-x-auto -mx-4 px-4 md:mx-0 md:px-0">
-        <button class="px-3 py-2 md:px-4 md:py-2 text-[10px] md:text-xs uppercase tracking-widest border-2 border-white bg-white text-black font-bold whitespace-nowrap flex-shrink-0" onclick="window.location.href='{{ url_for('index') }}'">ALL</button>
-        {% if is_authenticated %}
-        <button class="px-3 py-2 md:px-4 md:py-2 text-[10px] md:text-xs uppercase tracking-widest border-2 border-white/20 hover:border-white/40 transition-colors whitespace-nowrap flex-shrink-0" onclick="window.location.href='{{ url_for('playlists') }}'">MUSIC</button>
-        <button class="px-3 py-2 md:px-4 md:py-2 text-[10px] md:text-xs uppercase tracking-widest border-2 border-white/20 hover:border-white/40 transition-colors whitespace-nowrap flex-shrink-0" onclick="window.location.href='{{ url_for('diary') }}'">DIARIES</button>
-        <button class="px-3 py-2 md:px-4 md:py-2 text-[10px] md:text-xs uppercase tracking-widest border-2 border-white/20 hover:border-white/40 transition-colors whitespace-nowrap flex-shrink-0" onclick="window.location.href='{{ url_for('charts_page') }}'">CHARTS</button>
-        {% else %}
-        <button class="px-3 py-2 md:px-4 md:py-2 text-[10px] md:text-xs uppercase tracking-widest border-2 border-white/20 hover:border-white/40 transition-colors whitespace-nowrap flex-shrink-0" onclick="window.location.href='{{ url_for('login') }}'">MUSIC</button>
-        <button class="px-3 py-2 md:px-4 md:py-2 text-[10px] md:text-xs uppercase tracking-widest border-2 border-white/20 hover:border-white/40 transition-colors whitespace-nowrap flex-shrink-0" onclick="window.location.href='{{ url_for('diary') }}'">DIARIES</button>
-        <button class="px-3 py-2 md:px-4 md:py-2 text-[10px] md:text-xs uppercase tracking-widest border-2 border-white/20 hover:border-white/40 transition-colors whitespace-nowrap flex-shrink-0" onclick="window.location.href='{{ url_for('login') }}'">CHARTS</button>
-        {% endif %}
-    </div>
+    <section class="mb-10">
+        <div class="inline-flex items-center gap-4 mb-6">
+            <span class="text-[10px] tracking-[0.4em] uppercase opacity-40">Monetization Offers</span>
+            <div class="w-12 h-[1px] bg-white/20"></div>
+        </div>
+        <div class="offer-grid">
+            <article class="pixel-card offer-card">
+                <div class="inline-code">Launch Offer</div>
+                <h3 class="serif-font text-2xl mt-3">Archive Pass Beta</h3>
+                <p class="text-sm opacity-60 mt-3">월 구독 기반 크리에이터 멤버십. 아카이브 운영 도구와 우선 기능을 제공합니다.</p>
+                <div class="serif-font text-3xl mt-5">9,900 KRW<span class="text-sm opacity-40"> / month</span></div>
+                <ul>
+                    <li>트랙 지표 우선 동기화</li>
+                    <li>멤버 전용 큐레이션 배지</li>
+                    <li>베타 기능 우선 오픈</li>
+                </ul>
+                <form data-growth-form class="mt-auto space-y-3">
+                    <input type="hidden" name="lead_type" value="creator_membership">
+                    <input type="hidden" name="source_page" value="home_archive_pass">
+                    <input type="email" name="email" placeholder="멤버십 오픈 알림 이메일" class="pixel-input" required>
+                    <button type="submit" class="btn-pixel text-xs tracking-widest justify-center">JOIN BETA</button>
+                    <div class="status-message" data-growth-status></div>
+                </form>
+            </article>
 
-    <!-- Recent Content Grid (Bento Style) -->
-    <div class="grid grid-cols-1 md:grid-cols-12 gap-3 md:gap-4 mb-8 md:mb-10">
-        <!-- 다이어리 샘플 섹션 (로그인/미로그인 통일) -->
-        <div class="col-span-1 md:col-span-4 pixel-card p-4 md:p-6">
-            <div class="flex justify-between items-start mb-4 md:mb-6">
-                <span class="text-xl md:text-2xl opacity-60">📖</span>
-                <span class="text-[9px] md:text-[10px] uppercase tracking-widest opacity-40">DIARY COMMUNITY</span>
+            <article class="pixel-card offer-card">
+                <div class="inline-code">B2B Campaign</div>
+                <h3 class="serif-font text-2xl mt-3">Brand Studio Sprint</h3>
+                <p class="text-sm opacity-60 mt-3">브랜드가 음악 맥락 안에서 노출되고 반응 데이터를 회수할 수 있는 협업 패키지.</p>
+                <div class="serif-font text-3xl mt-5">690,000 KRW<span class="text-sm opacity-40">+</span></div>
+                <ul>
+                    <li>브랜드 큐레이션 페이지</li>
+                    <li>투표/참여형 이벤트 설계</li>
+                    <li>성과 리포트 초안 제공</li>
+                </ul>
+                <a href="{{ url_for('brand_studio') }}" class="btn-outline text-xs tracking-widest text-center mt-auto">OPEN BRAND STUDIO</a>
+            </article>
+
+            <article class="pixel-card offer-card">
+                <div class="inline-code">Insight Product</div>
+                <h3 class="serif-font text-2xl mt-3">Audience Insight Report</h3>
+                <p class="text-sm opacity-60 mt-3">감정 기록, 코멘트, 참여 데이터를 정리한 경량 인사이트 리포트형 상품.</p>
+                <div class="serif-font text-3xl mt-5">290,000 KRW<span class="text-sm opacity-40">+</span></div>
+                <ul>
+                    <li>반응 키워드 요약</li>
+                    <li>콘텐츠 포맷 제안</li>
+                    <li>브랜드/아티스트 협업 방향 정리</li>
+                </ul>
+                <form data-growth-form class="mt-auto space-y-3">
+                    <input type="hidden" name="lead_type" value="insight_report">
+                    <input type="hidden" name="source_page" value="home_insight_report">
+                    <input type="email" name="email" placeholder="리포트 문의 이메일" class="pixel-input" required>
+                    <input type="text" name="company" placeholder="브랜드 또는 팀명" class="pixel-input">
+                    <button type="submit" class="btn-pixel text-xs tracking-widest justify-center">REQUEST REPORT</button>
+                    <div class="status-message" data-growth-status></div>
+                </form>
+            </article>
+        </div>
+    </section>
+
+    <section class="conversion-grid mb-10">
+        <article class="pixel-card p-6 md:p-8">
+            <div class="inline-code">Creator Conversion Form</div>
+            <h3 class="serif-font text-3xl mt-3 mb-4">Creator Membership Waitlist</h3>
+            <p class="text-sm opacity-60 leading-relaxed mb-6">
+                감정 기반 아카이브를 꾸준히 운영하는 크리에이터를 위해 멤버십 우선 모집을 시작합니다.
+            </p>
+            <form data-growth-form class="space-y-4">
+                <input type="hidden" name="lead_type" value="premium_waitlist">
+                <input type="hidden" name="source_page" value="home_creator_waitlist">
+                <input type="text" name="name" placeholder="이름 또는 활동명" class="pixel-input">
+                <input type="email" name="email" placeholder="이메일" class="pixel-input" required>
+                <textarea name="goal" placeholder="멤버십에서 가장 기대하는 기능이나 운영 목적" class="pixel-textarea"></textarea>
+                <button type="submit" class="btn-pixel text-xs tracking-widest justify-center">APPLY FOR FOUNDING MEMBER</button>
+                <div class="status-message" data-growth-status></div>
+            </form>
+        </article>
+
+        <article class="pixel-card p-6 md:p-8">
+            <div class="inline-code">Brand Lead Form</div>
+            <h3 class="serif-font text-3xl mt-3 mb-4">Brand Partnership Inquiry</h3>
+            <p class="text-sm opacity-60 leading-relaxed mb-6">
+                음악 취향과 감정 기록 맥락 안에서 브랜드 캠페인을 설계하려는 팀을 위한 문의 폼입니다.
+            </p>
+            <form data-growth-form class="space-y-4">
+                <input type="hidden" name="lead_type" value="brand_partnership">
+                <input type="hidden" name="source_page" value="home_brand_partnership">
+                <input type="text" name="name" placeholder="담당자 이름" class="pixel-input">
+                <input type="email" name="email" placeholder="업무용 이메일" class="pixel-input" required>
+                <input type="text" name="company" placeholder="회사명" class="pixel-input">
+                <select name="budget_range" class="pixel-select">
+                    <option value="">예산 범위 선택</option>
+                    <option value="under_300k">Under 300,000 KRW</option>
+                    <option value="300k_1m">300,000 to 1,000,000 KRW</option>
+                    <option value="1m_3m">1,000,000 to 3,000,000 KRW</option>
+                    <option value="3m_plus">3,000,000 KRW+</option>
+                </select>
+                <textarea name="goal" placeholder="원하는 캠페인 목표나 협업 방향" class="pixel-textarea"></textarea>
+                <button type="submit" class="btn-pixel text-xs tracking-widest justify-center">REQUEST BRAND CALL</button>
+                <div class="status-message" data-growth-status></div>
+            </form>
+        </article>
+    </section>
+
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
+        <section class="col-span-1 md:col-span-5 pixel-card p-5 md:p-6">
+            <div class="flex justify-between items-start mb-5">
+                <span class="text-[10px] uppercase tracking-[0.3em] opacity-40">Recent Diaries</span>
+                <a href="{{ url_for('diary') }}" class="text-[10px] uppercase tracking-widest opacity-50 hover:opacity-100">OPEN</a>
             </div>
-            <h4 class="text-base md:text-lg font-bold mb-4">Recent Diaries</h4>
             {% if recent_diary and recent_diary|length > 0 %}
-            <div class="space-y-3 md:space-y-4 mb-4">
+            <div class="space-y-3">
                 {% for diary in recent_diary[:3] %}
-                <div class="p-3 bg-white/5 border border-white/10 hover:border-white/30 transition-all cursor-pointer group" onclick="window.location.href='{{ url_for('community_post', post_id=diary.id) }}'">
-                    <h5 class="text-sm font-bold mb-1 line-clamp-1 group-hover:underline decoration-1 underline-offset-2">{{ diary.title or 'Untitled' }}</h5>
-                    <p class="text-xs opacity-60 leading-relaxed line-clamp-2">
-                        {{ diary.content[:80] }}{% if diary.content|length > 80 %}...{% endif %}
-                    </p>
+                <div class="border border-white/10 p-4 hover:border-white/35 transition-all cursor-pointer" onclick="window.location.href='{{ url_for('community_post', post_id=diary.id) }}'">
+                    <h4 class="serif-font text-lg mb-2">{{ diary.title }}</h4>
+                    <p class="text-sm opacity-60 line-clamp-2">{{ diary.content[:110] }}{% if diary.content|length > 110 %}...{% endif %}</p>
                 </div>
                 {% endfor %}
             </div>
-            <button class="w-full py-2 bg-white/5 border border-white/10 text-[10px] md:text-xs font-bold uppercase text-white hover:bg-white hover:text-black transition-all" onclick="window.location.href='{{ url_for('diary') }}'">
-                View All Diaries →
-            </button>
             {% else %}
-            <p class="text-xs opacity-60 mb-4 leading-relaxed">
-                아직 작성된 다이어리가 없습니다.
-            </p>
-            <button class="w-full py-2 bg-white/5 border border-white/10 text-[10px] md:text-xs font-bold uppercase text-white hover:bg-white hover:text-black transition-all" onclick="window.location.href='{{ url_for('diary') }}'">
-                Explore Diaries →
-            </button>
+            <p class="text-sm opacity-60">아직 공개된 기록이 없습니다. 첫 번째 기록이 커뮤니티의 톤을 만듭니다.</p>
             {% endif %}
-        </div>
+        </section>
 
-        <!-- World Cup Status -->
-        <div class="col-span-1 md:col-span-4 pixel-card p-4 md:p-6 hover:border-white/40 transition-all cursor-pointer group relative overflow-hidden bg-gradient-to-br from-white/5 to-transparent" onclick="window.location.href='{{ url_for('worldcup') }}'">
-            <div class="absolute -right-2 -top-2 md:-right-4 md:-top-4 opacity-10">
-                <span class="text-4xl md:text-6xl">🏆</span>
+        <section class="col-span-1 md:col-span-3 pixel-card p-5 md:p-6">
+            <div class="text-[10px] uppercase tracking-[0.3em] opacity-40 mb-3">World Cup Pulse</div>
+            <h3 class="serif-font text-2xl mb-3">참여 신호</h3>
+            <div class="text-sm opacity-60 leading-relaxed mb-5">
+                최근 7일간 {{ growth_snapshot.recent_battles }}개의 배틀이 발생했고 총 {{ growth_snapshot.total_votes }}표가 누적되었습니다.
             </div>
-            <div class="relative z-10">
-                <div class="flex items-center gap-2 mb-2">
-                    <span class="relative flex h-2 w-2">
-                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                        <span class="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
-                    </span>
-                    <span class="text-[9px] md:text-[10px] font-bold text-red-400 uppercase tracking-widest">Live Voting</span>
-                </div>
-                <h3 class="text-lg md:text-xl font-bold mb-3 md:mb-4">World Cup</h3>
-                <p class="text-xs opacity-60 mb-3 md:mb-4">Vote for your favorite tracks in head-to-head battles.</p>
-                <button class="w-full py-2 bg-white/5 border border-white/10 text-[10px] md:text-xs font-bold uppercase text-white hover:bg-white hover:text-black transition-all">
-                    Join Vote
-                </button>
-            </div>
-        </div>
+            <a href="{{ url_for('worldcup') }}" class="btn-outline text-xs tracking-widest text-center">JOIN VOTING</a>
+        </section>
 
-        <!-- Quick Stats -->
-        <div class="col-span-1 md:col-span-4 pixel-card p-4 md:p-6">
-            <h3 class="text-[10px] md:text-xs uppercase tracking-[0.3em] opacity-40 mb-3 md:mb-4">QUICK STATS</h3>
-            <div class="space-y-3 md:space-y-4">
-                <div>
-                    <div class="flex justify-between items-center mb-1">
-                        <span class="text-xs opacity-60">Tracks</span>
-                        <span class="text-sm font-bold">{{ activity_stats.total_tracks }}</span>
-                    </div>
-                </div>
-                <div>
-                    <div class="flex justify-between items-center mb-1">
-                        <span class="text-xs opacity-60">Posts</span>
-                        <span class="text-sm font-bold">{{ activity_stats.total_posts }}</span>
-                    </div>
-                </div>
-                <div class="pt-3 md:pt-4 border-t border-white/10">
-                    <a href="{{ url_for('playlists') }}" class="text-[9px] md:text-[10px] uppercase tracking-widest opacity-60 hover:opacity-100 transition-opacity">
-                        View Archive →
-                    </a>
-                </div>
-            </div>
-        </div>
+        <section class="col-span-1 md:col-span-4 pixel-card p-5 md:p-6">
+            <div class="text-[10px] uppercase tracking-[0.3em] opacity-40 mb-3">Next Revenue Step</div>
+            <h3 class="serif-font text-2xl mb-3">브랜드 페이지에서 바로 제안서 흐름으로</h3>
+            <p class="text-sm opacity-60 leading-relaxed mb-5">
+                패키지 구성, 예산 범위, 문의 폼을 한 번에 제공하는 전용 페이지를 열어 두었습니다.
+            </p>
+            <a href="{{ url_for('brand_studio') }}" class="btn-pixel text-xs tracking-widest justify-center">GO TO BRAND STUDIO</a>
+        </section>
     </div>
 </div>
 {% endblock %}

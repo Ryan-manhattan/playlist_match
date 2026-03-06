@@ -16,6 +16,7 @@
 - ✅ **tracks** - 곡 정보 (SoundCloud, YouTube 등)
 - ✅ **track_comments** - 곡별 감상 코멘트
 - ✅ **users** - 사용자 정보 (Google OAuth)
+- ✅ **growth_leads** - 뉴스레터/멤버십/브랜드 문의 리드
 
 ### 3. 테이블 확인
 
@@ -71,6 +72,19 @@ ORDER BY table_name;
 - `updated_at` - 수정일시
 - `last_login` - 마지막 로그인
 
+### growth_leads (수익화 리드)
+- `id` - UUID (Primary Key)
+- `lead_type` - 리드 유형 (newsletter, creator_membership, brand_partnership 등)
+- `email` - 연락처 이메일
+- `name` - 담당자/리드 이름
+- `company` - 회사명
+- `budget_range` - 예산 범위
+- `goal` - 문의 목적/목표
+- `source_page` - 유입 페이지
+- `metadata` - 추가 폼 데이터(JSONB)
+- `user_id` - 로그인 사용자 연동(선택)
+- `created_at` - 생성일시
+
 ## 🔒 RLS (Row Level Security)
 
 모든 테이블에 RLS가 활성화되어 있으며, 현재는 모든 사용자가 읽기/쓰기 가능하도록 설정되어 있습니다.
@@ -93,8 +107,6 @@ FROM information_schema.columns
 WHERE table_schema = 'public' 
   AND table_name = 'posts';
 ```
-
-
 
 
 

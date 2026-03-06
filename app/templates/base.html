@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}OFF THE COMMUNITY{% endblock %}</title>
+    <meta name="description" content="{% block meta_description %}OFF THE COMMUNITY는 음악 아카이브, 감정 기록, 브랜드 협업 문의까지 연결하는 감성 기반 커뮤니티 플랫폼입니다.{% endblock %}">
+    <meta property="og:title" content="{% block og_title %}OFF THE COMMUNITY{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}음악 기록과 팬 반응이 브랜드 협업과 멤버십 전환으로 이어지는 아카이브 플랫폼.{% endblock %}">
+    <meta property="og:type" content="website">
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -98,6 +102,10 @@
                 <div class="dot"></div>
                 <span>WORLD CUP</span>
             </a>
+            <a href="{{ url_for('brand_studio') }}" class="sidebar-item {% if request.endpoint == 'brand_studio' %}active{% endif %}">
+                <div class="dot"></div>
+                <span>BRAND STUDIO</span>
+            </a>
             <a href="{{ url_for('music_studio') }}" class="sidebar-item {% if request.endpoint == 'music_studio' %}active{% endif %}" style="display: none;">
                 <div class="dot"></div>
                 <span>음악 스튜디오</span>
@@ -107,6 +115,22 @@
                 <span>영상 스튜디오</span>
             </a>
         </nav>
+
+        <div class="p-4 border-t-2 border-[#111]">
+            <div class="pixel-card !p-4 !shadow-none border-white/10">
+                <div class="text-[9px] uppercase tracking-[0.25em] opacity-40 mb-2">Founder List</div>
+                <p class="text-[11px] leading-relaxed opacity-65 mb-4">
+                    멤버십 오픈, 브랜드 협업, 미디어킷 공개 소식을 먼저 받습니다.
+                </p>
+                <form data-growth-form class="space-y-3">
+                    <input type="hidden" name="lead_type" value="newsletter">
+                    <input type="hidden" name="source_page" value="sidebar">
+                    <input type="email" name="email" placeholder="email@domain.com" class="pixel-input text-xs" required>
+                    <button type="submit" class="btn-pixel text-[10px] tracking-widest w-full justify-center">JOIN WAITLIST</button>
+                    <div class="status-message" data-growth-status></div>
+                </form>
+            </div>
+        </div>
         
         <!-- 로그인 상태 표시 -->
         <div class="p-4 border-t-2 border-[#111]">
@@ -149,6 +173,10 @@
         <div class="hidden lg:block opacity-30 text-[9px]">
             NODE: ARCHIVE-01
         </div>
+
+        <a href="{{ url_for('brand_studio') }}" class="hidden md:inline opacity-55 hover:opacity-100 transition-opacity text-[10px]">
+            BRAND STUDIO
+        </a>
     </footer>
 
     <!-- Scripts -->
@@ -162,6 +190,53 @@
                 overlay.style.display = sidebar.classList.contains('open') ? 'block' : 'none';
             }
         }
+
+        function bindGrowthLeadForms() {
+            document.querySelectorAll('form[data-growth-form]').forEach((form) => {
+                if (form.dataset.bound === 'true') return;
+                form.dataset.bound = 'true';
+
+                form.addEventListener('submit', async (event) => {
+                    event.preventDefault();
+                    const status = form.querySelector('[data-growth-status]');
+                    const submitBtn = form.querySelector('button[type="submit"]');
+                    const payload = Object.fromEntries(new FormData(form).entries());
+                    payload.source_page = payload.source_page || window.location.pathname;
+                    payload.referrer = document.referrer || '';
+
+                    if (status) status.textContent = '';
+                    if (submitBtn) {
+                        submitBtn.disabled = true;
+                        submitBtn.dataset.originalText = submitBtn.dataset.originalText || submitBtn.textContent;
+                        submitBtn.textContent = 'SENDING...';
+                    }
+
+                    try {
+                        const response = await fetch('/api/growth/leads', {
+                            method: 'POST',
+                            headers: {'Content-Type': 'application/json'},
+                            body: JSON.stringify(payload)
+                        });
+                        const data = await response.json();
+                        if (data.success) {
+                            if (status) status.textContent = '신청이 접수되었습니다.';
+                            form.reset();
+                        } else if (status) {
+                            status.textContent = data.error || '접수에 실패했습니다.';
+                        }
+                    } catch (error) {
+                        if (status) status.textContent = '네트워크 오류가 발생했습니다.';
+                    } finally {
+                        if (submitBtn) {
+                            submitBtn.disabled = false;
+                            submitBtn.textContent = submitBtn.dataset.originalText || 'SUBMIT';
+                        }
+                    }
+                });
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', bindGrowthLeadForms);
     </script>
     {% block extra_js %}{% endblock %}
 </body>

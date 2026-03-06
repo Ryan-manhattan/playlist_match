@@ -10,69 +10,129 @@
         line-height: 1.1;
         margin-bottom: 1.5rem;
     }
-    
+
     @media (max-width: 768px) {
         .community-header h2 {
             font-size: 2.25rem;
         }
     }
-    
+
+    .toolbar-grid {
+        display: grid;
+        grid-template-columns: 1.4fr 0.8fr 0.7fr 0.7fr auto;
+        gap: 0.8rem;
+        align-items: end;
+    }
+
+    @media (max-width: 960px) {
+        .toolbar-grid {
+            grid-template-columns: 1fr 1fr;
+        }
+    }
+
+    @media (max-width: 640px) {
+        .toolbar-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .filter-control label {
+        display: block;
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        opacity: 0.38;
+        margin-bottom: 0.55rem;
+    }
+
+    .filter-control input,
+    .filter-control select {
+        width: 100%;
+        background: #000;
+        border: 2px solid #222;
+        padding: 0.95rem 1rem;
+        color: white;
+        outline: none;
+    }
+
+    .filter-control input:focus,
+    .filter-control select:focus {
+        border-color: var(--pixel-white);
+    }
+
     .posts-list {
         display: flex;
         flex-direction: column;
-        gap: 2rem;
+        gap: 1.5rem;
     }
-    
+
     .post-card {
-        padding: 2.5rem;
+        padding: 2.2rem;
     }
-    
+
     @media (max-width: 768px) {
         .post-card {
-            padding: 1.5rem;
+            padding: 1.4rem;
         }
     }
-    
+
     .post-title {
         font-size: 1.75rem;
         font-family: var(--font-serif);
         margin-bottom: 1rem;
         color: var(--pixel-white);
     }
-    
+
     @media (max-width: 768px) {
         .post-title {
             font-size: 1.4rem;
         }
     }
-    
+
     .post-content {
         color: var(--sub-text);
-        margin-bottom: 2rem;
+        margin-bottom: 1.6rem;
         line-height: 1.8;
-        font-size: 1.1rem;
+        font-size: 1.05rem;
         font-family: var(--font-serif);
         display: -webkit-box;
-        -webkit-line-clamp: 2;
+        -webkit-line-clamp: 3;
         -webkit-box-orient: vertical;
         overflow: hidden;
     }
-    
+
     .post-meta {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding-top: 1.5rem;
+        padding-top: 1.2rem;
         border-top: 1px solid rgba(255, 255, 255, 0.05);
         font-size: 0.75rem;
         text-transform: uppercase;
         letter-spacing: 0.1em;
-        color: #444;
+        color: #555;
     }
-    
+
+    @media (max-width: 768px) {
+        .post-meta {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+    }
+
+    .result-chip {
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        padding: 0.65rem 0.85rem;
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        opacity: 0.55;
+    }
+
     .empty-state {
         text-align: center;
-        padding: 8rem 0;
+        padding: 7rem 1.5rem;
         border: 2px dashed #222;
     }
 </style>
@@ -87,32 +147,66 @@
         </div>
         <h2 class="serif-font text-4xl md:text-5xl mb-3">DIARY COMMUNITY_</h2>
         <p class="text-[11px] uppercase tracking-widest opacity-50">
-            Sentimental Records
+            Searchable sentimental records
         </p>
     </header>
-    
-    {% if current_user.is_authenticated %}
-    <div class="mb-12">
-        <a href="{{ url_for('community_write') }}" class="btn-pixel">
-            <span>✏️</span>
-            <span>기록하기</span>
-        </a>
+
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
+        {% if current_user.is_authenticated %}
+        <a href="{{ url_for('community_write') }}" class="btn-pixel">WRITE_ARCHIVE</a>
+        {% else %}
+        <a href="{{ url_for('login') }}" class="btn-outline">LOGIN_TO_WRITE</a>
+        {% endif %}
+
+        <div class="flex flex-wrap gap-3">
+            <div class="result-chip">RESULTS {{ total_results or 0 }}</div>
+            <div class="result-chip">SORT {{ filters.sort|upper }}</div>
+            <div class="result-chip">RANGE {{ filters.period|upper }}</div>
+        </div>
     </div>
-    {% else %}
-    <div class="mb-12">
-        <a href="{{ url_for('login') }}" class="btn-outline">
-            <span>🔐</span>
-            <span>로그인 후 기록하기</span>
-        </a>
-    </div>
-    {% endif %}
-    
+
+    <section class="pixel-card p-6 md:p-8 mb-10">
+        <form method="GET" action="{{ url_for('diary') }}" class="toolbar-grid">
+            <div class="filter-control">
+                <label for="q">Search</label>
+                <input id="q" type="search" name="q" value="{{ filters.q }}" placeholder="제목, 내용, 작성자 검색">
+            </div>
+            <div class="filter-control">
+                <label for="author">Author</label>
+                <input id="author" type="text" name="author" value="{{ filters.author }}" placeholder="작성자">
+            </div>
+            <div class="filter-control">
+                <label for="period">Period</label>
+                <select id="period" name="period">
+                    <option value="all" {% if filters.period == 'all' %}selected{% endif %}>All Time</option>
+                    <option value="today" {% if filters.period == 'today' %}selected{% endif %}>Today</option>
+                    <option value="7d" {% if filters.period == '7d' %}selected{% endif %}>Last 7 Days</option>
+                    <option value="30d" {% if filters.period == '30d' %}selected{% endif %}>Last 30 Days</option>
+                </select>
+            </div>
+            <div class="filter-control">
+                <label for="sort">Sort</label>
+                <select id="sort" name="sort">
+                    <option value="latest" {% if filters.sort == 'latest' %}selected{% endif %}>Latest</option>
+                    <option value="oldest" {% if filters.sort == 'oldest' %}selected{% endif %}>Oldest</option>
+                    <option value="title" {% if filters.sort == 'title' %}selected{% endif %}>Title</option>
+                </select>
+            </div>
+            <div class="flex flex-col md:flex-row gap-3">
+                <button type="submit" class="btn-pixel text-xs tracking-widest">APPLY</button>
+                {% if filters_applied %}
+                <a href="{{ url_for('diary') }}" class="btn-outline text-xs tracking-widest text-center">RESET</a>
+                {% endif %}
+            </div>
+        </form>
+    </section>
+
     {% if error %}
     <div class="pixel-card mb-8 border-red-900/50 text-red-200">
         {{ error }}
     </div>
     {% endif %}
-    
+
     {% if posts %}
     <div class="posts-list">
         {% for post in posts %}
@@ -120,18 +214,20 @@
             <div class="post-title">{{ post.title }}</div>
             <div class="post-content">{{ post.content }}</div>
             <div class="post-meta">
-                <span>👤 {{ post.author }}</span>
+                <span>{{ post.author }}</span>
                 <span>{{ post.created_at[:10] if post.created_at else '' }}</span>
             </div>
         </article>
         {% endfor %}
     </div>
 
-    <!-- Pagination -->
     <div class="flex justify-between items-center mt-12 pt-8 border-t-4 border-dashed border-[#111]">
         <div>
             {% if page and page > 1 %}
-                <a href="{{ url_for('diary') }}?page={{ page - 1 }}" class="btn-outline text-xs uppercase tracking-widest">
+                <a
+                    href="{{ url_for('diary', page=page - 1, q=filters.q, author=filters.author, period=filters.period, sort=filters.sort, per_page=per_page) }}"
+                    class="btn-outline text-xs uppercase tracking-widest"
+                >
                     PREV
                 </a>
             {% endif %}
@@ -141,7 +237,10 @@
         </div>
         <div>
             {% if has_next %}
-                <a href="{{ url_for('diary') }}?page={{ (page if page else 1) + 1 }}" class="btn-outline text-xs uppercase tracking-widest">
+                <a
+                    href="{{ url_for('diary', page=(page if page else 1) + 1, q=filters.q, author=filters.author, period=filters.period, sort=filters.sort, per_page=per_page) }}"
+                    class="btn-outline text-xs uppercase tracking-widest"
+                >
                     NEXT
                 </a>
             {% endif %}
@@ -149,8 +248,13 @@
     </div>
     {% else %}
     <div class="empty-state">
+        {% if filters_applied %}
+        <h3 class="text-xl serif-font mb-4">검색 조건에 맞는 기록이 없습니다</h3>
+        <p class="text-sm opacity-40">검색어를 줄이거나 기간 조건을 넓혀 다시 찾아보세요.</p>
+        {% else %}
         <h3 class="text-xl serif-font mb-4">아직 기록이 없습니다</h3>
         <p class="text-sm opacity-40">첫 번째 아카이브를 생성해 보세요.</p>
+        {% endif %}
     </div>
     {% endif %}
 </div>
