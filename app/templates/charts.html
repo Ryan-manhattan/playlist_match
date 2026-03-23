@@ -4,193 +4,395 @@
 
 {% block extra_css %}
 <style>
-    .charts-container {
-        max-width: 72rem;
-        margin: 0 auto;
-        padding: 4rem 1.5rem 8rem;
-    }
-    
-    .charts-header {
-        margin-bottom: 4rem;
-    }
-    
-    .charts-header h1 {
-        font-size: 3rem;
-        letter-spacing: -0.05em;
-        line-height: 1.1;
-        margin-bottom: 1rem;
-    }
-    
-    .charts-stats {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 1.5rem;
-        margin-bottom: 4rem;
-    }
-    
-    .stat-card {
-        padding: 1.5rem;
-        text-align: center;
-    }
-    
-    .stat-value {
-        font-size: 1.75rem;
-        font-weight: bold;
-        color: var(--pixel-white);
-        margin-bottom: 0.5rem;
-    }
-    
-    .stat-label {
-        font-size: 0.7rem;
-        opacity: 0.4;
-        text-transform: uppercase;
-        letter-spacing: 0.2em;
-    }
-    
-    .chart-filters {
-        margin-bottom: 3rem;
-        padding: 2rem;
-        background: var(--bg-black);
-    }
-    
-    .filter-group {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-        flex-wrap: wrap;
-        margin-bottom: 1.5rem;
-    }
-    
-    .filter-group:last-child { margin-bottom: 0; }
-    
-    .filter-group label {
-        font-size: 10px;
-        opacity: 0.4;
-        text-transform: uppercase;
-        letter-spacing: 0.2em;
-        min-width: 100px;
+:root {
+    --chart-bg: rgba(12, 12, 12, 0.9);
+    --card-bg: rgba(21, 21, 21, 0.8);
+    --card-border: 1px solid rgba(255, 255, 255, 0.15);
+    --accent: #ff6b6b;
+}
+
+.charts-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem 5rem;
+    background: radial-gradient(circle at top right, rgba(255, 255, 255, 0.08), transparent 55%),
+        linear-gradient(180deg, rgba(5, 5, 5, 1), rgba(12, 12, 12, 0.95));
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.65);
+}
+
+.charts-header {
+    margin-bottom: 2rem;
+}
+
+.charts-header h2 {
+    font-size: 3rem;
+    letter-spacing: -0.05em;
+}
+
+.chart-actions {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+}
+
+.chart-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.stat-card {
+    background: var(--card-bg);
+    border: var(--card-border);
+    padding: 1.25rem;
+    border-radius: 14px;
+    text-align: center;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.02);
+}
+
+.stat-value {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--accent);
+}
+
+.stat-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    opacity: 0.6;
+    margin-top: 0.35rem;
+}
+
+.chart-filters {
+    margin-bottom: 1.5rem;
+    padding: 2rem;
+    background: var(--card-bg);
+    border-radius: 18px;
+    border: var(--card-border);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.03);
+}
+
+.filter-group {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-bottom: 1rem;
+}
+
+.filter-group label {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.4em;
+    opacity: 0.6;
+    min-width: 100px;
+}
+
+.btn-outline {
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: rgba(255, 255, 255, 0.85);
+    padding: 0.5rem 1rem;
+    border-radius: 999px;
+    background: transparent;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-outline.active,
+.btn-outline:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(255, 107, 107, 0.08);
+}
+
+.chart-highlights {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.highlight-card {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.01));
+    border-radius: 16px;
+    border: var(--card-border);
+    padding: 1.25rem;
+    min-height: 120px;
+}
+
+.highlight-label {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.3em;
+    opacity: 0.6;
+}
+
+.highlight-value {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-top: 0.35rem;
+}
+
+.highlight-meta {
+    font-size: 0.75rem;
+    opacity: 0.6;
+    margin-top: 0.35rem;
+}
+
+.loading-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.chart-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1.5rem;
+}
+
+.chart-panel {
+    border: var(--card-border);
+    border-radius: 20px;
+    padding: 1.5rem;
+    background: rgba(9, 9, 9, 0.85);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.02);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    min-height: 420px;
+}
+
+.chart-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.chart-panel-header h3 {
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.3em;
+    opacity: 0.6;
+}
+
+.label-chip {
+    padding: 0.2rem 0.75rem;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.3em;
+}
+
+.track-list {
+    display: grid;
+    gap: 0.9rem;
+}
+
+.track-card {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 0.9rem;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    border-radius: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.01);
+    box-shadow: 0 20px 30px rgba(0, 0, 0, 0.35);
+}
+
+.track-card img {
+    width: 56px;
+    height: 56px;
+    border-radius: 12px;
+    object-fit: cover;
+}
+
+.track-info {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.track-title {
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.track-artist {
+    font-size: 0.8rem;
+    opacity: 0.6;
+    margin-top: 0.2rem;
+}
+
+.track-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.2rem;
+    font-size: 0.7rem;
+    opacity: 0.6;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+}
+
+.service-summary {
+    padding: 1rem;
+    border-radius: 14px;
+    border: 1px dashed rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.service-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.9rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.35rem 0;
+}
+
+.cross-hit-card {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 0.8rem;
+    align-items: center;
+    padding: 0.7rem 1rem;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.cross-hit-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.cross-hit-services {
+    font-size: 0.7rem;
+    opacity: 0.6;
+}
+
+.hidden {
+    display: none !important;
+}
+
+@media (max-width: 768px) {
+    .track-card {
+        grid-template-columns: auto 1fr;
     }
 
-    .track-item {
-        margin-bottom: 1rem;
+    .track-meta {
+        flex-direction: row;
+        justify-content: space-between;
     }
-    
-    .track-rank {
-        font-size: 1.25rem;
-        font-weight: bold;
-        min-width: 40px;
-    }
-    
-    .track-title {
-        font-family: var(--font-serif);
-        font-weight: bold;
-    }
-    
-    .track-artist {
-        font-size: 0.85rem;
-        opacity: 0.5;
-    }
-
-    .service-badge {
-        padding: 2px 8px;
-        font-size: 9px;
-        text-transform: uppercase;
-        letter-spacing: 0.1em;
-        border: 1px solid #333;
-    }
+}
 </style>
 {% endblock %}
 
 {% block content %}
 <div class="main-content-container charts-container">
-    <header class="community-header mb-12">
-        <div class="inline-flex items-center gap-4 mb-6">
+    <header class="charts-header">
+        <div class="inline-flex items-center gap-4 mb-3">
             <span class="text-[10px] tracking-[0.4em] uppercase opacity-40">System Node: Charts</span>
             <div class="w-12 h-[1px] bg-white/20"></div>
         </div>
-        <h2 class="serif-font text-4xl md:text-5xl mb-3">CHARTS_</h2>
-        <p class="text-[11px] uppercase tracking-widest opacity-50">
-            Real-time Music Trends
-        </p>
-        <div class="flex flex-col md:flex-row gap-4 mt-8">
-            <button id="refreshBtn" class="btn-pixel text-xs tracking-widest">Refresh_Data</button>
-            <button id="toggleSourceBtn" class="btn-outline text-xs tracking-widest">Switch_Chart</button>
+        <h2 class="serif-font text-4xl md:text-5xl mb-2">CHARTS_</h2>
+        <p class="text-[12px] uppercase tracking-[0.5em] opacity-50">Real-time Music Trends & Insights</p>
+        <div class="chart-actions">
+            <button id="refreshBtn" class="btn-outline">Refresh_Data</button>
+            <button id="toggleSourceBtn" class="btn-outline">Switch_View</button>
         </div>
     </header>
 
-    <!-- Stats -->
     <div class="charts-stats" id="chartsStats">
-        <div class="pixel-card stat-card">
+        <div class="stat-card">
             <div class="stat-value" id="totalTracks">-</div>
             <div class="stat-label">Total_Tracks</div>
         </div>
-        <div class="pixel-card stat-card">
+        <div class="stat-card">
             <div class="stat-value" id="koreaCount">-</div>
-            <div class="stat-label">Korea_Node</div>
+            <div class="stat-label">Domestic_Services</div>
         </div>
-        <div class="pixel-card stat-card">
+        <div class="stat-card">
             <div class="stat-value" id="globalCount">-</div>
             <div class="stat-label">Global_Node</div>
         </div>
-        <div class="pixel-card stat-card">
+        <div class="stat-card">
             <div class="stat-value" id="lastUpdated">-</div>
             <div class="stat-label">Last_Sync</div>
         </div>
     </div>
 
-    <!-- Filters -->
     <div class="pixel-card chart-filters">
         <div class="filter-group">
-            <label>Source_Node</label>
-            <button class="btn-outline text-[10px] source-btn active" data-source="melon">Melon</button>
-            <button class="btn-outline text-[10px] source-btn" data-source="bugs">Bugs</button>
-            <button class="btn-outline text-[10px] source-btn" data-source="genie">Genie</button>
-            <button class="btn-outline text-[10px] source-btn" data-source="korea-all">Cross_Platform</button>
+            <label>Chart_View</label>
+            <button class="btn-outline source-btn active" data-source="melon">Melon</button>
+            <button class="btn-outline source-btn" data-source="cross">Cross</button>
         </div>
         <div class="filter-group" id="melonFilters">
-            <label>Chart_Type</label>
-            <button class="btn-outline text-[10px] melon-type-btn active" data-type="realtime">Realtime</button>
-            <button class="btn-outline text-[10px] melon-type-btn" data-type="hot100">Hot_100</button>
+            <label>Melon Chart</label>
+            <button class="btn-outline melon-type-btn active" data-type="realtime">Realtime</button>
+            <button class="btn-outline melon-type-btn" data-type="hot100">Hot_100</button>
+            <button class="btn-outline melon-type-btn" data-type="daily">Daily</button>
+        </div>
+        <div class="filter-group" id="koreaFilters">
+            <label>Cross Services</label>
+            <button class="btn-outline korea-service-btn active" data-services="melon,bugs,genie">Tri-Service</button>
+            <button class="btn-outline korea-service-btn" data-services="melon,genie">Melon+Genie</button>
+            <button class="btn-outline korea-service-btn" data-services="melon">Melon Only</button>
         </div>
     </div>
 
-    <!-- Loading -->
-    <div id="loadingSpinner" class="hidden py-20 text-center">
+    <div class="pixel-card chart-highlights">
+        <div class="highlight-card">
+            <div class="highlight-label">Cross Platform Hits</div>
+            <div class="highlight-value" id="crossPlatformHitsValue">-</div>
+            <div class="highlight-meta" id="crossServicesMeta">Services: -</div>
+        </div>
+        <div class="highlight-card">
+            <div class="highlight-label">Global Sync Rate</div>
+            <div class="highlight-value" id="successRateValue">-</div>
+            <div class="highlight-meta">Collected Services</div>
+        </div>
+        <div class="highlight-card">
+            <div class="highlight-label">Last Cross Sync</div>
+            <div class="highlight-value" id="crossLastUpdated">-</div>
+            <div class="highlight-meta" id="logInfoMeta">daily_chart_collections.log</div>
+        </div>
+    </div>
+
+    <div id="loadingSpinner" class="loading-wrapper hidden py-6 text-center">
         <p class="text-[10px] uppercase tracking-[0.5em] animate-pulse">Syncing_Realtime_Data...</p>
     </div>
 
-    <!-- Error -->
     <div id="errorMessage" class="hidden pixel-card border-red-900/50 text-red-200 mb-8"></div>
 
-    <!-- Chart Grid -->
-    <div class="chart-grid" id="chartGrid">
-        <div id="melonCharts">
-            <div class="pixel-card">
-                <h3 id="melonChartTitle" class="text-xs uppercase tracking-[0.3em] opacity-40 mb-8 pb-2 border-b border-[#111]">Melon_Realtime_Top_50</h3>
-                <div class="track-list space-y-4" id="melonChart"></div>
+    <div class="chart-grid">
+        <div id="melonCharts" class="chart-panel pixel-card">
+            <div class="chart-panel-header">
+                <h3 id="melonChartTitle">Melon Realtime TOP 50</h3>
+                <span class="label-chip">Realtime</span>
             </div>
+            <div class="track-list" id="melonChartList"></div>
         </div>
 
-        <div id="bugsCharts" class="hidden">
-            <div class="pixel-card">
-                <h3 id="bugsChartTitle" class="text-xs uppercase tracking-[0.3em] opacity-40 mb-8 pb-2 border-b border-[#111]">Bugs_Realtime_Top_50</h3>
-                <div class="track-list space-y-4" id="bugsChart"></div>
+        <div id="koreaCharts" class="chart-panel pixel-card hidden">
+            <div class="chart-panel-header">
+                <h3>Cross Platform Insights</h3>
+                <span class="label-chip">Korea Data</span>
             </div>
-        </div>
-
-        <div id="genieCharts" class="hidden">
-            <div class="pixel-card">
-                <h3 id="genieChartTitle" class="text-xs uppercase tracking-[0.3em] opacity-40 mb-8 pb-2 border-b border-[#111]">Genie_Realtime_Top_50</h3>
-                <div class="track-list space-y-4" id="genieChart"></div>
-            </div>
-        </div>
-
-        <div id="koreaCharts" class="hidden">
-            <div class="pixel-card">
-                <h3 class="text-xs uppercase tracking-[0.3em] opacity-40 mb-8 pb-2 border-b border-[#111]">Cross_Platform_Hits_Top_20</h3>
-                <div class="track-list space-y-4" id="crossPlatformChart"></div>
-            </div>
-            <div id="serviceCharts" class="mt-8 space-y-8"></div>
+            <div class="cross-hits-list" id="crossPlatformChart"></div>
+            <div class="service-summary" id="serviceSummary"></div>
         </div>
     </div>
 </div>

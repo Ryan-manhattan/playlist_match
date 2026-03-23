@@ -103,6 +103,8 @@ app = Flask(__name__,
            static_folder='app/static')
 CORS(app, supports_credentials=True)
 
+app.link_extractor = None
+
 # 설정
 app.config['MAX_CONTENT_LENGTH'] = 500 * 1024 * 1024  # 500MB 제한
 app.config['UPLOAD_FOLDER'] = os.path.join(os.path.dirname(__file__), 'app', 'uploads')
@@ -137,6 +139,18 @@ class console:
         # 즉시 플러시하여 버퍼링 방지
         import sys
         sys.stdout.flush()
+
+# LinkExtractor 싱글톤 (초기화 실패해도 무시)
+link_extractor_instance = None
+try:
+    link_extractor_instance = LinkExtractor(console_log=console.log)
+    console.log("[Init] LinkExtractor 초기화 완료")
+except Exception as e:
+    console.log(f"[WARN] LinkExtractor 초기화 실패: {e}")
+
+# 앱 객체에 공유 인스턴스 연결
+app.link_extractor = link_extractor_instance
+
 
 # Flask-Login 초기화
 login_manager = LoginManager()
@@ -2554,7 +2568,7 @@ def extract_music():
     url = data['url']
     
     # 링크 추출기가 없으면 오류 반환
-    if not hasattr(app, 'link_extractor'):
+    if not getattr(app, 'link_extractor', None):
         console.log("[Extract Music] LinkExtractor 없음")
         return jsonify({'error': '링크 추출 기능을 사용할 수 없습니다'}), 500
     
@@ -3272,8 +3286,7 @@ def download_file(filename):
             
             # MP3로 변환 (바로 uploads 폴더에)
             console.log(f"[Download] MP3 변환 시작: {file_path}")
-            from link_extractor import LinkExtractor
-            extractor = LinkExtractor(console_log=console.log)
+            extractor = link_extractor_instance or LinkExtractor(console_log=console.log)
             
             # uploads 폴더에서 직접 변환
             mp3_path = extractor.convert_to_mp3(file_path, app.config['UPLOAD_FOLDER'])
@@ -4592,8 +4605,7 @@ def trim_audio_download():
         console.log(f"[Trim-Download] 30초 자르기 시작: {file_path}")
         
         # LinkExtractor를 사용하여 30초 자르기
-        from link_extractor import LinkExtractor
-        extractor = LinkExtractor(console_log=console.log)
+        extractor = link_extractor_instance or LinkExtractor(console_log=console.log)
         
         # 30초 자른 파일 생성
         trimmed_path = extractor._trim_audio_to_30_seconds(file_path, app.config['UPLOAD_FOLDER'])
