@@ -1306,6 +1306,20 @@ def get_worldcup_results():
         return jsonify({'success': False, 'error': str(e)}), 500
 
 
+@app.route('/api/worldcup/stats')
+def worldcup_stats():
+    """월드컵 통계 정보"""
+    if not supabase_available:
+        return jsonify({"success": False, "error": "Supabase 연결이 불가능합니다."}), 503
+    try:
+        supabase = SupabaseClient()
+        stats = supabase.get_worldcup_stats()
+        return jsonify({'success': True, 'stats': stats}), 200
+    except Exception as e:
+        print(f"[ERROR] 월드컵 통계 조회 실패: {e}")
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+
 @app.route('/diary')
 def diary():
     """일기(기존 커뮤니티) 피드 - 전체 사용자 접근 가능"""

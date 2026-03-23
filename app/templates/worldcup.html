@@ -4,246 +4,243 @@
 
 {% block extra_css %}
 <style>
+    :root {
+        --battle-bg: linear-gradient(135deg, rgba(22, 22, 22, 0.95), rgba(4, 4, 4, 0.95));
+        --card-bg: rgba(13, 13, 13, 0.85);
+        --card-border: 1px solid rgba(255, 255, 255, 0.12);
+        --accent: #f97316;
+    }
+
     .worldcup-container {
-        max-width: 1400px;
+        max-width: 1100px;
         margin: 0 auto;
-        min-height: calc(100vh - 120px);
+        padding: 2.5rem 1.5rem 4rem;
         display: flex;
         flex-direction: column;
+        gap: 1.5rem;
     }
-    
+
     .worldcup-header {
         text-align: center;
-        margin-bottom: 2rem;
-        flex-shrink: 0;
     }
-    
+
+    .worldcup-stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 1rem;
+    }
+
+    .stat-card {
+        background: var(--card-bg);
+        border: var(--card-border);
+        border-radius: 18px;
+        padding: 1.2rem;
+        text-align: left;
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.02);
+    }
+
+    .stat-card strong {
+        display: block;
+        font-size: 1.6rem;
+        color: var(--accent);
+    }
+
+    .stat-card span {
+        font-size: 0.7rem;
+        letter-spacing: 0.3em;
+        text-transform: uppercase;
+        opacity: 0.65;
+    }
+
+    .top-winner {
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.08), transparent 60%), rgba(7, 7, 7, 0.9);
+        border: 2px solid rgba(249, 115, 22, 0.25);
+        border-radius: 22px;
+        padding: 1.5rem;
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+    }
+
+    .top-winner img {
+        width: 96px;
+        height: 96px;
+        border-radius: 16px;
+        object-fit: cover;
+        border: 2px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .top-winner-content h3 {
+        margin: 0;
+        font-size: 1.3rem;
+        font-weight: 700;
+    }
+
+    .top-winner-content p {
+        margin: 0.25rem 0;
+        opacity: 0.7;
+        font-size: 0.9rem;
+    }
+
+    .battle-controls {
+        display: flex;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .btn-outline,
+    .btn-pixel,
+    .btn-skew {
+        border-radius: 999px;
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        color: #fff;
+        padding: 0.55rem 1.3rem;
+        text-transform: uppercase;
+        letter-spacing: 0.25em;
+        font-size: 0.7rem;
+        background: transparent;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .btn-outline:hover,
+    .btn-pixel:hover,
+    .btn-skew:hover {
+        border-color: var(--accent);
+        color: var(--accent);
+    }
+
     .battle-section {
         display: grid;
-        grid-template-columns: 1fr auto 1fr;
-        gap: 3rem;
-        align-items: center;
-        flex: 1;
-        min-height: 0;
-        padding: 0 2rem;
-    }
-    
-    @media (max-width: 768px) {
-        .battle-section {
-            grid-template-columns: 1fr;
-            grid-template-rows: 1fr auto 1fr;
-            gap: 1.5rem;
-        }
-        
-        .vs-divider {
-            order: 2;
-        }
-    }
-    
-    .track-card {
-        cursor: pointer;
-        transition: all 0.3s ease;
-        border: 2px solid transparent;
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        min-height: 0;
-    }
-    
-    .track-card:hover {
-        border-color: var(--pixel-white);
-        transform: scale(1.02);
-    }
-    
-    .track-card.selected {
-        border-color: var(--pixel-white);
-        box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
-    }
-    
-    .track-cover {
-        width: 100%;
-        flex: 1;
-        min-height: 0;
-        background: #111;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        overflow: hidden;
-        margin-bottom: 1rem;
-    }
-    
-    .track-cover img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-    
-    .track-info {
-        flex-shrink: 0;
-    }
-    
-    .vs-divider {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 3rem;
-        font-weight: bold;
-        opacity: 0.3;
-        flex-shrink: 0;
-    }
-    
-    @media (max-width: 768px) {
-        .vs-divider {
-            font-size: 2rem;
-        }
-    }
-    
-    .loading-state {
-        text-align: center;
-        padding: 4rem 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        height: 100%;
-    }
-    
-    .stats-section {
-        display: none;
-    }
-    
-    .results-section {
-        display: none !important;
-        width: 100%;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 2rem;
+        align-items: stretch;
+        background: var(--battle-bg);
+        border-radius: 26px;
+        padding: 2rem;
+        border: 2px solid rgba(255, 255, 255, 0.08);
         position: relative;
     }
-    
-    .results-section.active {
-        display: block !important;
+
+    .track-card {
+        background: rgba(255, 255, 255, 0.02);
+        border-radius: 20px;
+        padding: 1.6rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        justify-content: space-between;
+        cursor: pointer;
+        border: 2px solid transparent;
+        transition: transform 0.2s ease, border-color 0.2s ease;
     }
-    
-    .battle-section.hidden {
-        display: none !important;
+
+    .track-card.selected {
+        border-color: var(--accent);
+        transform: scale(1.02);
+        box-shadow: 0 0 25px rgba(249, 115, 22, 0.4);
     }
-    
-    .results-header {
-        text-align: center;
-        margin-bottom: 3rem;
-        padding: 2rem 0;
+
+    .track-card .track-cover {
+        border-radius: 16px;
+        overflow: hidden;
+        position: relative;
+        padding-bottom: 100%;
+        background: #000;
     }
-    
-    .rankings-list {
-        display: grid;
-        gap: 1.5rem;
-        max-width: 900px;
-        margin: 0 auto;
+
+    .track-card .track-cover img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
     }
-    
-    .ranking-item {
-        display: grid;
-        grid-template-columns: auto 1fr auto;
-        gap: 1.5rem;
-        align-items: center;
-        padding: 1.5rem;
-        border: 2px solid rgba(255, 255, 255, 0.1);
-        background: rgba(0, 0, 0, 0.3);
-        transition: all 0.3s ease;
-    }
-    
-    .ranking-item:hover {
-        border-color: rgba(255, 255, 255, 0.3);
-        background: rgba(0, 0, 0, 0.5);
-    }
-    
-    .ranking-item.top-3 {
-        border-color: rgba(255, 215, 0, 0.5);
-        background: rgba(255, 215, 0, 0.1);
-    }
-    
-    .rank-number {
-        font-size: 2rem;
-        font-weight: bold;
-        min-width: 60px;
-        text-align: center;
-        font-family: var(--font-mono);
-    }
-    
-    .rank-number.top-1 {
-        color: #FFD700;
-    }
-    
-    .rank-number.top-2 {
-        color: #C0C0C0;
-    }
-    
-    .rank-number.top-3 {
-        color: #CD7F32;
-    }
-    
-    .ranking-track-info {
-        flex: 1;
-    }
-    
-    .ranking-track-title {
-        font-size: 1.25rem;
-        font-weight: bold;
-        margin-bottom: 0.5rem;
+
+    .track-info h3 {
+        margin: 0;
+        font-size: 1.4rem;
         font-family: var(--font-serif);
     }
-    
-    .ranking-track-artist {
-        font-size: 0.9rem;
+
+    .track-info p {
+        margin: 0.3rem 0;
         opacity: 0.7;
-        margin-bottom: 0.25rem;
+        font-size: 0.9rem;
     }
-    
-    .ranking-track-stats {
-        font-size: 0.75rem;
-        opacity: 0.5;
-        font-family: var(--font-mono);
+
+    .battle-message {
+        text-align: center;
+        opacity: 0.6;
+        letter-spacing: 0.3em;
+        font-size: 0.8rem;
     }
-    
-    .ranking-wins {
-        text-align: right;
-        font-size: 1.5rem;
-        font-weight: bold;
-        font-family: var(--font-mono);
+
+    .vs-divider {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 2.5rem;
+        font-weight: 700;
+        opacity: 0.25;
+        pointer-events: none;
     }
-    
-    .ranking-wins-label {
-        font-size: 0.75rem;
-        opacity: 0.5;
-        margin-top: 0.25rem;
-        text-transform: uppercase;
+
+    .results-section {
+        background: linear-gradient(180deg, rgba(10, 10, 10, 0.95), rgba(2, 2, 2, 0.95));
+        border-radius: 24px;
+        border: var(--card-border);
+        padding: 2rem;
+        display: none;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .results-section .results-filter {
+        display: flex;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .results-filter button {
+        min-width: 110px;
+    }
+
+    .results-section.active {
+        display: flex;
+    }
+
+    .rankings-list {
+        display: grid;
+        gap: 1rem;
+    }
+
+    .recent-wins {
+        display: grid;
+        gap: 0.5rem;
+        font-size: 0.9rem;
         letter-spacing: 0.1em;
+        text-transform: uppercase;
+        opacity: 0.7;
     }
-    
-    .ranking-cover {
-        width: 80px;
-        height: 80px;
-        object-fit: cover;
-        border: 2px solid rgba(255, 255, 255, 0.1);
+
+    .loading-state {
+        text-align: center;
+        padding: 3rem 0;
+        grid-column: 1 / -1;
     }
-    
-    @media (max-width: 768px) {
-        .ranking-item {
-            grid-template-columns: auto 1fr;
-            gap: 1rem;
+
+    @media (max-width: 900px) {
+        .battle-section {
+            grid-template-columns: 1fr;
         }
-        
-        .ranking-wins {
-            grid-column: 1 / -1;
-            text-align: left;
-            margin-top: 0.5rem;
-        }
-        
-        .rank-number {
-            font-size: 1.5rem;
-            min-width: 40px;
-        }
-        
-        .ranking-cover {
-            width: 60px;
-            height: 60px;
+
+        .worldcup-stats {
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
         }
     }
 </style>
@@ -251,191 +248,221 @@
 
 {% block content %}
 <div class="main-content-container worldcup-container">
-    <header class="community-header mb-12">
-        <div class="inline-flex items-center gap-4 mb-6">
+    <header class="worldcup-header">
+        <div class="inline-flex items-center gap-4 mb-4 justify-center">
             <span class="text-[10px] tracking-[0.4em] uppercase opacity-40">System Node: WorldCup</span>
             <div class="w-12 h-[1px] bg-white/20"></div>
         </div>
-        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
-            <div>
-                <h2 class="serif-font text-4xl md:text-5xl mb-3">SONG WORLD CUP_</h2>
-                <p class="text-[11px] uppercase tracking-widest opacity-50">
-                    Track Battle System
-                </p>
+        <h2 class="serif-font text-4xl md:text-5xl mb-1">SONG WORLD CUP_</h2>
+        <p class="text-[11px] uppercase tracking-widest opacity-50 mb-3">Track Battle System · Showdown Voting</p>
+        <div class="worldcup-stats" id="worldcupStats">
+            <div class="stat-card">
+                <span>Total Votes</span>
+                <strong id="statVotes">-</strong>
+                <p>전체 투표 수</p>
             </div>
-            <button class="btn-outline text-xs tracking-widest" onclick="showResults()" id="showResultsBtn">
-                결과 보기
-            </button>
+            <div class="stat-card">
+                <span>Battle Count</span>
+                <strong id="statBattles">-</strong>
+                <p>진행된 대결</p>
+            </div>
+            <div class="stat-card">
+                <span>Recent Battles</span>
+                <strong id="statRecent">-</strong>
+                <p>최근 투표 히트</p>
+            </div>
+            <div class="stat-card">
+                <span>Top Track</span>
+                <strong id="statTopTrack">-</strong>
+                <p>현재 1위</p>
+            </div>
+        </div>
+        <div class="top-winner" id="topWinnerCard">
+            <img id="topWinnerCover" src="/static/img/default-cover.png" alt="Top Winner">
+            <div class="top-winner-content">
+                <div class="battle-message" id="topWinnerLabel">Top Ranked Track</div>
+                <h3 id="topWinnerTitle">Loading...</h3>
+                <p id="topWinnerArtist">Getting results...</p>
+            </div>
         </div>
     </header>
-    
+
+    <div class="battle-controls">
+        <button class="btn-outline" id="refreshBattleBtn">Refresh Battle</button>
+        <button class="btn-outline" id="skipBattleBtn">Skip Pair</button>
+        <button class="btn-outline" id="showResultsBtn">결과 보기</button>
+    </div>
+
     <div id="battleContainer" class="battle-section">
-        <div class="loading-state">
-            <p class="text-lg opacity-50">로딩 중...</p>
-        </div>
+        <div class="loading-state"><p>Preparing fresh battle...</p></div>
     </div>
-    
+
     <div id="resultsSection" class="results-section">
-        <div class="results-header">
-            <div class="inline-flex items-center gap-4 mb-6">
-                <span class="text-[10px] tracking-[0.4em] uppercase opacity-40">System Node: Results</span>
-                <div class="w-12 h-[1px] bg-white/20"></div>
-            </div>
-            <h2 class="serif-font text-4xl md:text-5xl mb-3">🏆 투표 결과</h2>
-            <p class="text-[11px] uppercase tracking-widest opacity-50 mb-6">
-                Rankings by Win Count
-            </p>
-            <button class="btn-outline text-xs tracking-widest" onclick="hideResults()">← 투표로 돌아가기</button>
+        <div class="results-filter">
+            <button class="btn-outline" data-filter="top">Top 10</button>
+            <button class="btn-outline" data-filter="all">Full List</button>
         </div>
-        <div id="rankingsList" class="rankings-list">
-            <div class="loading-state">
-                <p class="text-lg opacity-50">결과 로딩 중...</p>
-            </div>
+        <div class="recent-wins" id="recentWins">
+            <span>Recent Winners</span>
+            <p id="recentWinText">Loading...</p>
         </div>
+        <div id="rankingsList" class="rankings-list"></div>
+        <button class="btn-outline" id="backToBattleBtn">투표로 돌아가기</button>
     </div>
-    
 </div>
 {% endblock %}
 
 {% block extra_js %}
 <script>
-let currentTracks = [];
-let selectedTrackId = null;
-let seenTrackIds = []; // 이미 등장한 곡 ID 목록
+const state = {
+    currentTracks: [],
+    seenTrackIds: [],
+    resultsFilter: 'top',
+    lastRankings: [],
+};
 
-async function loadBattle() {
-    const container = document.getElementById('battleContainer');
-    const resultsSection = document.getElementById('resultsSection');
-    const showResultsBtn = document.getElementById('showResultsBtn');
-    
-    // 결과 섹션 완전히 숨기기
-    if (resultsSection) {
-        resultsSection.style.display = 'none';
-        resultsSection.classList.remove('active');
-    }
-    
-    // 배틀 섹션 표시
-    if (container) {
-        container.style.display = 'grid';
-        container.classList.remove('hidden');
-        container.innerHTML = '<div class="loading-state"><p class="text-lg opacity-50">로딩 중...</p></div>';
-    }
-    
-    // 결과 보기 버튼 표시
-    if (showResultsBtn) {
-        showResultsBtn.style.display = 'block';
-    }
-    
+const dom = {
+    battleContainer: document.getElementById('battleContainer'),
+    resultsSection: document.getElementById('resultsSection'),
+    rankingsList: document.getElementById('rankingsList'),
+    topWinnerTitle: document.getElementById('topWinnerTitle'),
+    topWinnerArtist: document.getElementById('topWinnerArtist'),
+    topWinnerCover: document.getElementById('topWinnerCover'),
+    statVotes: document.getElementById('statVotes'),
+    statBattles: document.getElementById('statBattles'),
+    statRecent: document.getElementById('statRecent'),
+    statTopTrack: document.getElementById('statTopTrack'),
+    recentWinText: document.getElementById('recentWinText'),
+    refreshBattleBtn: document.getElementById('refreshBattleBtn'),
+    skipBattleBtn: document.getElementById('skipBattleBtn'),
+    showResultsBtn: document.getElementById('showResultsBtn'),
+    backToBattleBtn: document.getElementById('backToBattleBtn'),
+    filterButtons: document.querySelectorAll('[data-filter]'),
+};
+
+let battleInProgress = false;
+
+document.addEventListener('DOMContentLoaded', () => {
+    setupListeners();
+    applyResultsFilter(state.resultsFilter);
+    loadBattle();
+    refreshStats();
+});
+
+function setupListeners() {
+    dom.refreshBattleBtn?.addEventListener('click', () => loadBattle(true));
+    dom.skipBattleBtn?.addEventListener('click', () => loadBattle(true));
+    dom.showResultsBtn?.addEventListener('click', showResults);
+    dom.backToBattleBtn?.addEventListener('click', hideResults);
+    dom.filterButtons.forEach(btn => {
+        btn.addEventListener('click', () => applyResultsFilter(btn.dataset.filter));
+    });
+}
+
+async function refreshStats() {
     try {
-        // 이미 본 곡들을 제외하고 요청
-        const excludeIds = seenTrackIds.length > 0 ? seenTrackIds.join(',') : '';
-        const url = excludeIds ? `/api/worldcup/tracks?exclude=${excludeIds}` : '/api/worldcup/tracks';
-        
-        const res = await fetch(url);
+        const res = await fetch('/api/worldcup/stats');
         const data = await res.json();
-        
-        if (data.success && data.tracks && data.tracks.length === 2) {
-            currentTracks = data.tracks;
-            selectedTrackId = null;
-            
-            // 등장한 곡들을 seenTrackIds에 추가
-            data.tracks.forEach(track => {
-                if (!seenTrackIds.includes(track.id)) {
-                    seenTrackIds.push(track.id);
-                }
-            });
-            
-            renderBattle(data.tracks);
-        } else if (data.error && data.error.includes('부족')) {
-            // 모든 곡을 다 본 경우
-            container.innerHTML = `
-                <div class="pixel-card p-10 text-center">
-                    <h3 class="text-xl serif-font mb-2">모든 곡을 다 봤습니다!</h3>
-                    <p class="text-sm opacity-50 mb-4">투표 결과를 확인하세요.</p>
-                    <button class="btn-pixel text-xs tracking-widest mr-2" onclick="showResults()">결과 보기</button>
-                    <button class="btn-outline text-xs tracking-widest" onclick="resetWorldCup()">다시 시작</button>
-                </div>
-            `;
-        } else {
-            container.innerHTML = `
-                <div class="pixel-card p-10 text-center">
-                    <h3 class="text-xl serif-font mb-2">곡이 부족합니다</h3>
-                    <p class="text-sm opacity-50">데이터베이스에 최소 2개 이상의 곡이 필요합니다.</p>
-                </div>
-            `;
+        if (!data.success) throw new Error(data.error || 'Stats unavailable');
+
+        const stats = data.stats || {};
+        dom.statVotes.textContent = stats.get('total_votes', 0);
+        dom.statBattles.textContent = stats.get('total_battles', 0);
+        dom.statRecent.textContent = stats.get('recent_battles', 0);
+
+        if (state.lastRankings.length) {
+            dom.statTopTrack.textContent = state.lastRankings[0].title || '-';
+            renderTopWinner(state.lastRankings[0]);
         }
     } catch (e) {
-        console.error('배틀 로드 실패:', e);
-        container.innerHTML = '<div class="pixel-card p-10 text-center"><p class="text-red-400">오류가 발생했습니다.</p></div>';
+        console.warn('Stats refresh failed', e);
+    }
+}
+
+async function loadBattle(resetSeen = false) {
+    if (battleInProgress) return;
+    battleInProgress = true;
+
+    if (resetSeen) {
+        state.seenTrackIds = [];
+    }
+
+    if (dom.battleContainer) {
+        dom.battleContainer.innerHTML = '<div class="loading-state"><p>Loading fresh contenders...</p></div>';
+    }
+
+    try {
+        const excludeParam = state.seenTrackIds.length ? '?exclude=' + state.seenTrackIds.join(',') : '';
+        const response = await fetch(`/api/worldcup/tracks${excludeParam}`);
+        const payload = await response.json();
+
+        if (payload.success && payload.tracks && payload.tracks.length === 2) {
+            state.currentTracks = payload.tracks;
+            state.currentTracks.forEach(track => {
+                if (!state.seenTrackIds.includes(track.id)) {
+                    state.seenTrackIds.push(track.id);
+                }
+            });
+            renderBattle(payload.tracks);
+        } else {
+            dom.battleContainer.innerHTML = `<div class="pixel-card p-10 text-center"><h3>새로운 곡이 부족합니다.</h3><p class="opacity-60">결과를 확인하거나 다시 시작해보세요.</p><div class="battle-controls"><button class="btn-outline" onclick="showResults()">결과 보기</button><button class="btn-outline" onclick="resetWorldCup()">처음으로</button></div></div>`;
+        }
+    } catch (error) {
+        dom.battleContainer.innerHTML = `<div class="pixel-card p-10 text-center"><p class="text-red-400">로드 실패</p></div>`;
+        console.error('Battle load failed', error);
+    } finally {
+        battleInProgress = false;
     }
 }
 
 function resetWorldCup() {
-    seenTrackIds = [];
+    state.seenTrackIds = [];
     loadBattle();
 }
 
 function renderBattle(tracks) {
-    const container = document.getElementById('battleContainer');
-    const [trackA, trackB] = tracks;
-    
-    container.innerHTML = `
-        <div class="track-card pixel-card p-6" 
-             data-track-id="${trackA.id}"
-             onclick="selectTrack('${trackA.id}')">
+    selectedTrackId = null;
+    if (!dom.battleContainer) return;
+    const [a, b] = tracks;
+    dom.battleContainer.innerHTML = '';
+
+    [a, b].forEach(track => {
+        const card = document.createElement('div');
+        card.className = 'track-card pixel-card';
+        card.dataset.trackId = track.id;
+        card.onclick = () => selectTrack(track.id);
+        card.innerHTML = `
             <div class="track-cover">
-                ${trackA.thumbnail_url ? 
-                    `<img src="${trackA.thumbnail_url}" alt="${trackA.title}">` : 
-                    '<span class="text-4xl opacity-20">🎵</span>'
-                }
+                ${track.thumbnail_url ? `<img src="${track.thumbnail_url}" alt="${track.title}">` : '<span class="text-4xl opacity-20">🎵</span>'}
             </div>
             <div class="track-info">
-                <h3 class="text-xl serif-font mb-2 truncate">${trackA.title}</h3>
-                <p class="text-sm opacity-50 mb-2 truncate">${trackA.artist || 'Unknown'}</p>
-                <p class="text-[10px] opacity-30">${trackA.duration_str || ''}</p>
+                <h3>${escapeHtml(track.title)}</h3>
+                <p>${escapeHtml(track.artist || 'Unknown Artist')}</p>
+                <p class="battle-message">${track.duration_str || 'Unknown duration'}</p>
             </div>
-        </div>
-        
-        <div class="vs-divider">VS</div>
-        
-        <div class="track-card pixel-card p-6" 
-             data-track-id="${trackB.id}"
-             onclick="selectTrack('${trackB.id}')">
-            <div class="track-cover">
-                ${trackB.thumbnail_url ? 
-                    `<img src="${trackB.thumbnail_url}" alt="${trackB.title}">` : 
-                    '<span class="text-4xl opacity-20">🎵</span>'
-                }
-            </div>
-            <div class="track-info">
-                <h3 class="text-xl serif-font mb-2 truncate">${trackB.title}</h3>
-                <p class="text-sm opacity-50 mb-2 truncate">${trackB.artist || 'Unknown'}</p>
-                <p class="text-[10px] opacity-30">${trackB.duration_str || ''}</p>
-            </div>
-        </div>
-    `;
+        `;
+        dom.battleContainer.appendChild(card);
+    });
+
+    const divider = document.createElement('div');
+    divider.className = 'vs-divider';
+    divider.textContent = 'VS';
+    dom.battleContainer.appendChild(divider);
 }
 
 async function selectTrack(trackId) {
-    if (selectedTrackId) return; // 이미 선택됨
-    
+    if (selectedTrackId) return;
     selectedTrackId = trackId;
-    
-    // 선택된 카드 하이라이트
     document.querySelectorAll('.track-card').forEach(card => {
-        if (card.dataset.trackId === trackId) {
-            card.classList.add('selected');
-        } else {
-            card.style.opacity = '0.5';
+        card.classList.toggle('selected', card.dataset.trackId === trackId);
+        if (card.dataset.trackId !== trackId) {
+            card.style.opacity = '0.6';
         }
     });
-    
-    // 투표 저장
-    const trackA = currentTracks[0];
-    const trackB = currentTracks[1];
-    
+
+    const [trackA, trackB] = state.currentTracks;
     try {
-        const res = await fetch('/api/worldcup/vote', {
+        const response = await fetch('/api/worldcup/vote', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
@@ -444,153 +471,104 @@ async function selectTrack(trackId) {
                 winner_id: trackId
             })
         });
-        
-        const data = await res.json();
+        const data = await response.json();
         if (data.success) {
-            // 1초 후 다음 배틀 로드
             setTimeout(() => {
+                selectedTrackId = null;
                 loadBattle();
+                refreshStats();
             }, 1000);
         } else {
-            alert(data.error || '투표 저장에 실패했습니다.');
-            selectedTrackId = null;
-            document.querySelectorAll('.track-card').forEach(card => {
-                card.classList.remove('selected');
-                card.style.opacity = '1';
-            });
+            throw new Error(data.error || 'Vote failed');
         }
     } catch (e) {
-        console.error('투표 저장 실패:', e);
-        alert('오류가 발생했습니다.');
-        selectedTrackId = null;
+        alert(e.message);
         document.querySelectorAll('.track-card').forEach(card => {
             card.classList.remove('selected');
             card.style.opacity = '1';
         });
+        selectedTrackId = null;
     }
 }
 
 async function showResults() {
-    const battleContainer = document.getElementById('battleContainer');
-    const resultsSection = document.getElementById('resultsSection');
-    const rankingsList = document.getElementById('rankingsList');
-    const showResultsBtn = document.getElementById('showResultsBtn');
-    
-    // 배틀 섹션 완전히 숨기기
-    if (battleContainer) {
-        battleContainer.style.display = 'none';
-        battleContainer.classList.add('hidden');
-    }
-    
-    // 결과 보기 버튼 숨기기
-    if (showResultsBtn) {
-        showResultsBtn.style.display = 'none';
-    }
-    
-    // 결과 섹션 표시
-    if (resultsSection) {
-        resultsSection.style.display = 'block';
-        resultsSection.classList.add('active');
-    }
-    
-    if (rankingsList) {
-        rankingsList.innerHTML = '<div class="loading-state"><p class="text-lg opacity-50">결과 로딩 중...</p></div>';
-    }
-    
+    dom.battleContainer.style.display = 'none';
+    dom.resultsSection.classList.add('active');
+    dom.rankingsList.innerHTML = '<div class="loading-state"><p>결과 불러오는 중...</p></div>';
+    dom.showResultsBtn.style.display = 'none';
+
     try {
-        const res = await fetch('/api/worldcup/results?limit=50');
-        const data = await res.json();
-        
-        if (data.success && data.rankings && data.rankings.length > 0) {
-            let html = '';
-            data.rankings.forEach((ranking, index) => {
-                const isTop3 = ranking.rank <= 3;
-                const rankClass = ranking.rank === 1 ? 'top-1' : ranking.rank === 2 ? 'top-2' : ranking.rank === 3 ? 'top-3' : '';
-                const coverUrl = ranking.cover_url || '/static/img/default-cover.png';
-                
-                html += `
-                    <div class="pixel-card ranking-item ${isTop3 ? 'top-3' : ''}">
-                        <div class="rank-number ${rankClass}">${ranking.rank}</div>
-                        <div class="ranking-track-info">
-                            <div style="display: flex; gap: 1rem; align-items: center;">
-                                <img src="${coverUrl}" alt="${ranking.title}" class="ranking-cover" onerror="this.src='/static/img/default-cover.png'">
-                                <div>
-                                    <div class="ranking-track-title">${ranking.title || 'Unknown'}</div>
-                                    <div class="ranking-track-artist">${ranking.artist || 'Unknown Artist'}</div>
-                                    <div class="ranking-track-stats">${ranking.duration_str || ''}</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="ranking-wins">
-                            ${ranking.wins}
-                            <div class="ranking-wins-label">WINS</div>
-                        </div>
-                    </div>
-                `;
-            });
-            
-            rankingsList.innerHTML = html;
+        const response = await fetch('/api/worldcup/results?limit=50');
+        const data = await response.json();
+        if (data.success && data.rankings) {
+            state.lastRankings = data.rankings;
+            renderRankings();
+            refreshStats();
+            renderTopWinner(data.rankings[0]);
+            dom.recentWinText.textContent = data.rankings.slice(0, 3).map(r => `${r.title} (${r.wins} wins)`).join(' / ');
         } else {
-            rankingsList.innerHTML = `
-                <div class="pixel-card p-10 text-center">
-                    <h3 class="text-xl serif-font mb-2">아직 투표 결과가 없습니다</h3>
-                    <p class="text-sm opacity-50 mb-4">투표를 시작해보세요!</p>
-                    <button class="btn-pixel text-xs tracking-widest" onclick="hideResults()">투표 시작</button>
-                </div>
-            `;
+            dom.rankingsList.innerHTML = '<div class="pixel-card p-10 text-center"><p>결과가 없습니다.</p></div>';
         }
-    } catch (e) {
-        console.error('결과 로드 실패:', e);
-        rankingsList.innerHTML = '<div class="pixel-card p-10 text-center"><p class="text-red-400">결과를 불러오는데 실패했습니다.</p></div>';
+    } catch (error) {
+        dom.rankingsList.innerHTML = '<div class="pixel-card p-10 text-center"><p class="text-red-400">결과 로드 실패</p></div>';
+        console.error('Results load failed', error);
     }
 }
 
 function hideResults() {
-    const battleContainer = document.getElementById('battleContainer');
-    const resultsSection = document.getElementById('resultsSection');
-    const showResultsBtn = document.getElementById('showResultsBtn');
-    
-    // 결과 섹션 완전히 숨기기
-    if (resultsSection) {
-        resultsSection.style.display = 'none';
-        resultsSection.classList.remove('active');
-    }
-    
-    // 배틀 섹션 표시
-    if (battleContainer) {
-        battleContainer.style.display = 'grid';
-        battleContainer.classList.remove('hidden');
-    }
-    
-    // 결과 보기 버튼 다시 표시
-    if (showResultsBtn) {
-        showResultsBtn.style.display = 'block';
-    }
-    
-    resetWorldCup();
+    dom.resultsSection.classList.remove('active');
+    dom.battleContainer.style.display = 'grid';
+    dom.showResultsBtn.style.display = 'inline-flex';
 }
 
-// 페이지 로드 시 첫 배틀 로드
-document.addEventListener('DOMContentLoaded', () => {
-    // 결과 섹션 초기화 - 완전히 숨기기
-    const resultsSection = document.getElementById('resultsSection');
-    if (resultsSection) {
-        resultsSection.style.display = 'none';
-        resultsSection.classList.remove('active');
+function applyResultsFilter(filter) {
+    state.resultsFilter = filter;
+    dom.filterButtons.forEach(btn => btn.classList.toggle('active', btn.dataset.filter === filter));
+    if (state.lastRankings.length) renderRankings();
+}
+
+function renderRankings() {
+    const list = state.lastRankings || [];
+    const filtered = state.resultsFilter === 'top' ? list.slice(0, 10) : list;
+    if (!filtered.length) {
+        dom.rankingsList.innerHTML = '<div class="pixel-card p-10 text-center"><p>No rankings yet.</p></div>';
+        return;
     }
-    
-    // 배틀 섹션 표시
-    const battleContainer = document.getElementById('battleContainer');
-    if (battleContainer) {
-        battleContainer.style.display = 'grid';
-        battleContainer.classList.remove('hidden');
-    }
-    
-    loadBattle();
-});
+
+    dom.rankingsList.innerHTML = filtered.map(item => {
+        const winLabel = item.wins ? `${item.wins} WINS` : 'No wins yet';
+        const cover = item.cover_url || '/static/img/default-cover.png';
+        return `
+            <div class="pixel-card ranking-item ${item.rank <= 3 ? 'top-3' : ''}">
+                <div class="rank-number ${item.rank <= 3 ? 'top-' + item.rank : ''}">${item.rank}</div>
+                <img src="${cover}" alt="${item.title || ''}" class="ranking-cover" onerror="this.src='/static/img/default-cover.png'">
+                <div class="ranking-track-info">
+                    <div class="ranking-track-title">${escapeHtml(item.title || 'Untitled')}</div>
+                    <div class="ranking-track-artist">${escapeHtml(item.artist || 'Unknown')}</div>
+                    <div class="ranking-track-stats">${item.duration_str || 'Unknown duration'}</div>
+                </div>
+                <div class="ranking-wins">
+                    ${winLabel}
+                    <div class="ranking-wins-label">votes</div>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+function renderTopWinner(track) {
+    if (!track) return;
+    dom.topWinnerTitle.textContent = track.title || 'No data yet';
+    dom.topWinnerArtist.textContent = track.artist || 'Unknown';
+    dom.topWinnerCover.src = track.cover_url || '/static/img/default-cover.png';
+    dom.statTopTrack.textContent = track.title || '-';
+}
+
+function escapeHtml(text) {
+    const map = {'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;'};
+    return text ? text.replace(/[&<>"']/g, m => map[m]) : '';
+}
+
+let selectedTrackId = null;
 </script>
 {% endblock %}
-
-
-
-
