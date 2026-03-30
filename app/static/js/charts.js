@@ -143,7 +143,7 @@ function renderMelonTracks(tracks) {
             <div class="track-card">
                 <div class="track-rank">#${rank}</div>
                 ${thumbnail ? `<img src="${thumbnail}" alt="Album Cover">` : '<div class="track-thumbnail" style="width:56px;height:56px;border-radius:12px;background:rgba(255,255,255,0.08);"></div>'}
-                <div class="track-info">
+                <div class="track-info" data-pretext data-pretext-text=".track-title" data-pretext-line-limit="3" data-pretext-line-height="24">
                     <div class="track-title">${title}</div>
                     <div class="track-artist">${artist}</div>
                     ${album}
@@ -157,6 +157,7 @@ function renderMelonTracks(tracks) {
     }).join('');
 
     dom.melonChartList.innerHTML = html;
+    window.applyPretextLayout?.(dom.melonChartList);
 }
 
 function updateMelonStats(data, trackCount) {
@@ -208,7 +209,7 @@ function renderCrossHits(hits) {
     }
 
     const html = hits.slice(0, 10).map((hit, index) => `
-        <div class="cross-hit-card">
+        <div class="cross-hit-card" data-pretext data-pretext-text=".cross-hit-title" data-pretext-line-limit="2" data-pretext-line-height="26">
             <div class="track-rank">#${index + 1}</div>
             <div>
                 <div class="cross-hit-title">${escapeHtml(hit.title)}</div>
@@ -223,6 +224,7 @@ function renderCrossHits(hits) {
     `).join('');
 
     dom.crossChartList.innerHTML = html;
+    window.applyPretextLayout?.(dom.crossChartList);
 }
 
 function renderServiceSummary(services) {

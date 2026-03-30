@@ -435,8 +435,8 @@ function renderBattle(tracks) {
             <div class="track-cover">
                 ${track.thumbnail_url ? `<img src="${track.thumbnail_url}" alt="${track.title}">` : '<span class="text-4xl opacity-20">🎵</span>'}
             </div>
-            <div class="track-info">
-                <h3>${escapeHtml(track.title)}</h3>
+            <div class="track-info" data-pretext data-pretext-text=".track-title" data-pretext-line-limit="3" data-pretext-line-height="26">
+                <h3 class="track-title">${escapeHtml(track.title)}</h3>
                 <p>${escapeHtml(track.artist || 'Unknown Artist')}</p>
                 <p class="battle-message">${track.duration_str || 'Unknown duration'}</p>
             </div>
@@ -448,6 +448,8 @@ function renderBattle(tracks) {
     divider.className = 'vs-divider';
     divider.textContent = 'VS';
     dom.battleContainer.appendChild(divider);
+
+    window.applyPretextLayout?.(dom.battleContainer);
 }
 
 async function selectTrack(trackId) {
@@ -542,7 +544,7 @@ function renderRankings() {
             <div class="pixel-card ranking-item ${item.rank <= 3 ? 'top-3' : ''}">
                 <div class="rank-number ${item.rank <= 3 ? 'top-' + item.rank : ''}">${item.rank}</div>
                 <img src="${cover}" alt="${item.title || ''}" class="ranking-cover" onerror="this.src='/static/img/default-cover.png'">
-                <div class="ranking-track-info">
+                <div class="ranking-track-info" data-pretext data-pretext-text=".ranking-track-title" data-pretext-line-limit="3" data-pretext-line-height="24">
                     <div class="ranking-track-title">${escapeHtml(item.title || 'Untitled')}</div>
                     <div class="ranking-track-artist">${escapeHtml(item.artist || 'Unknown')}</div>
                     <div class="ranking-track-stats">${item.duration_str || 'Unknown duration'}</div>
@@ -554,6 +556,7 @@ function renderRankings() {
             </div>
         `;
     }).join('');
+    window.applyPretextLayout?.(dom.rankingsList);
 }
 
 function renderTopWinner(track) {
