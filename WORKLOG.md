@@ -92,3 +92,10 @@
 - Blockers/risks: 없음.
 - Saved data sources / Data-asset impact: culture_rss.json, billboard_hot100.json, deezer_chart.json을 요약해서 키워드/스토리/차트 하이라이트를 cultural_insights.json에 저장하여 향후 Brand Studio 제안이나 Growth report의 핵심 요약에 돌려 쓸 수 있게 했습니다.
 - Next candidate task: scripts/update_cultural_insights.py를 autonomous job에 넣어 Cultural Insight Brief가 RSS·차트 필드를 반영하도록 하고, Brand Studio/CTA 복사에 직접 참조할 수 있게 한다.
+
+### 07:10 KST
+- 무엇을 바꿨는지: `scripts/log_data_asset_status.py`로 문화/리드/CTA 데이터 자산들의 최신 타임스탬프와 키 메트릭을 `app/static/data/data_asset_status.json`에 기록하고, 랜딩에 그 요약 카드(Identity/Signal 뒤에 위치)를 추가해 어떤 데이터로 수익화 흐름이 만들어지는지 투명하게 보여주게 했습니다.
+- 왜 바꿨는지: 고품질 데이터 자산이 방문자에게도 보이도록 만들어 Jun 브랜드/CTA를 정체성과 수익화 신호로 더 설득력 있게 연결하고, 팀이 수집한 기록이 무엇인지 추적하며 다음 캠페인 인사이트로 재사용할 수 있도록 하기 위해.
+- Blockers/risks: 없음.
+- Saved data sources / Data-asset impact: 문화 RSS, Billboard/Deezer/identity tags/signal insights/CTA momentum/growth summary 원자료를 모아 `data_asset_status.json`에 타임스탬프과 주요 카운트를 정리하여 향후 보고와 자동화 트리거 근거로 활용 가능합니다.
+- Next candidate task: 이 스크립트를 시간당 autonomous job에 넣어 `data_asset_status.json`이 최신 상태를 유지하도록 하고, Brand Studio/크론 모니터링에도 동일한 대시보드를 노출하는 흐름을 고민합니다.

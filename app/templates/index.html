@@ -527,6 +527,51 @@
         margin-top: 0.75rem;
     }
 
+    .data-asset-section {
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        background: rgba(8, 7, 12, 0.85);
+        border-radius: 18px;
+    }
+
+    .asset-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+
+    .asset-card {
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 14px;
+        padding: 1rem;
+        background: rgba(0, 0, 0, 0.3);
+        min-height: 140px;
+        display: flex;
+        flex-direction: column;
+        gap: 0.35rem;
+    }
+
+    .asset-value {
+        font-size: 1rem;
+        font-family: var(--font-serif);
+        letter-spacing: 0.35em;
+        opacity: 0.8;
+    }
+
+    .asset-notes {
+        font-size: 0.78rem;
+        opacity: 0.63;
+        line-height: 1.4;
+        flex: 1;
+    }
+
+    .asset-meta {
+        font-size: 0.65rem;
+        letter-spacing: 0.35em;
+        text-transform: uppercase;
+        opacity: 0.45;
+    }
+
     .signal-section {
         border: 1px solid rgba(255, 255, 255, 0.12);
         background: rgba(10, 8, 12, 0.75);
@@ -1252,6 +1297,37 @@
             주요 유입: {% for source_entry in lead_summary.top_sources[:3] %}{{ source_entry.source }}{% if not loop.last %}, {% endif %}{% endfor %}
         </p>
         {% endif %}
+    </section>
+
+    <section class="pixel-card data-asset-section p-6 md:p-8 mb-10">
+        <div class="flex items-start justify-between mb-4">
+            <div>
+                <span class="text-[10px] uppercase tracking-[0.3em] opacity-40">Data Asset Inventory</span>
+                <h3 class="serif-font text-2xl mt-2 leading-tight">Jun의 데이터 자산을 정리한 대시보드</h3>
+            </div>
+            {% if data_asset_status.generated_at %}
+            <span class="text-[10px] uppercase tracking-[0.35em] opacity-55">Updated {{ data_asset_status.generated_at[:16].replace('T', ' ') }}</span>
+            {% endif %}
+        </div>
+        <p class="text-sm opacity-60 leading-relaxed mb-5">{{ data_asset_status.notes }}</p>
+        <div class="asset-grid">
+            {% if data_asset_status.assets %}
+                {% for asset in data_asset_status.assets %}
+                <article class="asset-card">
+                    <div class="text-[10px] uppercase tracking-[0.3em] opacity-40">{{ asset.name }}</div>
+                    {% if asset.metric_value is not none and asset.metric_label %}
+                    <strong class="asset-value">{{ asset.metric_value }} {{ asset.metric_label }}</strong>
+                    {% endif %}
+                    <p class="asset-notes">{{ asset.notes or '내부 데이터 파이프라인에서 값을 다시 확인하세요.' }}</p>
+                    {% if asset.updated_at %}
+                    <p class="asset-meta">Updated {{ asset.updated_at[:16].replace('T', ' ') }}</p>
+                    {% endif %}
+                </article>
+                {% endfor %}
+            {% else %}
+                <p class="text-sm opacity-60">데이터 자산 요약을 준비 중입니다. scripts/log_data_asset_status.py를 실행하면 나타납니다.</p>
+            {% endif %}
+        </div>
     </section>
 
     <div class="grid grid-cols-1 md:grid-cols-12 gap-4">

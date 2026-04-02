@@ -1,0 +1,69 @@
+{
+  "generated_at": "2026-04-02T22:09:40.551125+00:00",
+  "assets": [
+    {
+      "name": "Cultural Insights Brief",
+      "updated_at": "2026-04-02T21:07:56.407342+00:00",
+      "metric_label": "keywords",
+      "metric_value": 6,
+      "notes": "scripts/update_cultural_insights.py가 RSS+차트 데이터를 요약합니다."
+    },
+    {
+      "name": "CTA Momentum",
+      "updated_at": "2026-04-02T20:09:34.645290Z",
+      "metric_label": "momentum entries",
+      "metric_value": 3,
+      "notes": "identity/lead/날씨 신호로 CTA 메시지를 정리합니다."
+    },
+    {
+      "name": "Signal Intelligence",
+      "updated_at": "2026-04-02T19:07:17.068090Z",
+      "metric_label": "top tags",
+      "metric_value": 5,
+      "notes": "identity + lead signal을 통합하는 scripts/compile_signal_insights.py 결과입니다."
+    },
+    {
+      "name": "Identity Tags",
+      "updated_at": "2026-04-02T18:06:22.920498+00:00",
+      "metric_label": "tags",
+      "metric_value": 6,
+      "notes": "scripts/compile_identity_tags.py가 RSS 데이터에서 추출했습니다."
+    },
+    {
+      "name": "Cultural Notes (RSS)",
+      "updated_at": "2026-04-02T17:07:08.748250+00:00",
+      "metric_label": "source feeds",
+      "metric_value": 3,
+      "notes": "NYTimes Arts, NPR Music, Rolling Stone RSS 스냅샷."
+    },
+    {
+      "name": "Deezer Global Pulse",
+      "updated_at": "2026-04-02T16:09:52.823670+00:00",
+      "metric_label": "top tracks",
+      "metric_value": 6,
+      "notes": "Deezer 글로벌 차트 자료를 저장합니다."
+    },
+    {
+      "name": "Billboard Signal",
+      "updated_at": "2026-04-02T15:08:47.532670Z",
+      "metric_label": "hot tracks",
+      "metric_value": 5,
+      "notes": "Billboard Hot 100 스냅샷을 기록합니다."
+    },
+    {
+      "name": "Lead Pulse",
+      "updated_at": "2026-04-02T14:09:16.230864Z",
+      "metric_label": "total leads",
+      "metric_value": 0,
+      "notes": "growth summary 로그로 실시간 리드 집계를 유지합니다."
+    },
+    {
+      "name": "Culture Pulse",
+      "updated_at": "2026-04-02T12:50:56.688099Z",
+      "metric_label": "signal cards + diaries",
+      "metric_value": 0,
+      "notes": "scripts/culture_data.py가 공연/다이어리를 큐레이션한 결과입니다."
+    }
+  ],
+  "notes": "Hourly autonomous job에서 scripts/log_data_asset_status.py를 실행해 data_asset_status.json을 갱신하세요."
+}

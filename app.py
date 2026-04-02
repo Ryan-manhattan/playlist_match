@@ -260,6 +260,13 @@ DEFAULT_CTA_MOMENTUM = {
     'notes': 'Momentum snapshots help landing-page CTAs stay aligned with identity + lead signals.'
 }
 
+DATA_ASSET_STATUS_PATH = Path(app.static_folder) / 'data' / 'data_asset_status.json'
+DEFAULT_DATA_ASSET_STATUS = {
+    'generated_at': None,
+    'assets': [],
+    'notes': 'Hourly autonomous job에서 scripts/log_data_asset_status.py를 실행해 data_asset_status.json을 갱신하세요.',
+}
+
 growth_lead_store = GrowthLeadStore(os.path.dirname(__file__))
 
 # 콘솔 로그 함수 (디버깅용)
@@ -838,6 +845,21 @@ def load_cta_momentum() -> dict:
     except Exception:
         pass
     return {**DEFAULT_CTA_MOMENTUM}
+
+
+def load_data_asset_status() -> dict:
+    try:
+        if DATA_ASSET_STATUS_PATH.exists():
+            with DATA_ASSET_STATUS_PATH.open('r', encoding='utf-8') as f:
+                data = json.load(f)
+                if isinstance(data, dict):
+                    status = {**DEFAULT_DATA_ASSET_STATUS, **data}
+                    if not isinstance(status.get('assets'), list):
+                        status['assets'] = []
+                    return status
+    except Exception:
+        pass
+    return {**DEFAULT_DATA_ASSET_STATUS}
 
 
 def _normalize_growth_lead_payload(data: dict) -> tuple[Optional[dict], Optional[str]]:
@@ -1443,6 +1465,7 @@ def index():
     identity_tags = load_identity_tags()
     signal_insights = load_signal_insights()
     cta_momentum = load_cta_momentum()
+    data_asset_status = load_data_asset_status()
 
     from datetime import datetime
     today_date = datetime.now().strftime('%Y.%m.%d')
@@ -1469,6 +1492,7 @@ def index():
         signal_insights=signal_insights,
         cta_momentum=cta_momentum,
         cultural_insights=cultural_insights,
+        data_asset_status=data_asset_status,
     )
 
 
