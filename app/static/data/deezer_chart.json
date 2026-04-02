@@ -1,0 +1,50 @@
+{
+  "source": "Deezer Global Chart",
+  "source_url": "https://www.deezer.com/chart",
+  "insight_line": "Jun의 레이더는 Deezer 글로벌 차트의 감각을 기록하고 있습니다.",
+  "captured_at": "2026-04-02T16:09:52.823670+00:00",
+  "top_tracks": [
+    {
+      "position": 1,
+      "title": "Loopable White Noise (Sleep Noise Loop)",
+      "artist": "No Fade Noise",
+      "duration": 306,
+      "popularity": 7762
+    },
+    {
+      "position": 2,
+      "title": "Zurück zu dir",
+      "artist": "Heike Schäfer",
+      "duration": 237,
+      "popularity": 15993
+    },
+    {
+      "position": 3,
+      "title": "Wieder zurück",
+      "artist": "Ben Zucker",
+      "duration": 184,
+      "popularity": 182124
+    },
+    {
+      "position": 4,
+      "title": "Immer noch",
+      "artist": "Ben Zucker",
+      "duration": 207,
+      "popularity": 252482
+    },
+    {
+      "position": 5,
+      "title": "Feels Right",
+      "artist": "Biig Piig",
+      "duration": 199,
+      "popularity": 543330
+    },
+    {
+      "position": 6,
+      "title": "Burn the House Down",
+      "artist": "AJR",
+      "duration": 212,
+      "popularity": 545946
+    }
+  ]
+}

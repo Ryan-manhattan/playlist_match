@@ -46,3 +46,13 @@
 - Saved sources: Billboard Hot 100 (requests + BeautifulSoup 스크립트 호출 시).
 - Data-asset impact: 매번 최신 차트 스냅샷을 JSON으로 보존해 향후 리포트나 CTA 정교화에 활용할 수 있는 구조를 마련했습니다.
 - Next candidate: 이 스크립트를 자율 작업/크론에 연결해 차트가 자동 업데이트되도록 계속 데이터 흐름을 유지합니다.
+
+## 2026-04-03
+
+### 01:10 KST
+- 무엇을 바꿨는지: Deezer Global Pulse 블록과 scripts/update_deezer_chart.py를 추가하여 랜딩에 Jun 취향의 글로벌 차트 신호를 쌓고 app/static/data/deezer_chart.json 자산을 확보했습니다.
+- 왜 바꿨는지: 문화/브랜드 CTA 직전에 Jun의 감성과 글로벌 신호를 노출해 ID를 강화하고 CTA 전환/리텐션을 위한 추가 데이터 자산을 만들기 위해.
+- Blockers/risks: 없음.
+- Saved data sources: Deezer API (https://api.deezer.com/chart/0/tracks)에서 6개 트랙을 가져와 JSON으로 저장.
+- Data-asset impact: 매 시점 스냅샷을 이어받을 수 있는 Deezer 차트 JSON이 마련되어 향후 리포트/CTA 정교화에 사용 가능.
+- Next candidate task: Deezer 스냅샷 스크립트를 autonomous job에 넣어 차트 블록이 자동으로 갱신되도록 하고, CTA/방문 집중 트래픽 흐름으로 묶기.
