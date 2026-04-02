@@ -202,6 +202,107 @@
         border-radius: 18px;
     }
 
+    .insight-section {
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: rgba(8, 6, 12, 0.8);
+        border-radius: 18px;
+    }
+
+    .insight-keywords {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.55rem;
+        margin-bottom: 1rem;
+    }
+
+    .insight-keyword {
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 999px;
+        padding: 0.35rem 0.9rem;
+        font-size: 0.75rem;
+        letter-spacing: 0.3em;
+        text-transform: uppercase;
+        opacity: 0.7;
+    }
+
+    .insight-stories {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 0.9rem;
+        margin-bottom: 1rem;
+    }
+
+    .insight-story {
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 14px;
+        padding: 1rem;
+        background: rgba(255, 255, 255, 0.02);
+        min-height: 140px;
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+    }
+
+    .insight-story h4 {
+        margin: 0;
+        font-size: 1rem;
+    }
+
+    .insight-story p {
+        margin: 0;
+        font-size: 0.85rem;
+        opacity: 0.65;
+        line-height: 1.4;
+    }
+
+    .insight-story a {
+        font-size: 0.72rem;
+        letter-spacing: 0.35em;
+        text-transform: uppercase;
+        opacity: 0.6;
+    }
+
+    .insight-charts {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 0.8rem;
+        margin-top: 0.5rem;
+    }
+
+    .chart-highlight {
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 14px;
+        padding: 0.85rem 1rem;
+        background: rgba(255, 255, 255, 0.02);
+        min-height: 110px;
+    }
+
+    .chart-highlight .chart-source {
+        font-size: 0.7rem;
+        opacity: 0.5;
+        letter-spacing: 0.4em;
+        text-transform: uppercase;
+    }
+
+    .chart-highlight .chart-title {
+        font-size: 1rem;
+        margin: 0.4rem 0 0.2rem;
+    }
+
+    .chart-highlight .chart-artist {
+        font-size: 0.7rem;
+        opacity: 0.55;
+        text-transform: uppercase;
+        letter-spacing: 0.3em;
+    }
+
+    .insight-notes {
+        font-size: 0.65rem;
+        letter-spacing: 0.35em;
+        text-transform: uppercase;
+        opacity: 0.45;
+    }
+
     .identity-tags-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -781,6 +882,65 @@
         <div class="mt-6 flex flex-wrap gap-3">
             <a href="{{ url_for('diary') }}" class="btn-outline text-xs tracking-widest justify-center">Document a Reaction</a>
             <a href="{{ url_for('brand_studio') }}" class="btn-outline text-xs tracking-widest justify-center">Share with Brand Studio</a>
+        </div>
+    </section>
+
+    <section class="pixel-card insight-section p-6 md:p-8 mb-10">
+        <div class="flex items-start justify-between mb-4">
+            <div>
+                <span class="text-[10px] uppercase tracking-[0.3em] opacity-40">Cultural Insight Brief</span>
+                <h3 class="serif-font text-2xl mt-2 leading-tight">Jun의 RSS와 차트 신호를 브랜드 이야기로 묶습니다.</h3>
+            </div>
+            {% if cultural_insights.generated_at %}
+            <span class="text-[10px] uppercase tracking-[0.35em] opacity-50">Updated {{ cultural_insights.generated_at[:16].replace('T', ' ') }}</span>
+            {% endif %}
+        </div>
+        <p class="text-sm opacity-60 leading-relaxed mb-5">{{ cultural_insights.headline }}</p>
+        {% if cultural_insights.keywords %}
+        <div class="insight-keywords">
+            {% for keyword in cultural_insights.keywords %}
+            <span class="insight-keyword">{{ keyword.keyword }} · {{ keyword.count }}</span>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% if cultural_insights.stories %}
+        <div class="insight-stories">
+            {% for story in cultural_insights.stories %}
+            <article class="insight-story">
+                <div class="text-[10px] uppercase tracking-[0.35em] opacity-45">{{ story.source }}</div>
+                {% if story.title %}
+                <h4 class="serif-font text-lg leading-tight">{{ story.title }}</h4>
+                {% endif %}
+                {% if story.summary %}
+                <p>{{ story.summary }}</p>
+                {% endif %}
+                {% if story.link %}
+                <a href="{{ story.link }}" target="_blank" rel="noreferrer">Read story</a>
+                {% endif %}
+            </article>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p class="text-sm opacity-60">문화 RSS와 차트 데이터를 조합해 다음 브랜드 리드를 위한 이야기 거리를 정리 중입니다.</p>
+        {% endif %}
+        {% if cultural_insights.chart_highlights %}
+        <div class="insight-charts">
+            {% for highlight in cultural_insights.chart_highlights %}
+            <div class="chart-highlight">
+                <div class="chart-source">{{ highlight.source }}</div>
+                {% if highlight.title %}
+                <p class="chart-title serif-font">{{ highlight.title }}</p>
+                {% endif %}
+                {% if highlight.artist %}
+                <p class="chart-artist">{{ highlight.artist }}</p>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        <div class="mt-6 flex flex-wrap gap-3 items-center">
+            <a href="{{ cultural_insights.cta.link }}" class="btn-outline text-xs tracking-widest justify-center">{{ cultural_insights.cta.label }}</a>
+            <span class="insight-notes">{{ cultural_insights.notes }}</span>
         </div>
     </section>
 

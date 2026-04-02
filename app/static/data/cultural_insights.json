@@ -1,0 +1,69 @@
+{
+  "generated_at": "2026-04-02T21:07:56.407342+00:00",
+  "headline": "Jun의 레이더는 noise과 album 신호를 문화 전선에서 동시 추적 중입니다.",
+  "keywords": [
+    {
+      "keyword": "noise",
+      "count": 3
+    },
+    {
+      "keyword": "album",
+      "count": 2
+    },
+    {
+      "keyword": "says",
+      "count": 2
+    },
+    {
+      "keyword": "brady",
+      "count": 2
+    },
+    {
+      "keyword": "no",
+      "count": 2
+    },
+    {
+      "keyword": "zur",
+      "count": 2
+    }
+  ],
+  "stories": [
+    {
+      "source": "NYTimes Arts",
+      "title": "‘The Drama’ Review: Her Secret Is His Crisis",
+      "summary": "Zendaya and Robert Pattinson play a couple upended when one confesses to coming close to committing a horrific crime.",
+      "link": "https://www.nytimes.com/2026/04/02/movies/the-drama-review-zendaya-robert-pattinson.html"
+    },
+    {
+      "source": "NPR Music",
+      "title": "Bush: Tiny Desk Concert",
+      "summary": "If you think you know \"Machinehead\" and \"Glycerine,\" prepare to be surprised by these Tiny Desk arrangements of beloved alt-rock hits.",
+      "link": "https://www.npr.org/2026/04/02/g-s1-115471/bush-tiny-desk-concert"
+    },
+    {
+      "source": "Rolling Stone Music News",
+      "title": "Olivia Rodrigo Reveals New Album ‘You Seem Pretty Sad for a Girl So in Love’",
+      "summary": "“I am so proud of this record and I can’t wait for you to hear it,” she says of her third album",
+      "link": "https://www.rollingstone.com/music/music-news/olivia-rodrigo-announces-new-album-you-seem-pretty-sad-1235531647/"
+    }
+  ],
+  "chart_highlights": [
+    {
+      "source": "Billboard Hot 100",
+      "title": "Swim",
+      "artist": "BTS",
+      "captured_at": "2026-04-02T15:08:47.532670Z"
+    },
+    {
+      "source": "Deezer Global Chart",
+      "title": "Loopable White Noise (Sleep Noise Loop)",
+      "artist": "No Fade Noise",
+      "captured_at": "2026-04-02T16:09:52.823670+00:00"
+    }
+  ],
+  "cta": {
+    "label": "Share Cultural Brief",
+    "link": "/brand-studio"
+  },
+  "notes": "scripts/update_cultural_insights.py로 RSS와 차트 데이터를 다시 조합해 새로운 내러티브를 만들 수 있습니다."
+}

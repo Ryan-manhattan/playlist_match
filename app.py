@@ -215,6 +215,19 @@ DEFAULT_CULTURE_RSS = {
     'summary_line': 'Jun은 일상의 문화 신호를 스캔하며 다음 멤버십/브랜드 스토리를 준비하고 있습니다.',
     'sources': [],
 }
+CULTURAL_INSIGHTS_PATH = Path(app.static_folder) / 'data' / 'cultural_insights.json'
+DEFAULT_CULTURAL_INSIGHTS = {
+    'generated_at': None,
+    'headline': 'Jun의 문화 신호가 곧 요약됩니다.',
+    'keywords': [],
+    'stories': [],
+    'chart_highlights': [],
+    'cta': {
+        'label': 'Share Cultural Brief',
+        'link': '/brand-studio'
+    },
+    'notes': 'scripts/update_cultural_insights.py를 실행해 문화 RSS와 차트 데이터에서 새로운 인사이트를 다시 조합하세요.'
+}
 IDENTITY_TAGS_PATH = Path(app.static_folder) / 'data' / 'identity_tags.json'
 DEFAULT_IDENTITY_TAGS = {
     'generated_at': None,
@@ -761,6 +774,25 @@ def load_culture_rss() -> dict:
     except Exception:
         pass
     return {**DEFAULT_CULTURE_RSS}
+
+
+def load_cultural_insights() -> dict:
+    try:
+        if CULTURAL_INSIGHTS_PATH.exists():
+            with CULTURAL_INSIGHTS_PATH.open('r', encoding='utf-8') as f:
+                data = json.load(f)
+                if isinstance(data, dict):
+                    insights = {**DEFAULT_CULTURAL_INSIGHTS, **data}
+                    if not isinstance(insights.get('keywords'), list):
+                        insights['keywords'] = []
+                    if not isinstance(insights.get('stories'), list):
+                        insights['stories'] = []
+                    if not isinstance(insights.get('chart_highlights'), list):
+                        insights['chart_highlights'] = []
+                    return insights
+    except Exception:
+        pass
+    return {**DEFAULT_CULTURAL_INSIGHTS}
 
 
 def load_identity_tags() -> dict:
@@ -1407,6 +1439,7 @@ def index():
     billboard_data = load_billboard_content()
     deezer_data = load_deezer_chart()
     culture_rss = load_culture_rss()
+    cultural_insights = load_cultural_insights()
     identity_tags = load_identity_tags()
     signal_insights = load_signal_insights()
     cta_momentum = load_cta_momentum()
@@ -1435,6 +1468,7 @@ def index():
         identity_tags=identity_tags,
         signal_insights=signal_insights,
         cta_momentum=cta_momentum,
+        cultural_insights=cultural_insights,
     )
 
 

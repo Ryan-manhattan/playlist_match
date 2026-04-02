@@ -86,3 +86,9 @@
 - Saved data sources: `app/static/data/identity_tags.json`, `app/static/data/lead_summary.json`, Open-Meteo current weather API (Seoul).
 - Data-asset impact: CTA Momentum JSON으로 identity/lead 신호 + 날씨 컨텍스트를 정형화해 나중에 Brand Studio 제안이나 CRM 메시지에 재활용 가능.
 - Next candidate task: 이 스크립트를 autonomous hourly job에 넣어 CTA Momentum 카드가 최신 데이터를 반영하도록 하고, Brand Studio 혹은 Growth dashboard에서도 동일한 흐름을 사용할 수 있게 한다.
+### 06:09 KST
+- 무엇을 바꿨는지: scripts/update_cultural_insights.py로 RSS+차트 데이터를 조합해 `app/static/data/cultural_insights.json`을 만들고, 랜딩에 새로운 Cultural Insight Brief 섹션을 넣어 브랜드 CTA 앞에서 가장 집중할 만한 키워드, 이야기, 차트 포인트를 보여주게 했습니다.
+- 왜 바꿨는지: Jun의 정체성과 외부 문화 신호를 한 데 묶는 고급 CTA Narrative를 만들어 랜딩 전환 설득력/재방문 의도를 키우고, 새로운 데이터 자산을 쌓아 브랜드 리포트/카피에 재사용할 수 있도록 하기 위해.
+- Blockers/risks: 없음.
+- Saved data sources / Data-asset impact: culture_rss.json, billboard_hot100.json, deezer_chart.json을 요약해서 키워드/스토리/차트 하이라이트를 cultural_insights.json에 저장하여 향후 Brand Studio 제안이나 Growth report의 핵심 요약에 돌려 쓸 수 있게 했습니다.
+- Next candidate task: scripts/update_cultural_insights.py를 autonomous job에 넣어 Cultural Insight Brief가 RSS·차트 필드를 반영하도록 하고, Brand Studio/CTA 복사에 직접 참조할 수 있게 한다.
