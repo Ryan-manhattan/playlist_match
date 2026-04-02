@@ -7,6 +7,7 @@ off the community - 음악 파일 처리 웹 서비스
 import os
 import re
 from pathlib import Path
+from collections import Counter
 
 # FFmpeg 경로를 환경 변수에 추가 (로컬 개발용)
 if os.name == 'nt':  # Windows에서만 실행
@@ -123,6 +124,7 @@ os.makedirs(app.config['PROCESSED_FOLDER'], exist_ok=True)
 
 PROMO_CONTENT_PATH = Path(app.static_folder) / 'data' / 'promo.json'
 CULTURE_CONTENT_PATH = Path(app.static_folder) / 'data' / 'culture.json'
+LEAD_SUMMARY_PATH = Path(app.static_folder) / 'data' / 'lead_summary.json'
 DEFAULT_PROMO_CONTENT = {
     'hero': {
 
@@ -336,13 +338,22 @@ GROWTH_LEAD_BUDGET_MAX_LEN = 80
 GROWTH_LEAD_GOAL_MAX_LEN = 2000
 GROWTH_LEAD_SOURCE_MAX_LEN = 255
 
-ALLOWED_GROWTH_LEAD_TYPES = {
+LEAD_TYPE_ORDER = [
     "newsletter",
     "creator_membership",
     "premium_waitlist",
     "brand_partnership",
     "media_kit",
     "insight_report",
+]
+ALLOWED_GROWTH_LEAD_TYPES = set(LEAD_TYPE_ORDER)
+LEAD_TYPE_LABELS = {
+    "newsletter": "Founder List",
+    "creator_membership": "Creator Membership",
+    "premium_waitlist": "Premium Waitlist",
+    "brand_partnership": "Brand Partnerships",
+    "media_kit": "Media Kit Request",
+    "insight_report": "Insight Report",
 }
 _growth_last_submit_at_by_ip = {}
 
@@ -623,6 +634,43 @@ def load_promo_content() -> dict:
         except Exception:
             pass
     return DEFAULT_PROMO_CONTENT
+
+
+def _default_growth_summary() -> dict:
+    return {
+        "generated_at": None,
+        "total_leads": 0,
+        "lead_types": {key: 0 for key in LEAD_TYPE_ORDER},
+        "recent_seven_days": 0,
+        "recent_leads_by_type": {key: 0 for key in LEAD_TYPE_ORDER},
+        "top_sources": [],
+        "goal_keywords": [],
+    }
+
+
+def load_growth_summary() -> dict:
+    summary = _default_growth_summary()
+    if LEAD_SUMMARY_PATH.exists():
+        try:
+            with LEAD_SUMMARY_PATH.open('r', encoding='utf-8') as f:
+                data = json.load(f)
+                if isinstance(data, dict):
+                    summary.update(data)
+        except Exception:
+            pass
+
+    summary["lead_types"] = {key: summary.get("lead_types", {}).get(key, 0) for key in LEAD_TYPE_ORDER}
+    summary["recent_leads_by_type"] = {key: summary.get("recent_leads_by_type", {}).get(key, 0) for key in LEAD_TYPE_ORDER}
+    ordered = []
+    for key in LEAD_TYPE_ORDER:
+        ordered.append({
+            "key": key,
+            "label": LEAD_TYPE_LABELS.get(key, key.replace('_', ' ').title()),
+            "count": summary["lead_types"].get(key, 0),
+            "recent_count": summary["recent_leads_by_type"].get(key, 0),
+        })
+    summary["ordered_lead_types"] = ordered
+    return summary
 
 
 def _normalize_growth_lead_payload(data: dict) -> tuple[Optional[dict], Optional[str]]:
@@ -1220,6 +1268,7 @@ def index():
     # 오늘 날짜 포맷팅
     culture_content = load_culture_content()
     promo_content = load_promo_content()
+    lead_summary = load_growth_summary()
 
     from datetime import datetime
     today_date = datetime.now().strftime('%Y.%m.%d')
@@ -1238,6 +1287,7 @@ def index():
         growth_snapshot=growth_snapshot,
         promo_content=promo_content,
         culture_content=culture_content,
+        lead_summary=lead_summary,
     )
 
 

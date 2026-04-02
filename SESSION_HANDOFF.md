@@ -1,0 +1,35 @@
+# SESSION HANDOFF
+
+## Project
+- Path: `/Users/junkim/Projects/off_community`
+- Primary goal:
+  1. Improve monetization / revenue potential
+  2. Increase visitors and return traffic
+  3. Express Jun's identity, taste, and cultural point of view clearly
+
+## Current state
+- Landing page has promo-driven commercialization sections.
+- Culture Pulse section was added and reads from `app/static/data/culture.json`.
+- `scripts/update_promo.py` creates promo content.
+- `scripts/culture_data.py` creates internal cultural snapshots.
+- Pretext-based layout improvements were added to charts/worldcup UI.
+- Added `scripts/update_growth_summary.py` + `app/static/data/lead_summary.json` so the landing page can show lead counts, keywords, and source signals in the new Lead Pulse card.
+
+## Automation currently configured
+- Daily 9 AM report job exists.
+- Hourly autonomous improvement job exists.
+- Both should think in terms of revenue + traffic + identity.
+- No automatic deploy.
+
+## Operating rules for future sessions
+- Read `WORKLOG.md` first.
+- Append to `WORKLOG.md` after every meaningful task.
+- Keep changes small, commercial, and reversible.
+- If blocked or risky, write the blocker in `WORKLOG.md` and propose the safest next step.
+
+## Next recommended tasks
+1. Connect external culture data sources (YouTube / Spotify / RSS)
+2. Improve homepage conversion path for membership / brand inquiry
+3. Add clearer identity-rich storytelling blocks
+4. Strengthen trust/security presentation without hurting conversion
+5. Hook the growth summary script into the hourly autonomous job so Lead Pulse numbers stay fresh

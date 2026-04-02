@@ -168,6 +168,51 @@
         text-transform: uppercase;
         opacity: 0.35;
     }
+
+    .lead-pulse-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+
+    .lead-type-card {
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 16px;
+        padding: 1rem;
+        min-height: 120px;
+        background: rgba(0, 0, 0, 0.32);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .lead-type-count {
+        font-size: 2.25rem;
+        font-family: var(--font-serif);
+        margin: 0.35rem 0;
+    }
+
+    .lead-type-meta {
+        font-size: 10px;
+        opacity: 0.6;
+    }
+
+    .keyword-chip {
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 999px;
+        padding: 0.35rem 0.8rem;
+        font-size: 11px;
+        opacity: 0.85;
+    }
+
+    .lead-meta-line {
+        font-size: 10px;
+        letter-spacing: 0.35em;
+        text-transform: uppercase;
+        opacity: 0.45;
+        margin-top: 0.75rem;
+    }
 </style>
 {% endblock %}
 
@@ -478,6 +523,45 @@
                 <div class="status-message" data-growth-status></div>
             </form>
         </article>
+    </section>
+
+    <section class="pixel-card p-6 md:p-8 mb-10">
+        <div class="flex items-end justify-between gap-4 mb-4">
+            <div>
+                <span class="inline-code">Lead Pulse</span>
+                <h3 class="serif-font text-3xl mt-2">Realtime Monetization Signals</h3>
+            </div>
+            {% if lead_summary.generated_at %}
+            <div class="text-[10px] uppercase tracking-[0.35em] opacity-55">{{ lead_summary.generated_at[:16].replace('T', ' ') }}</div>
+            {% endif %}
+        </div>
+        <p class="text-sm opacity-60 leading-relaxed">
+            {{ lead_summary.total_leads }}개의 수익화 리드를 포착했고, 지난 7일간 {{ lead_summary.recent_seven_days or 0 }}건이 추가되었습니다.
+        </p>
+        <div class="lead-pulse-grid">
+            {% for type in lead_summary.ordered_lead_types %}
+            <div class="lead-type-card">
+                <span class="text-[10px] uppercase tracking-[0.3em] opacity-40">{{ type.label }}</span>
+                <strong class="lead-type-count">{{ type.count }}</strong>
+                <span class="lead-type-meta">{{ type.recent_count }} / 7d</span>
+            </div>
+            {% endfor %}
+        </div>
+        {% if lead_summary.goal_keywords %}
+        <div class="mt-6">
+            <div class="text-[10px] uppercase tracking-[0.4em] opacity-35">Trending Intents</div>
+            <div class="mt-3 flex flex-wrap gap-2">
+                {% for keyword in lead_summary.goal_keywords[:6] %}
+                <span class="keyword-chip">{{ keyword.keyword }} · {{ keyword.count }}</span>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+        {% if lead_summary.top_sources %}
+        <p class="lead-meta-line">
+            주요 유입: {% for source_entry in lead_summary.top_sources[:3] %}{{ source_entry.source }}{% if not loop.last %}, {% endif %}{% endfor %}
+        </p>
+        {% endif %}
     </section>
 
     <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
