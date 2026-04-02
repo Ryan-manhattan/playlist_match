@@ -56,3 +56,11 @@
 - Saved data sources: Deezer API (https://api.deezer.com/chart/0/tracks)에서 6개 트랙을 가져와 JSON으로 저장.
 - Data-asset impact: 매 시점 스냅샷을 이어받을 수 있는 Deezer 차트 JSON이 마련되어 향후 리포트/CTA 정교화에 사용 가능.
 - Next candidate task: Deezer 스냅샷 스크립트를 autonomous job에 넣어 차트 블록이 자동으로 갱신되도록 하고, CTA/방문 집중 트래픽 흐름으로 묶기.
+
+### 02:40 KST
+- 무엇을 바꿨는지: scripts/update_culture_rss.py를 만들고 NYTimes Arts / NPR Music / Rolling Stone RSS를 하루 스캔하여 app/static/data/culture_rss.json에 저장한 뒤, 랜딩에 새로운 “Cultural Notes” 블록을 추가해 가장 최근 문화 감상을 UI/CTA로 연결했습니다.
+- 왜 바꿨는지: 문화 데이터 자산을 더 구조적으로 쌓아 Jun의 정체성과 감성을 방문자에게 보여주면서 브랜드/일기 CTA 앞에 문화적 신뢰를 붙이고, 장기적으로 RSS 스냅샷을 기반으로 인사이트와 콘텐츠를 만들기 위해.
+- Blockers/risks: 없음.
+- Saved data sources: NYTimes Arts RSS, NPR Music RSS (Tiny Desk 등), Rolling Stone Music News RSS를 requests로 가져와 요약해 JSON으로 기록함.
+- Data-asset impact: 피드별 스냅샷과 문맥 요약이 `culture_rss.json`에 보존되므로 향후 보고서, CTA 메시지, 문화 데이터 시리즈에 재사용 가능.
+- Next candidate task: 이 스크립트를 autonomous job(시간당) 혹은 cron과 연결해 문화 블록이 자동 갱신되도록 하고, 기록된 RSS 요약을 리드/디텍션에 활용하는 추가 CTA/통계 흐름을 고민하기.

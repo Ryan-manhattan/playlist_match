@@ -127,6 +127,7 @@ CULTURE_CONTENT_PATH = Path(app.static_folder) / 'data' / 'culture.json'
 LEAD_SUMMARY_PATH = Path(app.static_folder) / 'data' / 'lead_summary.json'
 BILLBOARD_DATA_PATH = Path(app.static_folder) / 'data' / 'billboard_hot100.json'
 DEEZER_CHART_PATH = Path(app.static_folder) / 'data' / 'deezer_chart.json'
+CULTURE_RSS_PATH = Path(app.static_folder) / 'data' / 'culture_rss.json'
 DEFAULT_PROMO_CONTENT = {
     'hero': {
 
@@ -208,6 +209,11 @@ DEFAULT_DEEZER_CHART = {
     'insight_line': 'Jun의 레이더는 Deezer 글로벌 차트의 감각을 기록하고 있습니다.',
     'captured_at': None,
     'top_tracks': [],
+}
+DEFAULT_CULTURE_RSS = {
+    'generated_at': None,
+    'summary_line': 'Jun은 일상의 문화 신호를 스캔하며 다음 멤버십/브랜드 스토리를 준비하고 있습니다.',
+    'sources': [],
 }
 
 growth_lead_store = GrowthLeadStore(os.path.dirname(__file__))
@@ -712,6 +718,18 @@ def load_deezer_chart() -> dict:
     except Exception:
         pass
     return {**DEFAULT_DEEZER_CHART}
+
+
+def load_culture_rss() -> dict:
+    try:
+        if CULTURE_RSS_PATH.exists():
+            with CULTURE_RSS_PATH.open('r', encoding='utf-8') as f:
+                data = json.load(f)
+                if isinstance(data, dict):
+                    return data
+    except Exception:
+        pass
+    return {**DEFAULT_CULTURE_RSS}
 
 
 def _normalize_growth_lead_payload(data: dict) -> tuple[Optional[dict], Optional[str]]:
@@ -1312,6 +1330,7 @@ def index():
     lead_summary = load_growth_summary()
     billboard_data = load_billboard_content()
     deezer_data = load_deezer_chart()
+    culture_rss = load_culture_rss()
 
     from datetime import datetime
     today_date = datetime.now().strftime('%Y.%m.%d')
@@ -1330,6 +1349,7 @@ def index():
         growth_snapshot=growth_snapshot,
         promo_content=promo_content,
         culture_content=culture_content,
+        culture_rss=culture_rss,
         lead_summary=lead_summary,
         billboard_data=billboard_data,
         deezer_data=deezer_data,

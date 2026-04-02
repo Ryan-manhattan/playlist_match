@@ -1,0 +1,66 @@
+{
+  "generated_at": "2026-04-02T17:07:08.748250+00:00",
+  "summary_line": "Jun은 요즘 ‘The Drama’ Review: Her Secret Is His Crisis (NYTimes Arts)를 읽으며 파트너 리드에 감성을 붙이고 있습니다.",
+  "sources": [
+    {
+      "name": "NYTimes Arts",
+      "tagline": "뉴욕타임스 아트 섹션",
+      "entries": [
+        {
+          "title": "‘The Drama’ Review: Her Secret Is His Crisis",
+          "link": "https://www.nytimes.com/2026/04/02/movies/the-drama-review-zendaya-robert-pattinson.html",
+          "published": "2026-04-02",
+          "summary": "Zendaya and Robert Pattinson play a couple upended when one confesses to coming close to committing a horrific crime."
+        },
+        {
+          "title": "Kanye West Plays First American Concert Since 2021",
+          "link": "https://www.nytimes.com/2026/04/02/arts/music/kanye-west-concert-los-angeles.html",
+          "published": "2026-04-02",
+          "summary": "After years of antisemitic behavior, the rapper formerly known as Kanye West performed his first full live show in the United States since 2021."
+        },
+        {
+          "title": "Danish Shows to Watch While We’re Still at Peace",
+          "link": "https://www.nytimes.com/2026/04/02/arts/television/danish-shows-to-watch-streaming.html",
+          "published": "2026-04-02",
+          "summary": "The protector of Greenland also makes very entertaining TV."
+        }
+      ]
+    },
+    {
+      "name": "NPR Music",
+      "tagline": "NPR 뮤직 오프닝",
+      "entries": [
+        {
+          "title": "Bush: Tiny Desk Concert",
+          "link": "https://www.npr.org/2026/04/02/g-s1-115471/bush-tiny-desk-concert",
+          "published": "2026-04-02",
+          "summary": "If you think you know \"Machinehead\" and \"Glycerine,\" prepare to be surprised by these Tiny Desk arrangements of beloved alt-rock hits."
+        },
+        {
+          "title": "Megan Moroney showcases her command of country heartache on 'Cloud 9'",
+          "link": "https://www.npr.org/2026/04/01/nx-s1-5766239/megan-moroney-showcases-her-command-of-country-heartache-on-cloud-9",
+          "published": "2026-04-01",
+          "summary": "Moroney's album arrives as a new kind of music from Big Pink: The Georgia-born singer/songwriter spins out tales of romantic revenge with a smooth fluency that's a stark contrasts ..."
+        }
+      ]
+    },
+    {
+      "name": "Rolling Stone Music News",
+      "tagline": "롤링스톤 최신 커버",
+      "entries": [
+        {
+          "title": "Olivia Rodrigo Reveals New Album ‘You Seem Pretty Sad for a Girl So in Love’",
+          "link": "https://www.rollingstone.com/music/music-news/olivia-rodrigo-announces-new-album-you-seem-pretty-sad-1235531647/",
+          "published": "2026-04-02",
+          "summary": "“I am so proud of this record and I can’t wait for you to hear it,” she says of her third album"
+        },
+        {
+          "title": "Ex-Turnstile Guitarist Brady Ebert Charged With Attempted Murder of Singer Brendan Yates’ Father",
+          "link": "https://www.rollingstone.com/music/music-news/turnstile-ex-guitarist-brady-ebert-attempted-murder-charge-1235540612/",
+          "published": "2026-04-02",
+          "summary": "After Brady Ebert allegedly targeted the Turnstile frontman’s dad, the band says, “We have no language left for Brady”"
+        }
+      ]
+    }
+  ]
+}
