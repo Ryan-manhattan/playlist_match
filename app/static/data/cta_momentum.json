@@ -1,0 +1,43 @@
+{
+  "generated_at": "2026-04-02T20:09:34.645290Z",
+  "context_line": "Seoul 5.3°C · Overcast · Signals lean toward brand partnership.",
+  "entries": [
+    {
+      "tag": "Album",
+      "tag_count": 3,
+      "keyword": "npr",
+      "keyword_count": 1,
+      "intent_label": "Brand Partnership",
+      "message": "Album 감성과 'npr' 키워드가 Brand Partnership 문의를 자극하는 신호를 만들고 있습니다. NPR Music: Megan Moroney showcases her command of country heartache on 'Cloud 9'에서 힘을 얻은 제안으로 CTA를 강화하세요.",
+      "cta": {
+        "label": "Request Brand Call",
+        "link": "/brand-studio"
+      }
+    },
+    {
+      "tag": "Brady",
+      "tag_count": 3,
+      "keyword": "music",
+      "keyword_count": 1,
+      "intent_label": "Brand Partnership",
+      "message": "Brady 감성과 'music' 키워드가 Brand Partnership 문의를 자극하는 신호를 만들고 있습니다. Rolling Stone Music News: Ex-Turnstile Guitarist Brady Ebert Charged With Attempted Murder of Singer Brendan Yates’ Father에서 힘을 얻은 제안으로 CTA를 강화하세요.",
+      "cta": {
+        "label": "Request Brand Call",
+        "link": "/brand-studio"
+      }
+    },
+    {
+      "tag": "Drama",
+      "tag_count": 2,
+      "keyword": "megan",
+      "keyword_count": 1,
+      "intent_label": "Brand Partnership",
+      "message": "Drama 감성과 'megan' 키워드가 Brand Partnership 문의를 자극하는 신호를 만들고 있습니다. Summary line에서 힘을 얻은 제안으로 CTA를 강화하세요.",
+      "cta": {
+        "label": "Request Brand Call",
+        "link": "/brand-studio"
+      }
+    }
+  ],
+  "notes": "Run scripts/compile_cta_momentum.py hourly after identity/lead snapshots."
+}

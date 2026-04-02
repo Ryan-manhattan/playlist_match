@@ -470,6 +470,51 @@
         letter-spacing: 0.25em;
         opacity: 0.75;
     }
+
+    .momentum-section {
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: rgba(8, 6, 12, 0.8);
+        border-radius: 18px;
+    }
+
+    .momentum-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 0.9rem;
+        margin-top: 1rem;
+    }
+
+    .momentum-card {
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 14px;
+        padding: 1rem;
+        background: rgba(255, 255, 255, 0.02);
+        min-height: 170px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .momentum-tag {
+        font-size: 0.85rem;
+        letter-spacing: 0.4em;
+        text-transform: uppercase;
+        opacity: 0.48;
+    }
+
+    .momentum-message {
+        margin: 0.85rem 0;
+        font-size: 0.9rem;
+        opacity: 0.7;
+        line-height: 1.5;
+    }
+
+    .momentum-meta {
+        font-size: 0.75rem;
+        letter-spacing: 0.32em;
+        text-transform: uppercase;
+        opacity: 0.45;
+    }
 </style>
 {% endblock %}
 
@@ -780,6 +825,35 @@
         <div class="mt-6 flex flex-wrap gap-3">
             <a href="{{ signal_insights.cta.link or url_for('brand_studio') }}" class="btn-outline text-xs tracking-widest justify-center">{{ signal_insights.cta.label or 'Share signal with Brand Studio' }}</a>
             <a href="{{ signal_insights.alt_cta.link or url_for('diary') }}" class="btn-pixel text-xs tracking-widest justify-center">{{ signal_insights.alt_cta.label or 'Document a Reaction' }}</a>
+        </div>
+    </section>
+
+    <section class="pixel-card momentum-section p-6 md:p-8 mb-10">
+        <div class="flex items-start justify-between mb-4">
+            <div>
+                <span class="text-[10px] uppercase tracking-[0.3em] opacity-40">CTA Momentum</span>
+                <h3 class="serif-font text-2xl mt-2 leading-tight">Jun의 감성과 리드 신호를 CTA로 녹입니다.</h3>
+            </div>
+            {% if cta_momentum.generated_at %}
+            <span class="text-[10px] uppercase tracking-[0.35em] opacity-50">Updated {{ cta_momentum.generated_at[:16].replace('T', ' ') }}</span>
+            {% endif %}
+        </div>
+        <p class="text-sm opacity-60 leading-relaxed mb-5">{{ cta_momentum.context_line or 'Signals are being compiled for CTA combos.' }}</p>
+        <div class="momentum-grid">
+            {% if cta_momentum.entries %}
+                {% for entry in cta_momentum.entries %}
+                <article class="momentum-card">
+                    <div class="momentum-tag">{{ entry.tag }}</div>
+                    <p class="momentum-message">{{ entry.message }}</p>
+                    <div class="momentum-meta">
+                        {{ entry.intent_label }} · {{ entry.keyword }} · {{ entry.tag_count }} / {{ entry.keyword_count }}
+                    </div>
+                    <a href="{{ entry.cta.link }}" class="btn-outline text-xs tracking-widest justify-center mt-4">{{ entry.cta.label }}</a>
+                </article>
+                {% endfor %}
+            {% else %}
+                <p class="text-sm opacity-60">CTA momentum을 계산하려면 scripts/compile_cta_momentum.py를 실행하세요.</p>
+            {% endif %}
         </div>
     </section>
 

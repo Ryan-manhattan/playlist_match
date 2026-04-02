@@ -19,6 +19,7 @@
 - “Cultural Notes” 섹션과 `app/static/data/culture_rss.json`을 추가하여 NYTimes Arts/NPR Music/Rolling Stone RSS 스냅샷이 브랜드·다이어리 CTA 앞에서 Jun의 취향을 보여주도록 했습니다 (`scripts/update_culture_rss.py`).
 - `scripts/compile_identity_tags.py`가 RSS 타이틀/요약에서 정체성 키워드·컨텍스트를 집계해 `app/static/data/identity_tags.json`에 저장하며, 랜딩의 새 Identity Tags 블록이 브랜드 문의/다이어리 CTA 앞에서 Jun의 문화 DNA를 다시 한번 강조합니다.
 - Signal Intelligence 블록이 `scripts/compile_signal_insights.py`와 `app/static/data/signal_insights.json`을 바탕으로 identity 태그와 growth 키워드를 통합해 제안 CTA 앞에 Jun의 정체성과 수익화 리드를 동시에 노출합니다.
+- CTA Momentum 블록과 `scripts/compile_cta_momentum.py`를 통해 identity/lead/날씨 컨텍스트를 `app/static/data/cta_momentum.json`으로 정형화하고 Jun의 문화 감성과 수익화 리드를 CTA copy로 바로 보여줍니다.
 
 ## Automation currently configured
 - Daily 9 AM report job exists.
@@ -43,3 +44,4 @@
 8. Hook `scripts/update_culture_rss.py` into the hourly autonomous job so the Cultural Notes data and CTA messaging stay synchronized with fresh NYTimes/NPR/Rolling Stone signals.
 9. Run `scripts/compile_identity_tags.py` inside the autonomous job as well so the Identity Tags block stays aligned with the latest RSS signals and can feed brand/membership pitches.
 10. Add `scripts/compile_signal_insights.py` to the hourly autonomous job so the new Signal Intelligence block stays in sync with identity+lead data and keeps the CTA flow fresh.
+11. Run `scripts/compile_cta_momentum.py` inside the hourly autonomous job so the CTA Momentum block stays aligned with current identity/lead/weather signals and Brand Studio can reuse the same CTA copy engine.

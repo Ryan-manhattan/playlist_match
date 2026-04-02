@@ -239,6 +239,14 @@ DEFAULT_SIGNAL_INSIGHTS = {
     'notes': 'Refresh signal insights after identity and lead snapshots.'
 }
 
+CTA_MOMENTUM_PATH = Path(app.static_folder) / 'data' / 'cta_momentum.json'
+DEFAULT_CTA_MOMENTUM = {
+    'generated_at': None,
+    'context_line': 'CTA momentum을 계산하려면 scripts/compile_cta_momentum.py를 실행하세요.',
+    'entries': [],
+    'notes': 'Momentum snapshots help landing-page CTAs stay aligned with identity + lead signals.'
+}
+
 growth_lead_store = GrowthLeadStore(os.path.dirname(__file__))
 
 # 콘솔 로그 함수 (디버깅용)
@@ -784,6 +792,20 @@ def load_signal_insights() -> dict:
     except Exception:
         pass
     return {**DEFAULT_SIGNAL_INSIGHTS}
+
+def load_cta_momentum() -> dict:
+    try:
+        if CTA_MOMENTUM_PATH.exists():
+            with CTA_MOMENTUM_PATH.open('r', encoding='utf-8') as f:
+                data = json.load(f)
+                if isinstance(data, dict):
+                    momentum = {**DEFAULT_CTA_MOMENTUM, **data}
+                    if not isinstance(momentum.get('entries'), list):
+                        momentum['entries'] = []
+                    return momentum
+    except Exception:
+        pass
+    return {**DEFAULT_CTA_MOMENTUM}
 
 
 def _normalize_growth_lead_payload(data: dict) -> tuple[Optional[dict], Optional[str]]:
@@ -1387,6 +1409,7 @@ def index():
     culture_rss = load_culture_rss()
     identity_tags = load_identity_tags()
     signal_insights = load_signal_insights()
+    cta_momentum = load_cta_momentum()
 
     from datetime import datetime
     today_date = datetime.now().strftime('%Y.%m.%d')
@@ -1411,6 +1434,7 @@ def index():
         deezer_data=deezer_data,
         identity_tags=identity_tags,
         signal_insights=signal_insights,
+        cta_momentum=cta_momentum,
     )
 
 

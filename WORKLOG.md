@@ -78,3 +78,11 @@
 - Blockers/risks: 없음.
 - Saved sources / Data-asset impact: identity_tags.json + lead_summary.json을 조합해 signal_insights.json에 상위 태그/키워드, CTA 추천을 기록하여 향후 리포트나 CTA 템플릿이 동일한 구조를 참조할 수 있게 했습니다.
 - Next candidate task: 이 컴파일 스크립트를 autonomous job에 넣어 시각화 블록이 Fresh 상태를 유지하게 하고, signal_insights 데이터를 Brand Studio/리포트 목차로 다시 보내는 흐름을 고민.
+
+### 05:20 KST
+- 무엇을 바꿨는지: identity/lead 신호 + Open-Meteo 날씨 맥락을 `scripts/compile_cta_momentum.py`에서 조합하여 `app/static/data/cta_momentum.json`(CTA Momentum 데이터 자산)과 랜딩의 CTA Momentum 카드(Identity/Signal 섹션 뒤, 소재+CTA 버튼 포함)를 추가함.
+- 왜 바꿨는지: 브랜드/멤버십 CTA 앞에 가장 힘 있는 태그×키워드 조합을 실시간 제안 형식으로 노출하면 리드 전환 설득력과 Jun의 문화 아이덴티티를 동시에 강조할 수 있음.
+- Blockers/risks: 없음.
+- Saved data sources: `app/static/data/identity_tags.json`, `app/static/data/lead_summary.json`, Open-Meteo current weather API (Seoul).
+- Data-asset impact: CTA Momentum JSON으로 identity/lead 신호 + 날씨 컨텍스트를 정형화해 나중에 Brand Studio 제안이나 CRM 메시지에 재활용 가능.
+- Next candidate task: 이 스크립트를 autonomous hourly job에 넣어 CTA Momentum 카드가 최신 데이터를 반영하도록 하고, Brand Studio 혹은 Growth dashboard에서도 동일한 흐름을 사용할 수 있게 한다.
