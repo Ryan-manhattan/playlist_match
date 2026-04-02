@@ -222,6 +222,22 @@ DEFAULT_IDENTITY_TAGS = {
     'tags': [],
     'notes': 'Run scripts/compile_identity_tags.py to refresh identity tags.'
 }
+SIGNAL_INSIGHTS_PATH = Path(app.static_folder) / 'data' / 'signal_insights.json'
+DEFAULT_SIGNAL_INSIGHTS = {
+    'generated_at': None,
+    'hero_line': 'Jun의 레이더가 정체성과 리드 의도를 연결하고 있습니다.',
+    'top_tags': [],
+    'keyword_intents': [],
+    'cta': {
+        'label': 'Share signal with Brand Studio',
+        'link': '/brand-studio'
+    },
+    'alt_cta': {
+        'label': 'Document a Reaction',
+        'link': '/diary'
+    },
+    'notes': 'Refresh signal insights after identity and lead snapshots.'
+}
 
 growth_lead_store = GrowthLeadStore(os.path.dirname(__file__))
 
@@ -752,6 +768,22 @@ def load_identity_tags() -> dict:
     except Exception:
         pass
     return {**DEFAULT_IDENTITY_TAGS}
+
+def load_signal_insights() -> dict:
+    try:
+        if SIGNAL_INSIGHTS_PATH.exists():
+            with SIGNAL_INSIGHTS_PATH.open('r', encoding='utf-8') as f:
+                data = json.load(f)
+                if isinstance(data, dict):
+                    insights = {**DEFAULT_SIGNAL_INSIGHTS, **data}
+                    if not isinstance(insights.get('top_tags'), list):
+                        insights['top_tags'] = []
+                    if not isinstance(insights.get('keyword_intents'), list):
+                        insights['keyword_intents'] = []
+                    return insights
+    except Exception:
+        pass
+    return {**DEFAULT_SIGNAL_INSIGHTS}
 
 
 def _normalize_growth_lead_payload(data: dict) -> tuple[Optional[dict], Optional[str]]:
@@ -1354,6 +1386,7 @@ def index():
     deezer_data = load_deezer_chart()
     culture_rss = load_culture_rss()
     identity_tags = load_identity_tags()
+    signal_insights = load_signal_insights()
 
     from datetime import datetime
     today_date = datetime.now().strftime('%Y.%m.%d')
@@ -1377,6 +1410,7 @@ def index():
         billboard_data=billboard_data,
         deezer_data=deezer_data,
         identity_tags=identity_tags,
+        signal_insights=signal_insights,
     )
 
 

@@ -425,6 +425,51 @@
         opacity: 0.45;
         margin-top: 0.75rem;
     }
+
+    .signal-section {
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: rgba(10, 8, 12, 0.75);
+        border-radius: 18px;
+    }
+
+    .signal-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 0.9rem;
+        margin-top: 1rem;
+    }
+
+    .signal-card {
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 14px;
+        padding: 1rem;
+        background: rgba(255, 255, 255, 0.02);
+        min-height: 140px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .signal-card h4 {
+        font-size: 1rem;
+        margin-bottom: 0.25rem;
+    }
+
+    .signal-context {
+        font-size: 0.8rem;
+        opacity: 0.65;
+        line-height: 1.4;
+    }
+
+    .signal-chip {
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 999px;
+        padding: 0.35rem 0.9rem;
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.25em;
+        opacity: 0.75;
+    }
 </style>
 {% endblock %}
 
@@ -448,6 +493,8 @@
     {% set culture_rss_updated = culture_rss.generated_at[:16].replace('T', ' ') if culture_rss.generated_at else None %}
     {% set identity_tags = identity_tags or {'hero_line': 'Jun의 문화 레이더가 새로운 감성 태그를 기록 중입니다.', 'tags': [], 'generated_at': None} %}
     {% set identity_updated = identity_tags.generated_at[:16].replace('T', ' ') if identity_tags.generated_at else None %}
+    {% set signal_insights = signal_insights or {'hero_line': 'Jun의 레이더가 정체성과 리드 의도를 연결하고 있습니다.', 'top_tags': [], 'keyword_intents': [], 'cta': {'label': 'Share signal with Brand Studio', 'link': url_for('brand_studio')}, 'alt_cta': {'label': 'Document a Reaction', 'link': url_for('diary')}} %}
+    {% set signal_updated = signal_insights.generated_at[:16].replace('T', ' ') if signal_insights.generated_at else None %}
     {% set billboard_data = billboard_data or {'insight_line': 'Billboard Hot 100 신호가 곧 나타납니다.', 'top_tracks': [], 'captured_at': None} %}
     {% set billboard_updated = billboard_data.captured_at[:16].replace('T', ' ') if billboard_data.captured_at else None %}
     {% set deezer_updated = deezer_data.captured_at[:16].replace('T', ' ') if deezer_data.captured_at else None %}
@@ -689,6 +736,50 @@
         <div class="mt-6 flex flex-wrap gap-3">
             <a href="{{ url_for('diary') }}" class="btn-outline text-xs tracking-widest justify-center">Document a Reaction</a>
             <a href="{{ url_for('brand_studio') }}" class="btn-outline text-xs tracking-widest justify-center">Share with Brand Studio</a>
+        </div>
+    </section>
+
+    <section class="pixel-card signal-section p-6 md:p-8 mb-10">
+        <div class="flex items-start justify-between mb-4">
+            <div>
+                <span class="text-[10px] uppercase tracking-[0.3em] opacity-40">Signal Intelligence</span>
+                <h3 class="serif-font text-2xl mt-2 leading-tight">Jun의 정체성과 리드 의도를 한 호흡에 보여줍니다.</h3>
+            </div>
+            {% if signal_updated %}
+            <span class="text-[10px] uppercase tracking-[0.35em] opacity-50">Updated {{ signal_updated }}</span>
+            {% endif %}
+        </div>
+        <p class="text-sm opacity-60 leading-relaxed mb-5">{{ signal_insights.hero_line }}</p>
+        <div class="signal-grid">
+            {% if signal_insights.top_tags %}
+                {% for tag in signal_insights.top_tags[:4] %}
+                <article class="signal-card">
+                    <div class="inline-code">{{ tag.source or 'Identity' }}</div>
+                    <h4 class="serif-font text-lg mt-1">{{ tag.tag or 'Signal Tag' }}</h4>
+                    <p class="signal-context">{{ tag.context_summary or 'Context syncing...' }}</p>
+                    <p class="text-[10px] uppercase tracking-[0.3em] opacity-45 mt-4">{{ tag.count }} mentions</p>
+                </article>
+                {% endfor %}
+            {% else %}
+                <article class="signal-card">
+                    <h4 class="serif-font text-lg">Signals are warming up</h4>
+                    <p class="signal-context">Run scripts/compile_signal_insights.py to merge identity tags and lead intents for the homepage.</p>
+                </article>
+            {% endif %}
+        </div>
+        {% if signal_insights.keyword_intents %}
+        <div class="mt-5">
+            <div class="text-[10px] uppercase tracking-[0.35em] opacity-35">Intent Keywords</div>
+            <div class="mt-3 flex flex-wrap gap-2">
+                {% for keyword in signal_insights.keyword_intents[:6] %}
+                <span class="signal-chip">{{ keyword.keyword or 'intent' }} · {{ keyword.count }}</span>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+        <div class="mt-6 flex flex-wrap gap-3">
+            <a href="{{ signal_insights.cta.link or url_for('brand_studio') }}" class="btn-outline text-xs tracking-widest justify-center">{{ signal_insights.cta.label or 'Share signal with Brand Studio' }}</a>
+            <a href="{{ signal_insights.alt_cta.link or url_for('diary') }}" class="btn-pixel text-xs tracking-widest justify-center">{{ signal_insights.alt_cta.label or 'Document a Reaction' }}</a>
         </div>
     </section>
 

@@ -72,3 +72,9 @@
 - Saved data sources: app/static/data/culture_rss.json에서 수집한 RSS 타이틀·요약 → identity_tags JSON.
 - Data-asset impact: 정체성 태그 집계 JSON이 역사적으로 기록되며 컨텍스트가 붙어, 향후 브랜드 스토리·프로모션 키워드로 재사용 가능.
 - Next candidate: `scripts/compile_identity_tags.py`를 hourly autonomous job에 넣어 Identity Tags가 culture RSS 갱신과 동시에 새로워지도록 고정하고, 이 태그 흐름을 Brand Studio 접점에 연동하기.
+### 04:20 KST
+- 무엇을 바꿨는지: identity/lead 데이터를 묶는 `scripts/compile_signal_insights.py` + `app/static/data/signal_insights.json` 데이터 자산을 만들고, `app.py`/랜딩 템플릿에 새로운 Signal Intelligence 블록을 새 CTA 흐름으로 배치하여 Jun의 identity, 문화 신호, 리드 의도를 한눈에 보여주는 UI/데이터 경험을 더했습니다.
+- 왜 바꿨는지: 랜딩에서 Jun 감성과 수익화 의도를 합쳐 브랜드/membership CTA를 더 설득력 있게 연결하고, 데이터 자산(정체성 태그 + 키워드)을 하나의 요약 지표로 병합해 나중에 리포트/추천에 재활용할 수 있도록 하기 위해.
+- Blockers/risks: 없음.
+- Saved sources / Data-asset impact: identity_tags.json + lead_summary.json을 조합해 signal_insights.json에 상위 태그/키워드, CTA 추천을 기록하여 향후 리포트나 CTA 템플릿이 동일한 구조를 참조할 수 있게 했습니다.
+- Next candidate task: 이 컴파일 스크립트를 autonomous job에 넣어 시각화 블록이 Fresh 상태를 유지하게 하고, signal_insights 데이터를 Brand Studio/리포트 목차로 다시 보내는 흐름을 고민.
