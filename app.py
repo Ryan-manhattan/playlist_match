@@ -267,6 +267,20 @@ DEFAULT_DATA_ASSET_STATUS = {
     'notes': 'Hourly autonomous job에서 scripts/log_data_asset_status.py를 실행해 data_asset_status.json을 갱신하세요.',
 }
 
+IDENTITY_CONTEXT_FEED_PATH = Path(app.static_folder) / 'data' / 'identity_context_feed.json'
+DEFAULT_IDENTITY_CONTEXT_FEED = {
+    'generated_at': None,
+    'headline': 'Jun의 문화 컨텍스트 피드가 곧 정리됩니다.',
+    'summary': 'scripts/compile_identity_context_feed.py를 실행해 identity_tags를 모아서 브랜드/멤버십 CTA 흐름을 강화하세요.',
+    'top_tags': [],
+    'contexts': [],
+    'cta': {
+        'label': 'Share this pulse with Brand Studio',
+        'link': '/brand-studio'
+    },
+    'notes': 'Run scripts/compile_identity_context_feed.py after identity tags refresh to keep this feed alive.',
+}
+
 growth_lead_store = GrowthLeadStore(os.path.dirname(__file__))
 
 # 콘솔 로그 함수 (디버깅용)
@@ -860,6 +874,23 @@ def load_data_asset_status() -> dict:
     except Exception:
         pass
     return {**DEFAULT_DATA_ASSET_STATUS}
+
+
+def load_identity_context_feed() -> dict:
+    try:
+        if IDENTITY_CONTEXT_FEED_PATH.exists():
+            with IDENTITY_CONTEXT_FEED_PATH.open('r', encoding='utf-8') as f:
+                data = json.load(f)
+                if isinstance(data, dict):
+                    feed = {**DEFAULT_IDENTITY_CONTEXT_FEED, **data}
+                    if not isinstance(feed.get('contexts'), list):
+                        feed['contexts'] = []
+                    if not isinstance(feed.get('top_tags'), list):
+                        feed['top_tags'] = []
+                    return feed
+    except Exception:
+        pass
+    return {**DEFAULT_IDENTITY_CONTEXT_FEED}
 
 
 def _normalize_growth_lead_payload(data: dict) -> tuple[Optional[dict], Optional[str]]:
@@ -1466,6 +1497,7 @@ def index():
     signal_insights = load_signal_insights()
     cta_momentum = load_cta_momentum()
     data_asset_status = load_data_asset_status()
+    identity_context_feed = load_identity_context_feed()
 
     from datetime import datetime
     today_date = datetime.now().strftime('%Y.%m.%d')
@@ -1489,6 +1521,7 @@ def index():
         billboard_data=billboard_data,
         deezer_data=deezer_data,
         identity_tags=identity_tags,
+        identity_context_feed=identity_context_feed,
         signal_insights=signal_insights,
         cta_momentum=cta_momentum,
         cultural_insights=cultural_insights,

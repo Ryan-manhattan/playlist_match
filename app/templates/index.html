@@ -202,6 +202,89 @@
         border-radius: 18px;
     }
 
+    .identity-feed-section {
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: rgba(4, 4, 8, 0.75);
+        border-radius: 18px;
+    }
+
+    .identity-feed-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.6rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .identity-feed-chip {
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 999px;
+        padding: 0.3rem 0.9rem;
+        font-size: 0.7rem;
+        letter-spacing: 0.35em;
+        text-transform: uppercase;
+        opacity: 0.55;
+    }
+
+    .identity-feed-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 1rem;
+    }
+
+    .identity-feed-card {
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 14px;
+        padding: 1rem;
+        background: rgba(255, 255, 255, 0.02);
+        min-height: 160px;
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+    }
+
+    .identity-feed-tag {
+        font-size: 0.7rem;
+        letter-spacing: 0.3em;
+        text-transform: uppercase;
+        opacity: 0.4;
+    }
+
+    .identity-feed-context {
+        margin: 0;
+        font-size: 0.95rem;
+        line-height: 1.5;
+        opacity: 0.75;
+    }
+
+    .identity-feed-meta {
+        font-size: 0.65rem;
+        letter-spacing: 0.3em;
+        text-transform: uppercase;
+        opacity: 0.45;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .identity-feed-meta span {
+        display: inline-block;
+    }
+
+    .identity-feed-meta span:first-child {
+        max-width: 60%;
+    }
+
+    .identity-feed-meta span:last-child {
+        text-align: right;
+    }
+
+    .identity-feed-notes {
+        font-size: 0.65rem;
+        letter-spacing: 0.35em;
+        text-transform: uppercase;
+        opacity: 0.45;
+        margin-top: 0.5rem;
+    }
+
     .insight-section {
         border: 1px solid rgba(255, 255, 255, 0.12);
         background: rgba(8, 6, 12, 0.8);
@@ -684,6 +767,8 @@
     {% set culture_rss_updated = culture_rss.generated_at[:16].replace('T', ' ') if culture_rss.generated_at else None %}
     {% set identity_tags = identity_tags or {'hero_line': 'Jun의 문화 레이더가 새로운 감성 태그를 기록 중입니다.', 'tags': [], 'generated_at': None} %}
     {% set identity_updated = identity_tags.generated_at[:16].replace('T', ' ') if identity_tags.generated_at else None %}
+    {% set identity_context_feed = identity_context_feed or {'headline': 'Jun의 문화 컨텍스트 피드가 곧 정리됩니다.', 'summary': 'scripts/compile_identity_context_feed.py를 실행해 identity_tags를 모아서 브랜드/멤버십 CTA 흐름을 강화하세요.', 'top_tags': [], 'contexts': [], 'cta': {'label': 'Share this pulse with Brand Studio', 'link': url_for('brand_studio')}, 'notes': 'Run scripts/compile_identity_context_feed.py after identity tags refresh to keep this feed alive.'} %}
+    {% set identity_feed_updated = identity_context_feed.generated_at[:19].replace('T', ' ') if identity_context_feed.generated_at else None %}
     {% set signal_insights = signal_insights or {'hero_line': 'Jun의 레이더가 정체성과 리드 의도를 연결하고 있습니다.', 'top_tags': [], 'keyword_intents': [], 'cta': {'label': 'Share signal with Brand Studio', 'link': url_for('brand_studio')}, 'alt_cta': {'label': 'Document a Reaction', 'link': url_for('diary')}} %}
     {% set signal_updated = signal_insights.generated_at[:16].replace('T', ' ') if signal_insights.generated_at else None %}
     {% set billboard_data = billboard_data or {'insight_line': 'Billboard Hot 100 신호가 곧 나타납니다.', 'top_tracks': [], 'captured_at': None} %}
@@ -927,6 +1012,51 @@
         <div class="mt-6 flex flex-wrap gap-3">
             <a href="{{ url_for('diary') }}" class="btn-outline text-xs tracking-widest justify-center">Document a Reaction</a>
             <a href="{{ url_for('brand_studio') }}" class="btn-outline text-xs tracking-widest justify-center">Share with Brand Studio</a>
+        </div>
+    </section>
+
+    <section class="pixel-card identity-feed-section p-6 md:p-8 mb-10">
+        <div class="flex items-start justify-between mb-4">
+            <div>
+                <span class="text-[10px] uppercase tracking-[0.3em] opacity-40">Identity Context Feed</span>
+                <h3 class="serif-font text-2xl mt-2 leading-tight">Jun의 문화 맥락을 브랜드/멤버십 CTA로 녹입니다.</h3>
+            </div>
+            {% if identity_feed_updated %}
+            <span class="text-[10px] uppercase tracking-[0.35em] opacity-50">Updated {{ identity_feed_updated }}</span>
+            {% endif %}
+        </div>
+        {% if identity_context_feed.headline %}
+        <p class="serif-font text-xl leading-loose mb-2">{{ identity_context_feed.headline }}</p>
+        {% endif %}
+        <p class="text-sm opacity-60 leading-relaxed mb-4">{{ identity_context_feed.summary }}</p>
+        {% if identity_context_feed.top_tags %}
+        <div class="identity-feed-tags mb-4">
+            {% for tag in identity_context_feed.top_tags %}
+            <span class="identity-feed-chip">{{ tag.tag }} · {{ tag.count }}</span>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% if identity_context_feed.contexts %}
+        <div class="identity-feed-grid mb-4">
+            {% for context in identity_context_feed.contexts %}
+            <article class="identity-feed-card">
+                <div class="identity-feed-tag">{{ context.tag }}</div>
+                <p class="identity-feed-context">{{ context.context }}</p>
+                <div class="identity-feed-meta">
+                    <span>{{ context.source or 'identity_tags' }}</span>
+                    <span>{{ context.tag_count }} mentions</span>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p class="text-sm opacity-60 leading-relaxed mb-4">컨텍스트 피드를 준비하려면 scripts/compile_identity_context_feed.py를 실행해주세요.</p>
+        {% endif %}
+        <div class="flex flex-wrap gap-3 items-center">
+            <a href="{{ identity_context_feed.cta.link or url_for('brand_studio') }}" class="btn-outline text-xs tracking-widest justify-center">{{ identity_context_feed.cta.label or 'Share this pulse with Brand Studio' }}</a>
+            {% if identity_context_feed.notes %}
+            <span class="identity-feed-notes">{{ identity_context_feed.notes }}</span>
+            {% endif %}
         </div>
     </section>
 

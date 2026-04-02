@@ -1,0 +1,65 @@
+{
+  "generated_at": "2026-04-02T23:06:43+00:00",
+  "headline": "Jun은 요즘 ‘The Drama’ Review: Her Secret Is His Crisis (NYTimes Arts)를 읽으며 파트너 리드에 감성을 붙이고 있습니다.",
+  "summary": "Derived from culture_rss snapshots. Run scripts/compile_identity_tags.py to refresh.",
+  "top_tags": [
+    {
+      "tag": "Album",
+      "count": 3,
+      "source": "culture_rss"
+    },
+    {
+      "tag": "Brady",
+      "count": 3,
+      "source": "culture_rss"
+    },
+    {
+      "tag": "Crisis",
+      "count": 2,
+      "source": "culture_rss"
+    }
+  ],
+  "contexts": [
+    {
+      "tag": "Album",
+      "context": "NPR Music: Megan Moroney showcases her command of country heartache on 'Cloud 9'",
+      "source": "culture_rss",
+      "tag_count": 3
+    },
+    {
+      "tag": "Album",
+      "context": "Rolling Stone Music News: Olivia Rodrigo Reveals New Album ‘You Seem Pretty Sad for a Girl So in Love’",
+      "source": "culture_rss",
+      "tag_count": 3
+    },
+    {
+      "tag": "Brady",
+      "context": "Rolling Stone Music News: Ex-Turnstile Guitarist Brady Ebert Charged With Attempted Murder of Singer Brendan Yates’ Father",
+      "source": "culture_rss",
+      "tag_count": 3
+    },
+    {
+      "tag": "Drama",
+      "context": "Summary line",
+      "source": "culture_rss",
+      "tag_count": 2
+    },
+    {
+      "tag": "Secret",
+      "context": "Summary line",
+      "source": "culture_rss",
+      "tag_count": 2
+    },
+    {
+      "tag": "Crisis",
+      "context": "Summary line",
+      "source": "culture_rss",
+      "tag_count": 2
+    }
+  ],
+  "cta": {
+    "label": "Share this pulse with Brand Studio",
+    "link": "/brand-studio"
+  },
+  "notes": "Run scripts/compile_identity_context_feed.py after identity tags refresh to keep this feed alive."
+}

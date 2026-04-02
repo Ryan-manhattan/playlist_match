@@ -99,3 +99,11 @@
 - Blockers/risks: 없음.
 - Saved data sources / Data-asset impact: 문화 RSS, Billboard/Deezer/identity tags/signal insights/CTA momentum/growth summary 원자료를 모아 `data_asset_status.json`에 타임스탬프과 주요 카운트를 정리하여 향후 보고와 자동화 트리거 근거로 활용 가능합니다.
 - Next candidate task: 이 스크립트를 시간당 autonomous job에 넣어 `data_asset_status.json`이 최신 상태를 유지하도록 하고, Brand Studio/크론 모니터링에도 동일한 대시보드를 노출하는 흐름을 고민합니다.
+
+### 08:04 KST
+- 무엇을 바꿨는지: identity_tags 컨텍스트를 scripts/compile_identity_context_feed.py에서 추출해 app/static/data/identity_context_feed.json으로 정리하고, index에 새로운 Identity Context Feed 섹션과 관련 로딩 로직을 추가했습니다.
+- 왜 바꿨는지: Jun의 문화 맥락과 정체성을 CTA 바로 앞에서 직접 보여줘 방문자/리드 전환을 강화하고, 더 수익화에 관련된 데이터 자산을 확보하기 위해.
+- Blockers/risks: 없음.
+- Saved data sources: app/static/data/identity_tags.json (culture_rss-derived contexts).
+- Data-asset impact: identity_context_feed.json이 identity contexts + hero 키워드를 기록해 Brand Studio/리포트에서 재활용 가능하도록 했습니다.
+- 다음 후보: scripts/compile_identity_context_feed.py를 autonomous job에 넣어 컨텍스트 피드가 최신화되도록 한 뒤 이 데이터를 Brand Studio CRM/copy에 연동하기.
