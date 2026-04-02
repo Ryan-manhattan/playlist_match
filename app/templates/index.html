@@ -196,6 +196,47 @@
         opacity: 0.6;
     }
 
+    .identity-section {
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: rgba(5, 5, 10, 0.7);
+        border-radius: 18px;
+    }
+
+    .identity-tags-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .identity-tag-card {
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: 14px;
+        padding: 1rem;
+        background: rgba(255, 255, 255, 0.02);
+    }
+
+    .identity-tag {
+        font-size: 1.1rem;
+        font-weight: 600;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        opacity: 0.8;
+    }
+
+    .identity-count {
+        font-size: 0.85rem;
+        opacity: 0.6;
+        margin-top: 0.4rem;
+    }
+
+    .identity-context {
+        font-size: 0.75rem;
+        opacity: 0.55;
+        margin-top: 0.4rem;
+        line-height: 1.4;
+    }
+
     .billboard-section {
         border: 1px solid rgba(255, 255, 255, 0.12);
         background: rgba(10, 9, 15, 0.65);
@@ -405,6 +446,8 @@
     {% set culture_updated = culture.updated_at[:16].replace('T', ' ') if culture.updated_at else None %}
     {% set culture_rss = culture_rss or {'summary_line': 'Jun은 일상의 문화 신호를 스캔하며 다음 멤버십/브랜드 스토리를 준비하고 있습니다.', 'sources': []} %}
     {% set culture_rss_updated = culture_rss.generated_at[:16].replace('T', ' ') if culture_rss.generated_at else None %}
+    {% set identity_tags = identity_tags or {'hero_line': 'Jun의 문화 레이더가 새로운 감성 태그를 기록 중입니다.', 'tags': [], 'generated_at': None} %}
+    {% set identity_updated = identity_tags.generated_at[:16].replace('T', ' ') if identity_tags.generated_at else None %}
     {% set billboard_data = billboard_data or {'insight_line': 'Billboard Hot 100 신호가 곧 나타납니다.', 'top_tracks': [], 'captured_at': None} %}
     {% set billboard_updated = billboard_data.captured_at[:16].replace('T', ' ') if billboard_data.captured_at else None %}
     {% set deezer_updated = deezer_data.captured_at[:16].replace('T', ' ') if deezer_data.captured_at else None %}
@@ -614,6 +657,38 @@
         <div class="mt-6 flex flex-wrap gap-3">
             <a href="{{ url_for('diary') }}" class="btn-outline text-xs tracking-widest justify-center">Document Reaction</a>
             <a href="{{ url_for('brand_studio') }}" class="btn-outline text-xs tracking-widest justify-center">Share with Partner</a>
+        </div>
+    </section>
+
+    <section class="pixel-card identity-section p-6 md:p-8 mb-10">
+        <div class="flex items-center justify-between mb-4">
+            <div>
+                <span class="text-[10px] uppercase tracking-[0.3em] opacity-40">Identity Tags</span>
+                <h3 class="serif-font text-2xl mt-2 leading-tight">Jun의 문화 태그를 브랜드/멤버십 큐에 연결합니다.</h3>
+            </div>
+            {% if identity_updated %}
+            <span class="text-[10px] uppercase tracking-[0.35em] opacity-50">Updated {{ identity_updated }}</span>
+            {% endif %}
+        </div>
+        <p class="text-sm opacity-60 leading-relaxed mb-5">{{ identity_tags.hero_line }}</p>
+        <div class="identity-tags-grid">
+            {% if identity_tags.tags %}
+                {% for tag in identity_tags.tags[:6] %}
+                <article class="identity-tag-card">
+                    <div class="identity-tag">{{ tag.tag }}</div>
+                    <div class="identity-count">{{ tag.count }} mentions</div>
+                    {% if tag.contexts %}
+                    <p class="identity-context">{{ tag.contexts | join(' · ') }}</p>
+                    {% endif %}
+                </article>
+                {% endfor %}
+            {% else %}
+                <p class="text-sm opacity-60">Identity tags are being generated. Run the data script to refresh the signals.</p>
+            {% endif %}
+        </div>
+        <div class="mt-6 flex flex-wrap gap-3">
+            <a href="{{ url_for('diary') }}" class="btn-outline text-xs tracking-widest justify-center">Document a Reaction</a>
+            <a href="{{ url_for('brand_studio') }}" class="btn-outline text-xs tracking-widest justify-center">Share with Brand Studio</a>
         </div>
     </section>
 

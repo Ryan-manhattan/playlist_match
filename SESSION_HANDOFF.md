@@ -17,6 +17,7 @@
 - Billboard Hot 100 snapshot data now lives in `app/static/data/billboard_hot100.json` and is surfaced via a new landing block; `scripts/update_billboard_hot100.py` pulls it from Billboard via requests/BeautifulSoup.
 - Deezer Global Pulse JSON (`app/static/data/deezer_chart.json`) and `scripts/update_deezer_chart.py` now feed a new landing block so Jun의 글로벌 차트 감성이 실시간으로 기록됩니다.
 - “Cultural Notes” 섹션과 `app/static/data/culture_rss.json`을 추가하여 NYTimes Arts/NPR Music/Rolling Stone RSS 스냅샷이 브랜드·다이어리 CTA 앞에서 Jun의 취향을 보여주도록 했습니다 (`scripts/update_culture_rss.py`).
+- `scripts/compile_identity_tags.py`가 RSS 타이틀/요약에서 정체성 키워드·컨텍스트를 집계해 `app/static/data/identity_tags.json`에 저장하며, 랜딩의 새 Identity Tags 블록이 브랜드 문의/다이어리 CTA 앞에서 Jun의 문화 DNA를 다시 한번 강조합니다.
 
 ## Automation currently configured
 - Daily 9 AM report job exists.
@@ -39,3 +40,4 @@
 6. Run `scripts/update_billboard_hot100.py` on the autonomous job schedule so the Billboard block always reflects a recent global snapshot
 7. Hook `scripts/update_deezer_chart.py` into the hourly autonomous job so the Deezer Pulse stays current.
 8. Hook `scripts/update_culture_rss.py` into the hourly autonomous job so the Cultural Notes data and CTA messaging stay synchronized with fresh NYTimes/NPR/Rolling Stone signals.
+9. Run `scripts/compile_identity_tags.py` inside the autonomous job as well so the Identity Tags block stays aligned with the latest RSS signals and can feed brand/membership pitches.

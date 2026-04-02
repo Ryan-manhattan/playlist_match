@@ -215,6 +215,13 @@ DEFAULT_CULTURE_RSS = {
     'summary_line': 'Jun은 일상의 문화 신호를 스캔하며 다음 멤버십/브랜드 스토리를 준비하고 있습니다.',
     'sources': [],
 }
+IDENTITY_TAGS_PATH = Path(app.static_folder) / 'data' / 'identity_tags.json'
+DEFAULT_IDENTITY_TAGS = {
+    'generated_at': None,
+    'hero_line': 'Jun의 문화 레이더가 새로운 감성 태그를 기록하고 있습니다.',
+    'tags': [],
+    'notes': 'Run scripts/compile_identity_tags.py to refresh identity tags.'
+}
 
 growth_lead_store = GrowthLeadStore(os.path.dirname(__file__))
 
@@ -730,6 +737,21 @@ def load_culture_rss() -> dict:
     except Exception:
         pass
     return {**DEFAULT_CULTURE_RSS}
+
+
+def load_identity_tags() -> dict:
+    try:
+        if IDENTITY_TAGS_PATH.exists():
+            with IDENTITY_TAGS_PATH.open('r', encoding='utf-8') as f:
+                data = json.load(f)
+                if isinstance(data, dict):
+                    identity = {**DEFAULT_IDENTITY_TAGS, **data}
+                    if not isinstance(identity.get('tags'), list):
+                        identity['tags'] = []
+                    return identity
+    except Exception:
+        pass
+    return {**DEFAULT_IDENTITY_TAGS}
 
 
 def _normalize_growth_lead_payload(data: dict) -> tuple[Optional[dict], Optional[str]]:
@@ -1331,6 +1353,7 @@ def index():
     billboard_data = load_billboard_content()
     deezer_data = load_deezer_chart()
     culture_rss = load_culture_rss()
+    identity_tags = load_identity_tags()
 
     from datetime import datetime
     today_date = datetime.now().strftime('%Y.%m.%d')
@@ -1353,6 +1376,7 @@ def index():
         lead_summary=lead_summary,
         billboard_data=billboard_data,
         deezer_data=deezer_data,
+        identity_tags=identity_tags,
     )
 
 

@@ -64,3 +64,11 @@
 - Saved data sources: NYTimes Arts RSS, NPR Music RSS (Tiny Desk 등), Rolling Stone Music News RSS를 requests로 가져와 요약해 JSON으로 기록함.
 - Data-asset impact: 피드별 스냅샷과 문맥 요약이 `culture_rss.json`에 보존되므로 향후 보고서, CTA 메시지, 문화 데이터 시리즈에 재사용 가능.
 - Next candidate task: 이 스크립트를 autonomous job(시간당) 혹은 cron과 연결해 문화 블록이 자동 갱신되도록 하고, 기록된 RSS 요약을 리드/디텍션에 활용하는 추가 CTA/통계 흐름을 고민하기.
+
+### 03:07 KST
+- 무엇을 바꿨는지: culture_rss JSON을 분석해 `scripts/compile_identity_tags.py`로 정체성 키워드/문맥 태그를 생성하고 app/static/data/identity_tags.json에 기록한 뒤 랜딩에 Identity Tags 블록과 저장 시간 메타, CTA를 새로 배치했습니다.
+- 왜 바꿨는지: Jun의 취향/문화 신호를 정량화해 방문자가 브랜드/멤버십 문의로 이어지도록 내러티브를 더 명확히 하고, 새로운 데이터 자산으로 차후 CTA·리포트에 재활용할 수 있게 하기 위해.
+- Blockers/risks: 없음.
+- Saved data sources: app/static/data/culture_rss.json에서 수집한 RSS 타이틀·요약 → identity_tags JSON.
+- Data-asset impact: 정체성 태그 집계 JSON이 역사적으로 기록되며 컨텍스트가 붙어, 향후 브랜드 스토리·프로모션 키워드로 재사용 가능.
+- Next candidate: `scripts/compile_identity_tags.py`를 hourly autonomous job에 넣어 Identity Tags가 culture RSS 갱신과 동시에 새로워지도록 고정하고, 이 태그 흐름을 Brand Studio 접점에 연동하기.

@@ -1,0 +1,59 @@
+{
+  "generated_at": "2026-04-02T18:06:22.920498+00:00",
+  "hero_line": "Jun은 요즘 ‘The Drama’ Review: Her Secret Is His Crisis (NYTimes Arts)를 읽으며 파트너 리드에 감성을 붙이고 있습니다.",
+  "tags": [
+    {
+      "tag": "Album",
+      "count": 3,
+      "contexts": [
+        "NPR Music: Megan Moroney showcases her command of country heartache on 'Cloud 9'",
+        "Rolling Stone Music News: Olivia Rodrigo Reveals New Album ‘You Seem Pretty Sad for a Girl So in Love’"
+      ],
+      "source": "culture_rss"
+    },
+    {
+      "tag": "Brady",
+      "count": 3,
+      "contexts": [
+        "Rolling Stone Music News: Ex-Turnstile Guitarist Brady Ebert Charged With Attempted Murder of Singer Brendan Yates’ Father"
+      ],
+      "source": "culture_rss"
+    },
+    {
+      "tag": "Drama",
+      "count": 2,
+      "contexts": [
+        "Summary line",
+        "NYTimes Arts: ‘The Drama’ Review: Her Secret Is His Crisis"
+      ],
+      "source": "culture_rss"
+    },
+    {
+      "tag": "Secret",
+      "count": 2,
+      "contexts": [
+        "Summary line",
+        "NYTimes Arts: ‘The Drama’ Review: Her Secret Is His Crisis"
+      ],
+      "source": "culture_rss"
+    },
+    {
+      "tag": "Crisis",
+      "count": 2,
+      "contexts": [
+        "Summary line",
+        "NYTimes Arts: ‘The Drama’ Review: Her Secret Is His Crisis"
+      ],
+      "source": "culture_rss"
+    },
+    {
+      "tag": "Kanye",
+      "count": 2,
+      "contexts": [
+        "NYTimes Arts: Kanye West Plays First American Concert Since 2021"
+      ],
+      "source": "culture_rss"
+    }
+  ],
+  "notes": "Derived from culture_rss snapshots. Run scripts/compile_identity_tags.py to refresh."
+}
