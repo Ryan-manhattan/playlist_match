@@ -122,8 +122,10 @@ os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 os.makedirs(app.config['PROCESSED_FOLDER'], exist_ok=True)
 
 PROMO_CONTENT_PATH = Path(app.static_folder) / 'data' / 'promo.json'
+CULTURE_CONTENT_PATH = Path(app.static_folder) / 'data' / 'culture.json'
 DEFAULT_PROMO_CONTENT = {
     'hero': {
+
         'heading': '감정 기록을 멤버십과 브랜드 매출로 연결합니다.',
         'subtext': 'OFF THE COMMUNITY는 음악 아카이브와 월드컵 참여 데이터를 한 곳에 모아 크리에이터 멤버십과 브랜드 협업 리드를 동시에 확보하는 구조로 확장되고 있습니다.',
         'flash_line': 'Emotion Commerce Stack keeps every pitch refreshed hourly.',
@@ -179,6 +181,13 @@ DEFAULT_PROMO_CONTENT = {
         'visits': 0
     },
     'updated_at': datetime.utcnow().isoformat() + 'Z'
+}
+
+DEFAULT_CULTURE_CONTENT = {
+    'hero_line': 'Cultural signals fuel the archive—every track blends with story.',
+    'top_tracks': [],
+    'film_diaries': [],
+    'updated_at': ''
 }
 
 growth_lead_store = GrowthLeadStore(os.path.dirname(__file__))
@@ -592,6 +601,17 @@ def _build_public_growth_snapshot() -> dict:
 
     return snapshot
 
+
+def load_culture_content() -> dict:
+    try:
+        if CULTURE_CONTENT_PATH.exists():
+            with CULTURE_CONTENT_PATH.open('r', encoding='utf-8') as f:
+                data = json.load(f)
+                if isinstance(data, dict):
+                    return data
+    except Exception:
+        pass
+    return {**DEFAULT_CULTURE_CONTENT}
 
 def load_promo_content() -> dict:
     if PROMO_CONTENT_PATH.exists():
@@ -1198,6 +1218,9 @@ def index():
         growth_snapshot["recent_battles"] = worldcup_stats.get("recent_battles", 0)
     
     # 오늘 날짜 포맷팅
+    culture_content = load_culture_content()
+    promo_content = load_promo_content()
+
     from datetime import datetime
     today_date = datetime.now().strftime('%Y.%m.%d')
     
@@ -1213,7 +1236,8 @@ def index():
         today_date=today_date,
         is_authenticated=is_authenticated,
         growth_snapshot=growth_snapshot,
-        promo_content=load_promo_content(),
+        promo_content=promo_content,
+        culture_content=culture_content,
     )
 
 

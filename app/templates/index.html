@@ -24,6 +24,88 @@
         gap: 1rem;
     }
 
+    .culture-section {
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: rgba(255, 255, 255, 0.02);
+        border-radius: 20px;
+    }
+
+    .culture-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+    }
+
+    .culture-header span:first-child {
+        font-size: 10px;
+        letter-spacing: 0.4em;
+        text-transform: uppercase;
+        opacity: 0.6;
+    }
+
+    .culture-updated {
+        font-size: 10px;
+        opacity: 0.5;
+    }
+
+    .culture-hero-line {
+        font-size: 1rem;
+        font-family: var(--font-serif);
+        margin-bottom: 1.25rem;
+        color: rgba(255, 255, 255, 0.85);
+    }
+
+    .culture-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .culture-card {
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 16px;
+        padding: 1rem;
+        background: rgba(0, 0, 0, 0.25);
+    }
+
+    .culture-card h4 {
+        margin: 0 0 0.35rem;
+        font-size: 1rem;
+    }
+
+    .culture-card p {
+        margin: 0;
+        opacity: 0.7;
+        font-size: 0.85rem;
+    }
+
+    .culture-diaries {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+        gap: 0.75rem;
+    }
+
+    .culture-diary {
+        border: 1px dashed rgba(255, 255, 255, 0.2);
+        border-radius: 14px;
+        padding: 0.85rem;
+        background: rgba(255, 255, 255, 0.02);
+        min-height: 120px;
+    }
+
+    .culture-diary h5 {
+        margin: 0 0 0.25rem;
+        font-size: 0.95rem;
+    }
+
+    .culture-diary p {
+        font-size: 0.78rem;
+        opacity: 0.6;
+        margin-bottom: 0.25rem;
+    }
+
     @media (max-width: 980px) {
         .offer-grid {
             grid-template-columns: 1fr;
@@ -102,7 +184,9 @@
     {% set primary_class = 'btn-pixel' if primary_cta.style == 'primary' else 'btn-outline' %}
     {% set secondary_class = 'btn-outline' if secondary_cta.style == 'secondary' else 'btn-pixel' %}
     {% set metrics = promo.metrics or {'tracks': growth_snapshot.total_tracks, 'diaries': growth_snapshot.total_posts, 'votes': growth_snapshot.total_votes, 'visits': growth_snapshot.today_visits} %}
+    {% set culture = culture_content or {'hero_line': 'Cultural signals fuel the archive—every track blends with story.', 'top_tracks': [], 'film_diaries': [], 'updated_at': None} %}
     {% set promo_updated = promo.updated_at if promo.updated_at else None %}
+    {% set culture_updated = culture.updated_at[:16].replace('T', ' ') if culture.updated_at else None %}
     <div class="hidden md:flex items-center justify-between mb-6 pb-4 border-b border-white/10">
         <div class="flex items-center gap-2 text-[10px] uppercase tracking-widest opacity-40 font-pixel">
             <span>ROOT</span>
@@ -221,6 +305,46 @@
             </section>
         </div>
     </div>
+
+    <section class="culture-section pixel-card p-6 md:p-8 mb-10">
+        <div class="culture-header">
+            <span>Culture Pulse</span>
+            {% if culture_updated %}<span class="culture-updated">Updated {{ culture_updated }}</span>{% endif %}
+        </div>
+        <p class="culture-hero-line">{{ culture.hero_line }}</p>
+        <div class="culture-grid">
+            {% if culture.top_tracks %}
+                {% for track in culture.top_tracks[:3] %}
+                <article class="culture-card">
+                    <h4>{{ track.title or 'Untitled Track' }}</h4>
+                    <p>{{ track.artist or 'Unknown Artist' }} · {{ track.wins or 0 }} wins</p>
+                    {% if track.duration %}<p class="text-xs uppercase tracking-[0.3em]">{{ (track.duration | int / 60)|round(1) }} min</p>{% endif %}
+                </article>
+                {% endfor %}
+            {% else %}
+                <article class="culture-card">
+                    <h4>No trending track yet</h4>
+                    <p>Collecting votes and cues from the community.</p>
+                </article>
+            {% endif %}
+        </div>
+        <div class="culture-diaries">
+            {% if culture.film_diaries %}
+                {% for diary in culture.film_diaries %}
+                <article class="culture-diary">
+                    <h5>{{ diary.title or 'Untitled Diary' }}</h5>
+                    <p>{{ diary.snippet or 'Cultural reflections will show here.' }}</p>
+                    <p class="text-[10px] uppercase tracking-[0.4em] opacity-50">{{ diary.author or 'Anonymous' }}</p>
+                </article>
+                {% endfor %}
+            {% else %}
+                <article class="culture-diary">
+                    <h5>No cultural notes yet</h5>
+                    <p>We are syncing diaries and film notes for the next drop.</p>
+                </article>
+            {% endif %}
+        </div>
+    </section>
 
     <section class="mb-10">
         <div class="inline-flex items-center gap-4 mb-6">
