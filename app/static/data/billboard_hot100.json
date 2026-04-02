@@ -1,0 +1,33 @@
+{
+  "source": "Billboard Hot 100",
+  "source_url": "https://www.billboard.com/charts/hot-100",
+  "insight_line": "Jun의 레이더는 Billboard Hot 100에 집중합니다.",
+  "captured_at": "2026-04-02T15:08:47.532670Z",
+  "top_tracks": [
+    {
+      "rank": 1,
+      "title": "Swim",
+      "artist": "BTS"
+    },
+    {
+      "rank": 2,
+      "title": "Choosin' Texas",
+      "artist": "Ella Langley"
+    },
+    {
+      "rank": 3,
+      "title": "Man I Need",
+      "artist": "Olivia Dean"
+    },
+    {
+      "rank": 4,
+      "title": "I Just Might",
+      "artist": "Bruno Mars"
+    },
+    {
+      "rank": 5,
+      "title": "Ordinary",
+      "artist": "Alex Warren"
+    }
+  ]
+}

@@ -125,6 +125,7 @@ os.makedirs(app.config['PROCESSED_FOLDER'], exist_ok=True)
 PROMO_CONTENT_PATH = Path(app.static_folder) / 'data' / 'promo.json'
 CULTURE_CONTENT_PATH = Path(app.static_folder) / 'data' / 'culture.json'
 LEAD_SUMMARY_PATH = Path(app.static_folder) / 'data' / 'lead_summary.json'
+BILLBOARD_DATA_PATH = Path(app.static_folder) / 'data' / 'billboard_hot100.json'
 DEFAULT_PROMO_CONTENT = {
     'hero': {
 
@@ -190,6 +191,14 @@ DEFAULT_CULTURE_CONTENT = {
     'top_tracks': [],
     'film_diaries': [],
     'updated_at': ''
+}
+
+DEFAULT_BILLBOARD_DATA = {
+    'source': 'Billboard Hot 100',
+    'source_url': 'https://www.billboard.com/charts/hot-100',
+    'insight_line': 'Billboard Hot 100 신호가 곧 여기에 표시됩니다.',
+    'captured_at': None,
+    'top_tracks': [],
 }
 
 growth_lead_store = GrowthLeadStore(os.path.dirname(__file__))
@@ -671,6 +680,18 @@ def load_growth_summary() -> dict:
         })
     summary["ordered_lead_types"] = ordered
     return summary
+
+
+def load_billboard_content() -> dict:
+    try:
+        if BILLBOARD_DATA_PATH.exists():
+            with BILLBOARD_DATA_PATH.open('r', encoding='utf-8') as f:
+                data = json.load(f)
+                if isinstance(data, dict):
+                    return data
+    except Exception:
+        pass
+    return {**DEFAULT_BILLBOARD_DATA}
 
 
 def _normalize_growth_lead_payload(data: dict) -> tuple[Optional[dict], Optional[str]]:
@@ -1269,6 +1290,7 @@ def index():
     culture_content = load_culture_content()
     promo_content = load_promo_content()
     lead_summary = load_growth_summary()
+    billboard_data = load_billboard_content()
 
     from datetime import datetime
     today_date = datetime.now().strftime('%Y.%m.%d')
@@ -1288,6 +1310,7 @@ def index():
         promo_content=promo_content,
         culture_content=culture_content,
         lead_summary=lead_summary,
+        billboard_data=billboard_data,
     )
 
 

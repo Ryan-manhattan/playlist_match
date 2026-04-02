@@ -14,6 +14,7 @@
 - `scripts/culture_data.py` creates internal cultural snapshots.
 - Pretext-based layout improvements were added to charts/worldcup UI.
 - Added `scripts/update_growth_summary.py` + `app/static/data/lead_summary.json` so the landing page can show lead counts, keywords, and source signals in the new Lead Pulse card.
+- Billboard Hot 100 snapshot data now lives in `app/static/data/billboard_hot100.json` and is surfaced via a new landing block; `scripts/update_billboard_hot100.py` pulls it from Billboard via requests/BeautifulSoup.
 
 ## Automation currently configured
 - Daily 9 AM report job exists.
@@ -33,3 +34,4 @@
 3. Add clearer identity-rich storytelling blocks
 4. Strengthen trust/security presentation without hurting conversion
 5. Hook the growth summary script into the hourly autonomous job so Lead Pulse numbers stay fresh
+6. Run `scripts/update_billboard_hot100.py` on the autonomous job schedule so the Billboard block always reflects a recent global snapshot

@@ -38,3 +38,11 @@
 - 데이터 출처: 로컬 `data/growth/growth_leads.jsonl` (스크립트 실행으로 요약된 JSON 생성).
 - Blockers/risks: 없음.
 - 다음 후보: Cron/파이프라인에 요약 스크립트 정기 실행을 연결하고, Supabase 리드/유입 현황을 직접 가져오는 API까지 확장하기.
+
+### 00:15 KST
+- Billboard Hot 100 스냅샷을 홈에 추가하고, `update_billboard_hot100.py` 스크립트 + `app/static/data/billboard_hot100.json` 자산을 만들어 외부 글로벌 차트 데이터를 기록·표현하게 했습니다.
+- 이유: Jun의 감성과 문화적 감시를 명확히 드러내고, 브랜드·멤버십 CTA 앞에 글로벌 트렌드 신호를 붙여 방문자/수익 전환 타이밍을 틀어줍니다.
+- Blockers/risks: 없음.
+- Saved sources: Billboard Hot 100 (requests + BeautifulSoup 스크립트 호출 시).
+- Data-asset impact: 매번 최신 차트 스냅샷을 JSON으로 보존해 향후 리포트나 CTA 정교화에 활용할 수 있는 구조를 마련했습니다.
+- Next candidate: 이 스크립트를 자율 작업/크론에 연결해 차트가 자동 업데이트되도록 계속 데이터 흐름을 유지합니다.
