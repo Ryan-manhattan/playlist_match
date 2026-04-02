@@ -6,6 +6,7 @@ off the community - 음악 파일 처리 웹 서비스
 
 import os
 import re
+from pathlib import Path
 
 # FFmpeg 경로를 환경 변수에 추가 (로컬 개발용)
 if os.name == 'nt':  # Windows에서만 실행
@@ -119,6 +120,66 @@ app.config['PERMANENT_SESSION_LIFETIME'] = 86400  # 24시간
 # 폴더 생성 확인
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 os.makedirs(app.config['PROCESSED_FOLDER'], exist_ok=True)
+
+PROMO_CONTENT_PATH = Path(app.static_folder) / 'data' / 'promo.json'
+DEFAULT_PROMO_CONTENT = {
+    'hero': {
+        'heading': '감정 기록을 멤버십과 브랜드 매출로 연결합니다.',
+        'subtext': 'OFF THE COMMUNITY는 음악 아카이브와 월드컵 참여 데이터를 한 곳에 모아 크리에이터 멤버십과 브랜드 협업 리드를 동시에 확보하는 구조로 확장되고 있습니다.',
+        'flash_line': 'Emotion Commerce Stack keeps every pitch refreshed hourly.',
+        'ctas': [
+            {'text': 'ADD YOUR TRACK', 'link': '/playlists', 'style': 'primary'},
+            {'text': 'REQUEST MEDIA KIT', 'link': '/brand-studio', 'style': 'secondary'}
+        ]
+    },
+    'offers': [
+        {
+            'tagline': 'Launch Offer',
+            'title': 'Archive Pass Beta',
+            'description': 'Emotion-driven membership + exclusive creator features.',
+            'price': '9,900 KRW / month',
+            'bullets': ['Prioritized track stats', 'Member-only badges', 'Beta access workflows'],
+            'cta': {
+                'type': 'form',
+                'label': 'JOIN BETA',
+                'lead_type': 'creator_membership',
+                'source_page': 'home_archive_pass'
+            }
+        },
+        {
+            'tagline': 'B2B Campaign',
+            'title': 'Brand Studio Sprint',
+            'description': 'Custom campaigns powered by fan diaries and worldcup buzz.',
+            'price': '690,000 KRW +',
+            'bullets': ['Dedicated brand playlist', 'Live voting experiences', 'Narrative report deck'],
+            'cta': {
+                'type': 'link',
+                'label': 'OPEN BRAND STUDIO',
+                'href': '/brand-studio'
+            }
+        },
+        {
+            'tagline': 'Insight Product',
+            'title': 'Audience Insight Report',
+            'description': 'Actionable narrative built from diaries, votes, and comments.',
+            'price': '290,000 KRW +',
+            'bullets': ['Keyword heatmap', 'Format recommendations', 'Collab roadmap'],
+            'cta': {
+                'type': 'form',
+                'label': 'REQUEST REPORT',
+                'lead_type': 'insight_report',
+                'source_page': 'home_insight_report'
+            }
+        }
+    ],
+    'metrics': {
+        'tracks': 0,
+        'diaries': 0,
+        'votes': 0,
+        'visits': 0
+    },
+    'updated_at': datetime.utcnow().isoformat() + 'Z'
+}
 
 growth_lead_store = GrowthLeadStore(os.path.dirname(__file__))
 
@@ -530,6 +591,18 @@ def _build_public_growth_snapshot() -> dict:
         pass
 
     return snapshot
+
+
+def load_promo_content() -> dict:
+    if PROMO_CONTENT_PATH.exists():
+        try:
+            with PROMO_CONTENT_PATH.open('r', encoding='utf-8') as f:
+                data = json.load(f)
+                if isinstance(data, dict):
+                    return data
+        except Exception:
+            pass
+    return DEFAULT_PROMO_CONTENT
 
 
 def _normalize_growth_lead_payload(data: dict) -> tuple[Optional[dict], Optional[str]]:
@@ -1140,6 +1213,7 @@ def index():
         today_date=today_date,
         is_authenticated=is_authenticated,
         growth_snapshot=growth_snapshot,
+        promo_content=load_promo_content(),
     )
 
 

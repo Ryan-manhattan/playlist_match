@@ -1,0 +1,78 @@
+{
+  "hero": {
+    "heading": "Monetize 0 tracks with 0 votes of proof and 0 visitors watching.",
+    "subtext": "Hourly insight loop fueling creator membership + brand campaigns (recent 0 battles).",
+    "flash_line": "Hourly refresh keeps the pitch deck sharp.",
+    "ctas": [
+      {
+        "text": "ADD YOUR TRACK",
+        "link": "/playlists",
+        "style": "primary"
+      },
+      {
+        "text": "REQUEST MEDIA KIT",
+        "link": "/brand-studio",
+        "style": "secondary"
+      }
+    ]
+  },
+  "offers": [
+    {
+      "tagline": "Launch Offer",
+      "title": "Archive Pass Beta",
+      "description": "Emotion-driven membership + exclusive creator features.",
+      "price": "9,900 KRW / month",
+      "bullets": [
+        "Prioritized track stats",
+        "Member-only badges",
+        "Beta access workflows"
+      ],
+      "cta": {
+        "type": "form",
+        "label": "JOIN BETA",
+        "lead_type": "creator_membership",
+        "source_page": "home_archive_pass"
+      }
+    },
+    {
+      "tagline": "B2B Campaign",
+      "title": "Brand Studio Sprint",
+      "description": "Custom campaigns powered by fan diaries and worldcup buzz.",
+      "price": "690,000 KRW +",
+      "bullets": [
+        "Dedicated brand playlist",
+        "Live voting experiences",
+        "Narrative report deck"
+      ],
+      "cta": {
+        "type": "link",
+        "label": "OPEN BRAND STUDIO",
+        "href": "/brand-studio"
+      }
+    },
+    {
+      "tagline": "Insight Product",
+      "title": "Audience Insight Report",
+      "description": "Actionable narrative built from diaries, votes, and comments.",
+      "price": "290,000 KRW +",
+      "bullets": [
+        "Keyword heatmap",
+        "Format recommendations",
+        "Collab roadmap"
+      ],
+      "cta": {
+        "type": "form",
+        "label": "REQUEST REPORT",
+        "lead_type": "insight_report",
+        "source_page": "home_insight_report"
+      }
+    }
+  ],
+  "metrics": {
+    "tracks": 0,
+    "diaries": 0,
+    "votes": 0,
+    "visits": 0
+  },
+  "updated_at": "2026-04-02T12:39:34.932610Z"
+}
