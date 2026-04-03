@@ -23,13 +23,30 @@ This project now batches every revenue/identity signal update into a single scri
 Each step logs its own output and the orchestrator prints a summary with durations/failure status and exits non-zero if any of the scripts fail. That makes it easy to monitor `/tmp/off-community-hourly.log` from the host Cron job.
 
 ## Scheduling
-Install the following Cron entry (or let the autonomous engine call it) to keep everything fresh every hour:
+### Preferred (macOS LaunchAgent)
+Create a LaunchAgent so the orchestrator runs every hour without touching `/var/at/tabs`, which was previously blocked by spool/permission checks:
+
+```
+~/Library/LaunchAgents/com.offcommunity.hourly.plist
+```
+
+The plist should point at `/usr/bin/env python3 scripts/hourly_autonomous_job.py`, set the working directory to `/Users/junkim/Projects/off_community`, stream both stdout/stderr to `/tmp/off-community-hourly.log`, and use `StartInterval` 3600 plus `RunAtLoad` so updates happen immediately and every hour after. Load it with:
+
+```
+launchctl unload ~/Library/LaunchAgents/com.offcommunity.hourly.plist >/dev/null 2>&1 || true
+launchctl load -w ~/Library/LaunchAgents/com.offcommunity.hourly.plist
+```
+
+If you need to stop the hourly run temporarily (for upgrades or debugging), unload the plist, edit the script, then reload it.
+
+### Optional Cron fallback
+If you prefer `cron` or need to deploy to a different host, the existing entry still works as long as the run user can write to `/var/at/tabs`:
 
 ```
 0 * * * * cd /Users/junkim/Projects/off_community && /usr/bin/env python3 scripts/hourly_autonomous_job.py >> /tmp/off-community-hourly.log 2>&1
 ```
 
-If you already had individual cron jobs for the promo or culture feeds, you can retire them once this orchestrator is live.
+Retire any standalone promo/culture cron jobs once the orchestrator is live.
 
 ## Monitoring & next steps
 - Inspect `/tmp/off-community-hourly.log` for failures or slow steps.

@@ -31,10 +31,15 @@
 
 ## Automation currently configured
 - Daily 9 AM report job exists.
-- Hourly autonomous improvement job now runs `scripts/hourly_autonomous_job.py`, which courts the promo, chart, RSS (now including Pitchfork), identity, CTA, Guardian, Spotify, and data asset scripts in one sweep (see `docs/hourly_autonomous_job.md` for the schedule and Cron snippet; output lands in `/tmp/off-community-hourly.log`).
-- Cron entry described in `docs/hourly_autonomous_job.md` is still pending because `crontab /tmp/off-community-cron` hangs while writing to `/var/at/tabs/junkim`, so host-level permission or another scheduler (launchd/supervisor) is required before the hourly job runs automatically.
+- Hourly autonomous improvement job now runs `scripts/hourly_autonomous_job.py`, which courts the promo, chart, RSS (now including Pitchfork), identity, CTA, Guardian, Spotify, and data asset scripts in one sweep. The new `com.offcommunity.hourly` LaunchAgent runs the orchestrator every 3600 seconds, logs to `/tmp/off-community-hourly.log`, and is described in `docs/hourly_autonomous_job.md`, so the full pipeline stays synchronized without hitting the old Cron spool block.
+- `docs/hourly_autonomous_job.md` still documents the Cron snippet as an optional fallback, but it only works when the host user can write to `/var/at/tabs`, so prefer the LaunchAgent on macOS.
 - Both should think in terms of revenue + traffic + identity.
 - No automatic deploy.
+
+## Next recommended tasks
+1. Confirm `/tmp/off-community-hourly.log` records new hourly runs after the LaunchAgent fires and that the Data Asset Inventory card timestamps refresh right after those runs.
+2. Confirm the Supabase `culture_items` table reflects the latest normalized snapshot after each hourly run and capture any gaps so future pulses can reference them.
+3. Keep sourcing new cultural signals (YouTube dips, Spotify spikes, additional RSS beyond Pitchfork/NME) and, when ready, add the worker scripts to `scripts/hourly_autonomous_job.py` so Jun's identity narrative stays ahead of trends.
 
 ## Operating rules for future sessions
 - Read `WORKLOG.md` first.

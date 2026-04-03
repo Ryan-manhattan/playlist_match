@@ -163,3 +163,11 @@
 - Saved data sources: Kworb Global Daily Spotify chart (https://kworb.net/spotify/country/global_daily.html).
 - Data-asset impact: `app/static/data/spotify_daily_chart.json` + Spotify Radar UI를 도입했고 `scripts/log_data_asset_status.py`/pipeline/Hourly doc이 이 자산을 추적/갱신하도록 바꿨습니다.
 - 다음 후보 task: Cron scheduling 블록을 풀고 `/tmp/off-community-hourly.log`가 새로운 run을 기록하는지 확인한 뒤 Data Asset Inventory의 타임스탬프가 갱신되는지 살펴봅니다.
+
+### 15:20 KST
+- 무엇을 바꿨는지: `com.offcommunity.hourly` LaunchAgent를 만들고 로딩한 다음 `docs/hourly_autonomous_job.md`와 `SESSION_HANDOFF.md`를 업데이트해 시간당 파이프라인이 Mac에서 정기 실행될 수 있도록 문서와 실제 스케줄을 맞췄습니다.
+- 왜 바꿨는지: `/var/at/tabs` 쓰기 권한 문제가 Cron을 막았던 상황에서 LaunchAgent가 동일한 스크립트를 시간당으로 실행하고 `/tmp/off-community-hourly.log`를 그대로 사용하게 만들어 Jun의 수익·문화·CTA 데이터 자산이 자동으로 최신 상태를 유지하도록 하기 위해.
+- Blockers/risks: 없음.
+- Saved data sources: LaunchAgent plist 자체와 관련 문서(`docs/hourly_autonomous_job.md`, `SESSION_HANDOFF.md`)에 스케줄·오퍼레이팅 경로를 기록했습니다.
+- Data-asset impact: 새로운 자동화 스케줄 덕분에 Promo/Charts/RSS/Guardian/Spotify/Identity/CTA/Data Asset Inventory JSON들이 매시간 같은 타임스탬프로 업데이트되고 기록되며, `/tmp/off-community-hourly.log`가 작동하는지 확인하기만 하면 곧바로 Brand Studio/CRM 흐름이 최신 데이터를 참조하게 됩니다.
+- 다음 후보 task: `/tmp/off-community-hourly.log`와 Data Asset Inventory 카드를 LaunchAgent 실행 후에 검사하여 실제 런타임이 기록·반영되는지 확인하고, Supabase `culture_items` 테이블이 동일한 타임스탬프를 통해 최신화되는지를 검증합니다.
