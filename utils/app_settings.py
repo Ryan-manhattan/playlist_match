@@ -4,7 +4,12 @@
 """
 import os
 from pathlib import Path
-from dotenv import load_dotenv
+
+try:
+    from dotenv import load_dotenv
+except ModuleNotFoundError:
+    def load_dotenv(*args, **kwargs):
+        return False
 
 # .env 파일 로드
 ENV_PATH = Path(__file__).resolve().parents[1] / ".env"

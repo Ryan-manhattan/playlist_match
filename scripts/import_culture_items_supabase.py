@@ -7,10 +7,11 @@ import sys
 from pathlib import Path
 from typing import Any, Dict, Iterable, List
 
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+
 from utils import app_settings
 from utils.supabase_client import SupabaseClient
-
-ROOT = Path(__file__).resolve().parents[1]
 NORMALIZED_PATH = ROOT / 'data' / 'normalized' / 'culture_items.jsonl'
 MANIFEST_PATH = ROOT / 'data' / 'derived' / 'culture_items_manifest.json'
 CHUNK_SIZE = 120

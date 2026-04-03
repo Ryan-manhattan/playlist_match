@@ -28,18 +28,20 @@
 - `scripts/update_spotify_kworb.py`가 Kworb Global Daily Spotify 차트를 `app/static/data/spotify_daily_chart.json`에 기록하고 있으며, 런딩의 Spotify Radar 블록과 데이터 자산 카드가 이 스냅샷을 추적합니다.
 - `scripts/build_culture_items.py`가 culture / RSS / Billboard / Deezer 데이터를 공통 스키마로 정규화해 `data/normalized/culture_items.jsonl`과 `data/derived/culture_items_manifest.json`을 생성하므로, 나중에 Supabase `culture_items` 테이블로 이관하기 쉬운 로컬 데이터 레이어가 생겼습니다.
 - `scripts/import_culture_items_supabase.py`가 정규화 JSONL을 Supabase `culture_items` 테이블에 upsert해 시간당 파이프라인만큼 Postgres에 장기 기록을 남기기 시작했습니다.
+- `scripts/hourly_autonomous_job.py` now calls `datetime.now(tz=timezone.utc)` for log timestamps, `scripts/import_culture_items_supabase.py` prepends the repo root to `sys.path`, and `utils/app_settings.py` tolerates a missing `python-dotenv`; running `/usr/bin/env python3 scripts/hourly_autonomous_job.py >> /tmp/off-community-hourly.log 2>&1` refreshed the JSON assets and left `/tmp/off-community-hourly.log` ending with a success summary even though the Supabase client/credentials are still absent (that step now just logs a skip).
 
 ## Automation currently configured
 - Daily 9 AM report job exists.
 - Hourly autonomous improvement job now runs `scripts/hourly_autonomous_job.py`, which courts the promo, chart, RSS (now including Pitchfork), identity, CTA, Guardian, Spotify, and data asset scripts in one sweep. The new `com.offcommunity.hourly` LaunchAgent runs the orchestrator every 3600 seconds, logs to `/tmp/off-community-hourly.log`, and is described in `docs/hourly_autonomous_job.md`, so the full pipeline stays synchronized without hitting the old Cron spool block.
+- I manually executed the LaunchAgent command (`/usr/bin/env python3 scripts/hourly_autonomous_job.py >> /tmp/off-community-hourly.log 2>&1`) and saw the log end with "All steps completed successfully" while `app/static/data/data_asset_status.json` got a fresh timestamp, so the scheduled job should now keep the data assets aligned.
 - `docs/hourly_autonomous_job.md` still documents the Cron snippet as an optional fallback, but it only works when the host user can write to `/var/at/tabs`, so prefer the LaunchAgent on macOS.
 - Both should think in terms of revenue + traffic + identity.
 - No automatic deploy.
 
 ## Next recommended tasks
-1. Confirm `/tmp/off-community-hourly.log` records new hourly runs after the LaunchAgent fires and that the Data Asset Inventory card timestamps refresh right after those runs.
-2. Confirm the Supabase `culture_items` table reflects the latest normalized snapshot after each hourly run and capture any gaps so future pulses can reference them.
-3. Keep sourcing new cultural signals (YouTube dips, Spotify spikes, additional RSS beyond Pitchfork/NME) and, when ready, add the worker scripts to `scripts/hourly_autonomous_job.py` so Jun's identity narrative stays ahead of trends.
+1. After the next scheduled LaunchAgent run, check `/tmp/off-community-hourly.log` again so it still ends with "All steps completed successfully" and verify `app/static/data/data_asset_status.json` shares the same timestamp as the Data Asset Inventory card, proving the automated run kept the assets fresh.
+2. Provide Supabase credentials plus the `supabase` library so `scripts/import_culture_items_supabase.py` can upsert into the `culture_items` table again; rerun the hourly pipeline afterwards to confirm Supabase reflects the latest normalized snapshot.
+3. Continue sourcing new cultural signals (YouTube dips, Spotify spikes, additional RSS beyond Pitchfork/NME) and, when ready, integrate the new worker scripts into `scripts/hourly_autonomous_job.py` so Jun's identity narrative keeps ahead of trends.
 
 ## Operating rules for future sessions
 - Read `WORKLOG.md` first.
@@ -47,7 +49,3 @@
 - Keep changes small, commercial, and reversible.
 - If blocked or risky, write the blocker in `WORKLOG.md` and propose the safest next step.
 
-## Next recommended tasks
-1. Resolve the Cron scheduling block so the `docs/hourly_autonomous_job.md` entry (`0 * * * * cd /Users/junkim/Projects/off_community && /usr/bin/env python3 scripts/hourly_autonomous_job.py >> /tmp/off-community-hourly.log 2>&1`) can be installed (host-level permission or alternative scheduler), then confirm `/tmp/off-community-hourly.log` records the hourly runs and the Data Asset Inventory card timestamps refresh shortly thereafter.
-2. Confirm Supabase `culture_items` table reflects the latest normalized snapshot after each hourly run and document any gaps in the Data Asset Inventory/Brand Studio flow.
-3. Keep sourcing new culture signals (YouTube dips, Spotify spikes, additional RSS beyond Pitchfork/NME) and, when ready, add the worker scripts to `scripts/hourly_autonomous_job.py` so the identity narrative stays ahead of trends.

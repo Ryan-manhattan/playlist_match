@@ -34,7 +34,7 @@ PIPELINE_SCRIPTS: List[Tuple[str, Path]] = [
 
 def _run_script(label: str, script_path: Path) -> Tuple[int, float]:
     start = time.monotonic()
-    timestamp = datetime.now(timezone=timezone.utc).isoformat()
+    timestamp = datetime.now(tz=timezone.utc).isoformat()
     if not script_path.exists():
         print(f"[{timestamp}] [SKIP] {label} → missing {script_path}")
         return 1, 0.0
@@ -66,7 +66,7 @@ def main() -> None:
         timeline.append((label, script_path.name, status, duration))
 
     total_duration = sum(entry[3] for entry in timeline)
-    finished_at = datetime.now(timezone.utc).isoformat()
+    finished_at = datetime.now(tz=timezone.utc).isoformat()
 
     print("\nPipeline summary:")
     for label, name, status, duration in timeline:

@@ -171,3 +171,10 @@
 - Saved data sources: LaunchAgent plist 자체와 관련 문서(`docs/hourly_autonomous_job.md`, `SESSION_HANDOFF.md`)에 스케줄·오퍼레이팅 경로를 기록했습니다.
 - Data-asset impact: 새로운 자동화 스케줄 덕분에 Promo/Charts/RSS/Guardian/Spotify/Identity/CTA/Data Asset Inventory JSON들이 매시간 같은 타임스탬프로 업데이트되고 기록되며, `/tmp/off-community-hourly.log`가 작동하는지 확인하기만 하면 곧바로 Brand Studio/CRM 흐름이 최신 데이터를 참조하게 됩니다.
 - 다음 후보 task: `/tmp/off-community-hourly.log`와 Data Asset Inventory 카드를 LaunchAgent 실행 후에 검사하여 실제 런타임이 기록·반영되는지 확인하고, Supabase `culture_items` 테이블이 동일한 타임스탬프를 통해 최신화되는지를 검증합니다.
+
+### 16:40 KST
+- 무엇을 바꿨는지: `scripts/hourly_autonomous_job.py` now uses `datetime.now(tz=timezone.utc)` so the LaunchAgent log can append safely, `scripts/import_culture_items_supabase.py` prepends the repo root to `sys.path` before importing `utils`, and `utils/app_settings.py` tolerates a missing `python-dotenv` package. I reran the hourly pipeline with the same redirection LaunchAgent uses, saw `/tmp/off-community-hourly.log` end with a success summary, and confirmed `app/static/data/data_asset_status.json` refreshed at 07:06 UTC.
+- 왜 바꿨는지: The hourly orchestrator had been crashing before it could refresh Jun’s cultural/identity/CTA payloads; fixing the timezone import and the Supabase importer keeps the `com.offcommunity.hourly` job from aborting mid-run and lets the data asset card show accurate timestamps every hour.
+- Blockers/risks: Supabase client/credentials are still absent in this environment so the importer prints a warning and skips, but now the job exits cleanly instead of failing the pipeline.
+- Saved data sources / Data-asset impact: Fresh JSON snapshots for promo/growth/lead/culture/identity/CTA assets plus the normalized `culture_items` manifest and data asset status all reflect the 2026-04-03T07:06 run; the `data_asset_status.json` and `/tmp/off-community-hourly.log` entries now prove the pipeline executed successfully.
+- Next candidate task: Reintroduce Supabase credentials and the `supabase` package (or auto-install it) so the `culture_items` import starts populating Postgres again, then double-check the LaunchAgent log after the next run to keep the data-asset timeline trustworthy.

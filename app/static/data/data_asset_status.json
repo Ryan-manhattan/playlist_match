@@ -1,72 +1,72 @@
 {
-  "generated_at": "2026-04-03T05:09:33.054992+00:00",
+  "generated_at": "2026-04-03T07:06:46.908955+00:00",
   "assets": [
     {
-      "name": "Spotify Global Daily",
-      "updated_at": "2026-04-03T05:08:47.733865+00:00",
-      "metric_label": "top tracks",
-      "metric_value": 6,
-      "notes": "scripts/update_spotify_kworb.py가 Kworb Global Daily 데이터로 Spotify 감성을 기록합니다."
-    },
-    {
-      "name": "Pitchfork Signal",
-      "updated_at": "2026-04-03T04:07:55.065151+00:00",
-      "metric_label": "entries",
-      "metric_value": 4,
-      "notes": "scripts/update_pitchfork_rss.py가 글로벌 Pitchfork 뉴스를 기록합니다."
-    },
-    {
       "name": "Cultural Insights Brief",
-      "updated_at": "2026-04-02T21:07:56.407342+00:00",
+      "updated_at": "2026-04-03T07:06:46.819634+00:00",
       "metric_label": "keywords",
       "metric_value": 6,
       "notes": "scripts/update_cultural_insights.py가 RSS+차트 데이터를 요약합니다."
     },
     {
       "name": "CTA Momentum",
-      "updated_at": "2026-04-02T20:09:34.645290Z",
+      "updated_at": "2026-04-03T07:06:46.725722Z",
       "metric_label": "momentum entries",
       "metric_value": 3,
       "notes": "identity/lead/날씨 신호로 CTA 메시지를 정리합니다."
     },
     {
       "name": "Signal Intelligence",
-      "updated_at": "2026-04-02T19:07:17.068090Z",
+      "updated_at": "2026-04-03T07:06:45.476894Z",
       "metric_label": "top tags",
       "metric_value": 5,
       "notes": "identity + lead signal을 통합하는 scripts/compile_signal_insights.py 결과입니다."
     },
     {
       "name": "Identity Tags",
-      "updated_at": "2026-04-02T18:06:22.920498+00:00",
+      "updated_at": "2026-04-03T07:06:44.851653+00:00",
       "metric_label": "tags",
       "metric_value": 6,
       "notes": "scripts/compile_identity_tags.py가 RSS 데이터에서 추출했습니다."
     },
     {
+      "name": "Pitchfork Signal",
+      "updated_at": "2026-04-03T07:06:44.809249+00:00",
+      "metric_label": "entries",
+      "metric_value": 4,
+      "notes": "scripts/update_pitchfork_rss.py가 글로벌 Pitchfork 뉴스를 기록합니다."
+    },
+    {
       "name": "Cultural Notes (RSS)",
-      "updated_at": "2026-04-02T17:07:08.748250+00:00",
+      "updated_at": "2026-04-03T07:06:44.557274+00:00",
       "metric_label": "source feeds",
       "metric_value": 3,
       "notes": "NYTimes Arts, NPR Music, Rolling Stone RSS 스냅샷."
     },
     {
+      "name": "Spotify Global Daily",
+      "updated_at": "2026-04-03T07:06:44.163413+00:00",
+      "metric_label": "top tracks",
+      "metric_value": 6,
+      "notes": "scripts/update_spotify_kworb.py가 Kworb Global Daily 데이터로 Spotify 감성을 기록합니다."
+    },
+    {
       "name": "Deezer Global Pulse",
-      "updated_at": "2026-04-02T16:09:52.823670+00:00",
+      "updated_at": "2026-04-03T07:06:42.330872+00:00",
       "metric_label": "top tracks",
       "metric_value": 6,
       "notes": "Deezer 글로벌 차트 자료를 저장합니다."
     },
     {
       "name": "Billboard Signal",
-      "updated_at": "2026-04-02T15:08:47.532670Z",
+      "updated_at": "2026-04-03T07:06:41.851928Z",
       "metric_label": "hot tracks",
       "metric_value": 5,
       "notes": "Billboard Hot 100 스냅샷을 기록합니다."
     },
     {
       "name": "Lead Pulse",
-      "updated_at": "2026-04-02T14:09:16.230864Z",
+      "updated_at": "2026-04-03T07:06:41.013520Z",
       "metric_label": "total leads",
       "metric_value": 0,
       "notes": "growth summary 로그로 실시간 리드 집계를 유지합니다."
