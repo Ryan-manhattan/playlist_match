@@ -123,3 +123,11 @@
 - Saved data sources: https://www.theguardian.com/music (리스트 페이지 + 선택 기사 메타).
 - Data-asset impact: Guardian music feed JSON이 시간대별 Guardian 기사 타이틀·요약·타임스탬프를 기록하며, 랜딩 Data Asset Inventory 주변에서 새로운 문화/identity 신호를 드라이브하는 데이터 접점을 제공합니다.
 - 다음 후보: 이 스크립트를 시간당 autonomous job에 넣어 Guardian Music Radar가 최신 Guardian 커버리지를 자동으로 반영하게 하고, data_asset_status.json이나 Brand Studio/CRM 화면에서 동일한 자산을 다시 참조하는 흐름을 고민합니다.
+
+### 10:20 KST
+- 무엇을 바꿨는지: `scripts/hourly_autonomous_job.py`를 만들어 기존 개별 수집/정리 스크립트를 순차 실행하고, `docs/hourly_autonomous_job.md`로 스케줄/크론 정보와 로그 위치를 문서화하면서 SESSION_HANDOFF.md의 자동화 설명과 우선순위를 정리했습니다.
+- 왜 바꿨는지: 성장/프로모션/차트/문화/정체성/CTA/Guardian/데이터 상태 스크립트를 한 번에 묶어서 한 시간마다 실행하면 랜딩 페이지 피드가 모두 같은 시점의 데이터(및 `data_asset_status.json`과 `data/normalized/culture_items` 라인)로 동기화돼 방문자·브랜드·데이터 자산 신뢰도를 높일 수 있습니다.
+- Blockers/risks: 호스트에 `scripts/hourly_autonomous_job.py`를 호출하는 크론 항목이 아직 없어서 자동 실행은 다음 크론에서 확인해야 합니다.
+- Saved data sources: growth lead logs → `lead_summary.json`, Supabase stats → `promo.json`, Billboard/Deezer RSS/Guardian feeds → 각 JSON, identity/CTA scripts → identity_tags/cta_momentum/cultural_insights, normalized culture items, data asset status.
+- Data-asset impact: 모든 데이터 JSON(lead summary, promo, charts, RSS, identity, CTA, cultural briefs, normalized culture items, asset inventory)이 한 시점에서 갱신되도록 보장하고, 후속 Supabase 수집이나 Brand Studio 복사도 동일한 타임스탬프를 참조할 수 있게 됐습니다.
+- 다음 후보: 크론 항목을 설치하고 `/tmp/off-community-hourly.log`에서 첫 실행을 확인한 뒤 Data Asset Inventory 카드와 `data/normalized/culture_items` 흐름을 Supabase import로 이어가기; 동시에 YouTube/Spotify 등 새 문화 신호를 캡처하는 스크립트를 파이프라인에 추가할 방법을 고민합니다.

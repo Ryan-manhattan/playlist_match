@@ -28,7 +28,7 @@
 
 ## Automation currently configured
 - Daily 9 AM report job exists.
-- Hourly autonomous improvement job exists.
+- Hourly autonomous improvement job now runs `scripts/hourly_autonomous_job.py`, which courts the promo, chart, RSS, identity, CTA, Guardian, and data asset scripts in one sweep (see `docs/hourly_autonomous_job.md` for the schedule and Cron snippet; output lands in `/tmp/off-community-hourly.log`).
 - Both should think in terms of revenue + traffic + identity.
 - No automatic deploy.
 
@@ -39,19 +39,6 @@
 - If blocked or risky, write the blocker in `WORKLOG.md` and propose the safest next step.
 
 ## Next recommended tasks
-1. Connect external culture data sources (YouTube / Spotify / RSS)
-2. Improve homepage conversion path for membership / brand inquiry
-3. Add clearer identity-rich storytelling blocks
-4. Strengthen trust/security presentation without hurting conversion
-5. Connect normalized local data layers to future Supabase import flows
-5. Hook the growth summary script into the hourly autonomous job so Lead Pulse numbers stay fresh
-6. Run `scripts/update_billboard_hot100.py` on the autonomous job schedule so the Billboard block always reflects a recent global snapshot
-7. Hook `scripts/update_deezer_chart.py` into the hourly autonomous job so the Deezer Pulse stays current.
-8. Hook `scripts/update_culture_rss.py` into the hourly autonomous job so the Cultural Notes data and CTA messaging stay synchronized with fresh NYTimes/NPR/Rolling Stone signals.
-9. Run `scripts/compile_identity_tags.py` inside the autonomous job as well so the Identity Tags block stays aligned with the latest RSS signals and can feed brand/membership pitches.
-10. Add `scripts/compile_signal_insights.py` to the hourly autonomous job so the new Signal Intelligence block stays in sync with identity+lead data and keeps the CTA flow fresh.
-11. Run `scripts/compile_cta_momentum.py` inside the hourly autonomous job so the CTA Momentum block stays aligned with current identity/lead/weather signals and Brand Studio can reuse the same CTA copy engine.
-12. Schedule `scripts/update_cultural_insights.py` within the hourly autonomous job so the Cultural Insight Brief reflects the freshest RSS + chart keywords and stories for CTA storytelling.
-13. scripts/log_data_asset_status.py를 시간당 autonomous job에 넣어 Data Asset Inventory가 최신 상태를 유지하고 랜딩/Brand Studio에서 동일한 데이터 자산 흐름을 재사용할 수 있도록 합니다.
-14. scripts/compile_identity_context_feed.py를 시간당 autonomous job에 넣어 Identity Context Feed/JSON이 항상 최신 상태로 유지되고 Brand Studio/CRM copy가 동일한 컨텍스트 데이터를 참조할 수 있도록 합니다.
-15. scripts/update_guardian_music.py를 시간당 autonomous job에 넣어 Guardian Music Radar가 최신 Guardian 기사로 자동 갱신되도록 하고, data_asset_status.json이나 Brand Studio/CRM 복사에서 동일한 Guardian 자산을 다시 참조하는 흐름을 마련합니다.
+1. Install the Cron entry from `docs/hourly_autonomous_job.md`, watch `/tmp/off-community-hourly.log`, and verify the Data Asset Inventory card updates within minutes so the landing scripts keep reflecting fresh culture/lead signals.
+2. Tie `data/normalized/culture_items.jsonl` plus the derived manifest into the planned Supabase `culture_items` import so each hourly build feeds a long-term proprietary dataset.
+3. Keep sourcing new culture signals (YouTube dips, Spotify spikes, additional RSS like Pitchfork or NME) and, when ready, add the worker scripts to `scripts/hourly_autonomous_job.py` so the identity narrative stays ahead of trends.
