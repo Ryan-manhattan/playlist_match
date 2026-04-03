@@ -39,16 +39,16 @@ def _parse_last_run(lines: list[str]) -> str | None:
 
 
 def _extract_timeline(lines: list[str]) -> list[dict[str, str]]:
+    summary_start = None
+    for index, line in enumerate(lines):
+        if line.strip().startswith("Pipeline summary:"):
+            summary_start = index
+    if summary_start is None:
+        return []
     timeline = []
-    seen_summary = False
-    for line in lines:
+    for line in lines[summary_start + 1 :]:
         stripped = line.strip()
         if not stripped:
-            continue
-        if stripped.startswith("Pipeline summary:"):
-            seen_summary = True
-            continue
-        if not seen_summary:
             continue
         if stripped.startswith("•"):
             content = stripped.lstrip("•").strip()

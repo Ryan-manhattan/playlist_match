@@ -30,8 +30,11 @@ PIPELINE_SCRIPTS: List[Tuple[str, Path]] = [
     ("culture items Supabase import", ROOT / "scripts" / "import_culture_items_supabase.py"),
     ("data asset status", ROOT / "scripts" / "log_data_asset_status.py"),
     ("pipeline health", ROOT / "scripts" / "pipeline_health.py"),
-    ("automation log snapshot", ROOT / "scripts" / "collect_automation_log.py"),
 ]
+AUTOMATION_LOG_SCRIPT: Tuple[str, Path] = (
+    "automation log snapshot",
+    ROOT / "scripts" / "collect_automation_log.py",
+)
 
 
 def _run_script(label: str, script_path: Path) -> Tuple[int, float]:
@@ -76,6 +79,10 @@ def main() -> None:
         print(f"  • {label} ({name}): {result_label} in {duration:.1f}s")
 
     print(f"Total duration: {total_duration:.1f}s | finished at {finished_at}")
+    print()
+    automation_status, _ = _run_script(*AUTOMATION_LOG_SCRIPT)
+    if automation_status != 0:
+        overall_status = 1
 
     if overall_status != 0:
         print("One or more scripts failed (see above). Exiting with failure code for scheduler alerting.")

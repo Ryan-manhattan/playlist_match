@@ -220,3 +220,10 @@
 - Data-asset impact: `app/static/data/billboard_hot100.json`, `app/static/data/deezer_chart.json`, `app/static/data/spotify_daily_chart.json`, `app/static/data/culture_rss.json`, `app/static/data/pitchfork_rss.json`, `app/static/data/guardian_music_feed.json`, `app/static/data/identity_tags.json`, `app/static/data/identity_context_feed.json`, `app/static/data/signal_insights.json`, `app/static/data/cta_momentum.json`, `app/static/data/cultural_insights.json`, `app/static/data/promo.json`, `app/static/data/lead_summary.json`, `app/static/data/data_asset_status.json`, `app/static/data/pipeline_health.json`, `app/static/data/automation_log.json`, `data/normalized/culture_items.jsonl`, `data/derived/culture_items_latest.json`, `data/derived/culture_items_manifest.json` 모두 10:06 UTC로 갱신되어 랜딩 UI/데이터 자산 파일들이 같은 시점의 기록을 이어갑니다.
 - Next candidate task: automation log 캡처를 파이프라인 summary 뒤로 옮기거나 가벼운 후처리 훅을 추가해 UI가 항상 가장 최근 실행 결과를 바로 보여주도록 한 뒤 시간당 job을 다시 돌려 확인합니다.
 
+### 19:34 KST
+- 무엇을 바꿨는지: `scripts/hourly_autonomous_job.py`가 pipeline summary를 찍은 바로 다음에 post-run hook으로 `scripts/collect_automation_log.py`를 호출하도록 바꾸고, 이 스크립트는 마지막 summary가 담긴 로그 섹션만 파싱해서 `app/static/data/automation_log.json`을 곧장 최신 실행으로 업데이트하도록 했으며, 관련 문서(`docs/hourly_autonomous_job.md`, `SESSION_HANDOFF.md`)도 이 워크플로를 설명하도록 정리했습니다.
+- 왜 바꿨는지: automation log API/data card가 한 실행 주기만큼 뒤처지는 대신에 마지막 summary 라인을 읽고 UI/시그널 카드가 LaunchAgent의 실제 완료 상태를 즉시 증명하도록 해서 수익화/신뢰도를 높이고 데이터 자산 타임스탬프를 일치시키기 위해.
+- Blockers/risks: 없음.
+- Saved data sources: `/tmp/off-community-hourly.log`의 최신 pipeline summary 섹션을 다시 읽고 `python3 scripts/collect_automation_log.py`를 실행해 `app/static/data/automation_log.json`을 갱신했습니다.
+- Data-asset impact: automation log asset이 Latest run timeline/next expected run 필드를 올바르게 보여주므로 Pipeline Health 카드가 실시간 로그 상태를 반영하며, `automation_log.json`이 프레시한 run metadata를 다음 캠페인 리포트나 Brand Studio CTA copy에 재활용할 기반으로 남깁니다.
+- Next candidate task: writable Flutter 환경에서 `cd apps/mobile && flutter create . && flutter pub get && flutter analyze`를 돌려 Flutter package graph와 플랫폼 폴더를 생성한 뒤 모바일 payload 관련 다음 작업을 이어가십시오.

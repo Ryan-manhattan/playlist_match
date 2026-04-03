@@ -19,7 +19,8 @@ This project now batches every revenue/identity signal update into a single scri
 14. `scripts/build_culture_items.py`
 15. `scripts/import_culture_items_supabase.py` – upserts the normalized dataset into the `culture_items` table so the long-term proprietary snapshot lives beside the landing payloads.
 16. `scripts/log_data_asset_status.py`
-17. `scripts/collect_automation_log.py` – reads `/tmp/off-community-hourly.log` and emits `app/static/data/automation_log.json` so the landing page can surface the LaunchAgent run status along with the data asset inventory.
+
+Once the summary and duration lines are printed, the orchestrator runs `scripts/collect_automation_log.py` as a lightweight post-run hook so `/tmp/off-community-hourly.log` is read after the pipeline summary actually exists. That keeps `app/static/data/automation_log.json` aligned with the very last run, letting the landing page surface the LaunchAgent success/failure message and timeline without lag.
 
 Each step logs its own output and the orchestrator prints a summary with durations/failure status and exits non-zero if any of the scripts fail. That makes it easy to monitor `/tmp/off-community-hourly.log` from the host Cron job.
 

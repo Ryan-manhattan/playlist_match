@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-03T10:06:27.626823+00:00",
+  "generated_at": "2026-04-03T10:36:55.013740+00:00",
   "log_path": "/tmp/off-community-hourly.log",
   "last_run": "2026-04-03T10:06:05.454128+00:00",
   "next_expected_run_utc": "2026-04-03T11:06:05.454128+00:00",
@@ -17,7 +17,7 @@
     },
     {
       "label": "Billboard Hot 100 (update_billboard_hot100.py)",
-      "detail": "FAIL in 0.2s"
+      "detail": "OK in 0.9s"
     },
     {
       "label": "Deezer global chart (update_deezer_chart.py)",
@@ -25,11 +25,11 @@
     },
     {
       "label": "Spotify Global Daily (update_spotify_kworb.py)",
-      "detail": "FAIL in 0.1s"
+      "detail": "OK in 1.8s"
     },
     {
       "label": "culture RSS (update_culture_rss.py)",
-      "detail": "FAIL in 0.1s"
+      "detail": "OK in 0.4s"
     },
     {
       "label": "Pitchfork signal (update_pitchfork_rss.py)",
@@ -45,7 +45,7 @@
     },
     {
       "label": "Guardian music feed (update_guardian_music.py)",
-      "detail": "FAIL in 0.1s"
+      "detail": "OK in 0.8s"
     },
     {
       "label": "signal insights (compile_signal_insights.py)",
@@ -53,11 +53,11 @@
     },
     {
       "label": "CTA momentum (compile_cta_momentum.py)",
-      "detail": "OK in 1.6s"
+      "detail": "OK in 1.3s"
     },
     {
       "label": "cultural insights (update_cultural_insights.py)",
-      "detail": "OK in 0.0s"
+      "detail": "OK in 0.1s"
     },
     {
       "label": "culture item build (build_culture_items.py)",
@@ -65,10 +65,18 @@
     },
     {
       "label": "culture items Supabase import (import_culture_items_supabase.py)",
-      "detail": "FAIL in 0.0s"
+      "detail": "OK in 0.0s"
     },
     {
       "label": "data asset status (log_data_asset_status.py)",
+      "detail": "OK in 0.0s"
+    },
+    {
+      "label": "pipeline health (pipeline_health.py)",
+      "detail": "OK in 0.0s"
+    },
+    {
+      "label": "automation log snapshot (collect_automation_log.py)",
       "detail": "OK in 0.0s"
     }
   ],
