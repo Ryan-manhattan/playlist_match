@@ -1,55 +1,58 @@
 {
-  "generated_at": "2026-04-03T07:06:44.851653+00:00",
-  "hero_line": "Jun은 요즘 ‘The Drama’ Review: Her Secret Is His Crisis (NYTimes Arts)를 읽으며 파트너 리드에 감성을 붙이고 있습니다.",
+  "generated_at": "2026-04-03T10:06:03.027424+00:00",
+  "hero_line": "Jun은 요즘 Seats Left Empty on Smithsonian Board as Strain With White House Persists (NYTimes Arts)를 읽으며 파트너 리드에 감성을 붙이고 있습니다.",
   "tags": [
     {
-      "tag": "Drama",
+      "tag": "Seats",
       "count": 2,
       "contexts": [
         "Summary line",
-        "NYTimes Arts: ‘The Drama’ Review: Her Secret Is His Crisis"
+        "NYTimes Arts: Seats Left Empty on Smithsonian Board as Strain With White House Persists"
       ],
       "source": "culture_rss"
     },
     {
-      "tag": "Secret",
+      "tag": "Left",
       "count": 2,
       "contexts": [
         "Summary line",
-        "NYTimes Arts: ‘The Drama’ Review: Her Secret Is His Crisis"
+        "NYTimes Arts: Seats Left Empty on Smithsonian Board as Strain With White House Persists"
       ],
       "source": "culture_rss"
     },
     {
-      "tag": "Crisis",
+      "tag": "Empty",
       "count": 2,
       "contexts": [
         "Summary line",
-        "NYTimes Arts: ‘The Drama’ Review: Her Secret Is His Crisis"
+        "NYTimes Arts: Seats Left Empty on Smithsonian Board as Strain With White House Persists"
       ],
       "source": "culture_rss"
     },
     {
-      "tag": "Kanye",
+      "tag": "Smithsonian",
       "count": 2,
       "contexts": [
-        "NYTimes Arts: Kanye West Plays First American Concert Since 2021"
+        "Summary line",
+        "NYTimes Arts: Seats Left Empty on Smithsonian Board as Strain With White House Persists"
       ],
       "source": "culture_rss"
     },
     {
-      "tag": "West",
+      "tag": "Board",
       "count": 2,
       "contexts": [
-        "NYTimes Arts: Kanye West Plays First American Concert Since 2021"
+        "Summary line",
+        "NYTimes Arts: Seats Left Empty on Smithsonian Board as Strain With White House Persists"
       ],
       "source": "culture_rss"
     },
     {
-      "tag": "First",
+      "tag": "Strain",
       "count": 2,
       "contexts": [
-        "NYTimes Arts: Kanye West Plays First American Concert Since 2021"
+        "Summary line",
+        "NYTimes Arts: Seats Left Empty on Smithsonian Board as Strain With White House Persists"
       ],
       "source": "culture_rss"
     }

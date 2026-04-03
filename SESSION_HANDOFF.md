@@ -29,25 +29,29 @@
 - `scripts/build_culture_items.py`가 culture / RSS / Billboard / Deezer 데이터를 공통 스키마로 정규화해 `data/normalized/culture_items.jsonl`과 `data/derived/culture_items_manifest.json`을 생성하므로, 나중에 Supabase `culture_items` 테이블로 이관하기 쉬운 로컬 데이터 레이어가 생겼습니다.
 - `scripts/import_culture_items_supabase.py`가 정규화 JSONL을 Supabase `culture_items` 테이블에 upsert해 시간당 파이프라인만큼 Postgres에 장기 기록을 남기기 시작했습니다.
 - `scripts/hourly_autonomous_job.py` now calls `datetime.now(tz=timezone.utc)` for log timestamps, `scripts/import_culture_items_supabase.py` prepends the repo root to `sys.path`, and `utils/app_settings.py` tolerates a missing `python-dotenv`; running `/usr/bin/env python3 scripts/hourly_autonomous_job.py >> /tmp/off-community-hourly.log 2>&1` refreshed the JSON assets and left `/tmp/off-community-hourly.log` ending with a success summary even though the Supabase client/credentials are still absent (that step now just logs a skip).
+- Manual runs of the hourly pipeline around 10:05–10:06 UTC refreshed Billboard/Deezer/Spotify/RSS/identity/Guardian/CTA/Cultural data, rewrote `data/normalized/culture_items.jsonl` + its manifest, and updated `app/static/data/data_asset_status.json`, while `scripts/collect_automation_log.py` was rerun afterward so `app/static/data/automation_log.json` now records the 2026-04-03T10:06:05 UTC success and the next expected run at 11:06.
 
 - `scripts/pipeline_health.py`가 `data_asset_status.json`을 분석해 freshness/staleness 지표를 `app/static/data/pipeline_health.json`에 기록하며, `scripts/hourly_autonomous_job.py`가 새 스크립트를 호출하고 랜딩의 Pipeline Health 카드가 자동화 상태/CTA 앞에서 보이게 되었습니다.
 - `scripts/collect_automation_log.py`가 `/tmp/off-community-hourly.log`를 읽어 `app/static/data/automation_log.json`을 만들고 있으며, 홈 페이지의 Pipeline Health callout과 `automation_log` asset이 LaunchAgent가 실제로 완주했는지 빠르게 보증할 수 있도록 돕고 있습니다. `automation_log.json`에는 이제 `next_expected_run_local`/`next_expected_run_utc` 필드가 생겨서 홈 UI에서 다음 시간당 실행 시점도 동시에 보여줄 수 있습니다.
+- `apps/mobile`에 첫 Flutter 앱 기반이 추가되었습니다. 현재는 `HomeRepository` + `LocalHomeDataSource`로 번들된 `assets/data/home_payload.json`을 읽어 Culture Pulse / Identity / Monetization / Data Assets 섹션을 렌더링하는 구조이며, `scripts/build_flutter_home_payload.py`가 기존 웹 JSON들과 `data/derived/culture_items_*`를 모바일용 payload로 합칩니다.
+- `docs/flutter_app_foundation.md`와 `apps/mobile/README.md`에 웹 데이터 파일이 모바일 섹션으로 어떻게 매핑되는지, 그리고 향후 `culture_items`/Supabase repository로 어떻게 연결할지 기록했습니다.
+- Flutter wrapper-based tooling (`flutter create`, `flutter pub get`, `flutter analyze`)은 이 환경에서 Homebrew SDK cache write restriction 때문에 아직 실행하지 못했습니다. 대신 direct Dart SDK 경로(`/opt/homebrew/share/flutter/bin/cache/dart-sdk/bin/dart`)로 포맷을 돌렸고, Python payload builder/JSON validation은 성공했습니다. 따라서 앱 코드/데이터 구조는 추가됐지만 platform shells(`android/`, `ios/`)와 lockfile 생성은 다음 writable Flutter session에서 마무리해야 합니다. 같은 이유로 `.git/index.lock` 생성도 막혀 이 세션에서는 commit을 남기지 못했습니다.
 
 
 ## Automation currently configured
 - Daily 9 AM report job exists.
 - Hourly autonomous improvement job now runs `scripts/hourly_autonomous_job.py`, which courts the promo, chart, RSS (now including Pitchfork), identity, CTA, Guardian, Spotify, and data asset scripts in one sweep. The new `com.offcommunity.hourly` LaunchAgent runs the orchestrator every 3600 seconds, logs to `/tmp/off-community-hourly.log`, and is described in `docs/hourly_autonomous_job.md`, so the full pipeline stays synchronized without hitting the old Cron spool block.
-- I manually executed the LaunchAgent command (`/usr/bin/env python3 scripts/hourly_autonomous_job.py >> /tmp/off-community-hourly.log 2>&1`) and saw the log end with "All steps completed successfully" while `app/static/data/data_asset_status.json` got a fresh timestamp, so the scheduled job should now keep the data assets aligned.
+- I manually executed the LaunchAgent command (`/usr/bin/env python3 scripts/hourly_autonomous_job.py >> /tmp/off-community-hourly.log 2>&1`) today and saw the log finish with "All steps completed successfully" while `app/static/data/data_asset_status.json` refreshed; afterward I reran `scripts/collect_automation_log.py` so `app/static/data/automation_log.json` now records the 2026-04-03T10:06:05 UTC success plus next expected run at 11:06, meaning the LaunchAgent should keep the assets aligned each hour.
 - `docs/hourly_autonomous_job.md` still documents the Cron snippet as an optional fallback, but it only works when the host user can write to `/var/at/tabs`, so prefer the LaunchAgent on macOS.
 - Both should think in terms of revenue + traffic + identity.
 - No automatic deploy.
 
 ## Next recommended tasks
-1. After the next scheduled LaunchAgent run, check `/tmp/off-community-hourly.log` again so it still ends with "All steps completed successfully" and verify `app/static/data/data_asset_status.json` shares the same timestamp as the Data Asset Inventory card, proving the automated run kept the assets fresh.
-2. Provide Supabase credentials plus the `supabase` library so `scripts/import_culture_items_supabase.py` can upsert into the `culture_items` table again; rerun the hourly pipeline afterwards to confirm Supabase reflects the latest normalized snapshot.
-3. Continue sourcing new cultural signals (YouTube dips, Spotify spikes, additional RSS beyond Pitchfork/NME) and, when ready, integrate the new worker scripts into `scripts/hourly_autonomous_job.py` so Jun's identity narrative keeps ahead of trends.
-4. After the next automation sweep, revisit the new Pipeline Health card and `app/static/data/pipeline_health.json` to confirm the fresh/stale counters reset; if stale assets accumulate, log a follow-up fix (e.g., add alerts or stronger retries).
-5. Use `automation_log.next_expected_run_local` to ensure the next scheduled LaunchAgent run stays within an hour; if the predicted time drifts or `automation_log.status` flips to failed, investigate the failing scripts/logs before the next run and consider wiring an alert/Slack notice so the brand team knows the pipeline is misaligned.
+1. In a writable Flutter environment, run `cd apps/mobile && flutter create . && flutter pub get && flutter analyze` so the new mobile package gets platform shells plus a real Flutter package graph; the current blocker is the Homebrew SDK cache path being read-only in this sandbox.
+2. After that Flutter bootstrap, add a `SupabaseHomeRepository` or API-backed repository that hydrates the same domain models as `MobileHomeRepository`, so the app can switch from bundled JSON to live data without touching the screen layer.
+3. Keep `scripts/build_flutter_home_payload.py` aligned with new website assets as more signals arrive (YouTube, Spotify spikes, extra RSS), and consider hooking it into the hourly pipeline once the mobile payload should auto-refresh.
+4. Fix the automation log capture so `scripts/collect_automation_log.py` reads the log after the pipeline summary (or via a lightweight post-run hook) and the UI always reflects the most recent run instead of lagging by one cycle.
+5. Provide Supabase credentials plus the `supabase` library so `scripts/import_culture_items_supabase.py` can upsert into the `culture_items` table again; rerun the hourly pipeline afterwards to confirm Supabase reflects the latest normalized snapshot.
 
 
 
@@ -56,4 +60,3 @@
 - Append to `WORKLOG.md` after every meaningful task.
 - Keep changes small, commercial, and reversible.
 - If blocked or risky, write the blocker in `WORKLOG.md` and propose the safest next step.
-

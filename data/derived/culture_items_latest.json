@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-03T07:06:46.851824+00:00",
+  "generated_at": "2026-04-03T10:06:05.339757+00:00",
   "count": 18,
   "sources": [
     "billboard_hot100",
@@ -8,110 +8,110 @@
   ],
   "items": [
     {
-      "id": "2635eae665d72014",
+      "id": "5d4f0660936784d5",
       "source": "culture_rss",
       "source_type": "rss_article",
       "external_id": "NYTimes Arts-1",
-      "title": "‘The Drama’ Review: Her Secret Is His Crisis",
+      "title": "Seats Left Empty on Smithsonian Board as Strain With White House Persists",
       "creator": "NYTimes Arts",
-      "url": "https://www.nytimes.com/2026/04/02/movies/the-drama-review-zendaya-robert-pattinson.html",
-      "published_at": "2026-04-02",
-      "summary": "Zendaya and Robert Pattinson play a couple upended when one confesses to coming close to committing a horrific crime.",
+      "url": "https://www.nytimes.com/2026/04/03/arts/design/seats-left-empty-on-smithsonian-board-as-strain-with-white-house-persists.html",
+      "published_at": "2026-04-03",
+      "summary": "The terms of two governing members have expired, but their replacements have yet to be named as the institution faces President Trump’s effort to play a role in the selections.",
       "tags": [
         "rss",
         "culture",
         "nytimes-arts"
       ],
       "raw_ref": "app/static/data/culture_rss.json",
-      "collected_at": "2026-04-03T07:06:46.850841+00:00",
+      "collected_at": "2026-04-03T10:06:05.339115+00:00",
       "status": "active",
       "metadata": {
         "tagline": "뉴욕타임스 아트 섹션"
       }
     },
     {
-      "id": "8ba78dda1e48b83e",
+      "id": "804b347b04d3a37d",
       "source": "culture_rss",
       "source_type": "rss_article",
       "external_id": "NYTimes Arts-2",
-      "title": "Kanye West Plays First American Concert Since 2021",
+      "title": "On ‘Company Retreat,’ Anthony Norman Finished the Job",
       "creator": "NYTimes Arts",
-      "url": "https://www.nytimes.com/2026/04/02/arts/music/kanye-west-concert-los-angeles.html",
-      "published_at": "2026-04-02",
-      "summary": "After years of antisemitic behavior, the rapper formerly known as Kanye West performed his first full live show in the United States since 2021.",
+      "url": "https://www.nytimes.com/2026/04/03/arts/television/jury-duty-company-retreat-anthony-norman.html",
+      "published_at": "2026-04-03",
+      "summary": "The unwitting hero of this Amazon prank comedy series acted heroically in the final episode.",
       "tags": [
         "rss",
         "culture",
         "nytimes-arts"
       ],
       "raw_ref": "app/static/data/culture_rss.json",
-      "collected_at": "2026-04-03T07:06:46.851015+00:00",
+      "collected_at": "2026-04-03T10:06:05.339290+00:00",
       "status": "active",
       "metadata": {
         "tagline": "뉴욕타임스 아트 섹션"
       }
     },
     {
-      "id": "400478c3d9f61ea8",
+      "id": "ca7bb9733ffa9580",
       "source": "culture_rss",
       "source_type": "rss_article",
       "external_id": "NYTimes Arts-3",
-      "title": "Danish Shows to Watch While We’re Still at Peace",
+      "title": "‘Jimmy & the Demons’ Review",
       "creator": "NYTimes Arts",
-      "url": "https://www.nytimes.com/2026/04/02/arts/television/danish-shows-to-watch-streaming.html",
-      "published_at": "2026-04-02",
-      "summary": "The protector of Greenland also makes very entertaining TV.",
+      "url": "https://www.nytimes.com/2026/04/03/movies/jimmy-and-the-demons-review.html",
+      "published_at": "2026-04-03",
+      "summary": "The impish but thoughtful James Grashow, his sculpture and his long marriage are the subjects of Cindy Meehl’s film.",
       "tags": [
         "rss",
         "culture",
         "nytimes-arts"
       ],
       "raw_ref": "app/static/data/culture_rss.json",
-      "collected_at": "2026-04-03T07:06:46.851022+00:00",
+      "collected_at": "2026-04-03T10:06:05.339298+00:00",
       "status": "active",
       "metadata": {
         "tagline": "뉴욕타임스 아트 섹션"
       }
     },
     {
-      "id": "66689b325d9d6714",
+      "id": "58459800c64f85f1",
       "source": "culture_rss",
       "source_type": "rss_article",
       "external_id": "NPR Music-1",
-      "title": "Bush: Tiny Desk Concert",
+      "title": "How Fab 5 Freddy projected hip-hop to the world",
       "creator": "NPR Music",
-      "url": "https://www.npr.org/2026/04/02/g-s1-115471/bush-tiny-desk-concert",
-      "published_at": "2026-04-02",
-      "summary": "If you think you know \"Machinehead\" and \"Glycerine,\" prepare to be surprised by these Tiny Desk arrangements of beloved alt-rock hits.",
+      "url": "https://www.npr.org/2026/04/03/g-s1-116222/fab-5-freddy-memoir-interview",
+      "published_at": "2026-04-03",
+      "summary": "On the heels of a new memoir sharing the recipes of a rich cultural life, rap's first tour guide talks aging with the culture, seeing its influence all over, Basquiat's lasting leg...",
       "tags": [
         "rss",
         "culture",
         "npr-music"
       ],
       "raw_ref": "app/static/data/culture_rss.json",
-      "collected_at": "2026-04-03T07:06:46.851029+00:00",
+      "collected_at": "2026-04-03T10:06:05.339306+00:00",
       "status": "active",
       "metadata": {
         "tagline": "NPR 뮤직 오프닝"
       }
     },
     {
-      "id": "2fdaaacb13913b8a",
+      "id": "3ebdcb886779bdb4",
       "source": "culture_rss",
       "source_type": "rss_article",
       "external_id": "NPR Music-2",
-      "title": "Megan Moroney showcases her command of country heartache on 'Cloud 9'",
+      "title": "The surprising feminist history of baseball's biggest anthem",
       "creator": "NPR Music",
-      "url": "https://www.npr.org/2026/04/01/nx-s1-5766239/megan-moroney-showcases-her-command-of-country-heartache-on-cloud-9",
-      "published_at": "2026-04-01",
-      "summary": "Moroney's album arrives as a new kind of music from Big Pink: The Georgia-born singer/songwriter spins out tales of romantic revenge with a smooth fluency that's a stark contrasts ...",
+      "url": "https://www.npr.org/2026/04/03/nx-s1-5768255/take-me-out-to-the-ball-game-lyrics-baseball-women",
+      "published_at": "2026-04-03",
+      "summary": "There's a lot more to \"Take Me Out to the Ball Game\" than \"peanuts and Cracker Jack.\"",
       "tags": [
         "rss",
         "culture",
         "npr-music"
       ],
       "raw_ref": "app/static/data/culture_rss.json",
-      "collected_at": "2026-04-03T07:06:46.851037+00:00",
+      "collected_at": "2026-04-03T10:06:05.339311+00:00",
       "status": "active",
       "metadata": {
         "tagline": "NPR 뮤직 오프닝"
@@ -133,7 +133,7 @@
         "rolling-stone-music-news"
       ],
       "raw_ref": "app/static/data/culture_rss.json",
-      "collected_at": "2026-04-03T07:06:46.851045+00:00",
+      "collected_at": "2026-04-03T10:06:05.339320+00:00",
       "status": "active",
       "metadata": {
         "tagline": "롤링스톤 최신 커버"
@@ -155,21 +155,21 @@
         "rolling-stone-music-news"
       ],
       "raw_ref": "app/static/data/culture_rss.json",
-      "collected_at": "2026-04-03T07:06:46.851051+00:00",
+      "collected_at": "2026-04-03T10:06:05.339327+00:00",
       "status": "active",
       "metadata": {
         "tagline": "롤링스톤 최신 커버"
       }
     },
     {
-      "id": "0fbeb10f6462e90b",
+      "id": "51bd4d4b85c6ca86",
       "source": "billboard_hot100",
       "source_type": "chart_track",
       "external_id": "billboard_hot100-1-Swim",
       "title": "Swim",
       "creator": "BTS",
       "url": "https://www.billboard.com/charts/hot-100",
-      "published_at": "2026-04-03T07:06:41.851928Z",
+      "published_at": "2026-04-03T10:06:00.018580Z",
       "summary": "chart snapshot rank=1",
       "tags": [
         "music",
@@ -177,7 +177,7 @@
         "billboard_hot100"
       ],
       "raw_ref": "app/static/data/billboard_hot100.json",
-      "collected_at": "2026-04-03T07:06:46.851104+00:00",
+      "collected_at": "2026-04-03T10:06:05.339379+00:00",
       "status": "active",
       "metadata": {
         "rank": 1,
@@ -186,14 +186,14 @@
       }
     },
     {
-      "id": "ee0cb11fc67ab665",
+      "id": "ce6eb91bdb1efe8f",
       "source": "billboard_hot100",
       "source_type": "chart_track",
       "external_id": "billboard_hot100-2-Choosin' Texas",
       "title": "Choosin' Texas",
       "creator": "Ella Langley",
       "url": "https://www.billboard.com/charts/hot-100",
-      "published_at": "2026-04-03T07:06:41.851928Z",
+      "published_at": "2026-04-03T10:06:00.018580Z",
       "summary": "chart snapshot rank=2",
       "tags": [
         "music",
@@ -201,7 +201,7 @@
         "billboard_hot100"
       ],
       "raw_ref": "app/static/data/billboard_hot100.json",
-      "collected_at": "2026-04-03T07:06:46.851110+00:00",
+      "collected_at": "2026-04-03T10:06:05.339385+00:00",
       "status": "active",
       "metadata": {
         "rank": 2,
@@ -210,14 +210,14 @@
       }
     },
     {
-      "id": "21d7e57f81d90a0d",
+      "id": "24c81fb31e3b1ccc",
       "source": "billboard_hot100",
       "source_type": "chart_track",
       "external_id": "billboard_hot100-3-Man I Need",
       "title": "Man I Need",
       "creator": "Olivia Dean",
       "url": "https://www.billboard.com/charts/hot-100",
-      "published_at": "2026-04-03T07:06:41.851928Z",
+      "published_at": "2026-04-03T10:06:00.018580Z",
       "summary": "chart snapshot rank=3",
       "tags": [
         "music",
@@ -225,7 +225,7 @@
         "billboard_hot100"
       ],
       "raw_ref": "app/static/data/billboard_hot100.json",
-      "collected_at": "2026-04-03T07:06:46.851115+00:00",
+      "collected_at": "2026-04-03T10:06:05.339390+00:00",
       "status": "active",
       "metadata": {
         "rank": 3,
@@ -234,14 +234,14 @@
       }
     },
     {
-      "id": "8ece8be13befec81",
+      "id": "da81dc98da89a03b",
       "source": "billboard_hot100",
       "source_type": "chart_track",
       "external_id": "billboard_hot100-4-I Just Might",
       "title": "I Just Might",
       "creator": "Bruno Mars",
       "url": "https://www.billboard.com/charts/hot-100",
-      "published_at": "2026-04-03T07:06:41.851928Z",
+      "published_at": "2026-04-03T10:06:00.018580Z",
       "summary": "chart snapshot rank=4",
       "tags": [
         "music",
@@ -249,7 +249,7 @@
         "billboard_hot100"
       ],
       "raw_ref": "app/static/data/billboard_hot100.json",
-      "collected_at": "2026-04-03T07:06:46.851120+00:00",
+      "collected_at": "2026-04-03T10:06:05.339394+00:00",
       "status": "active",
       "metadata": {
         "rank": 4,
@@ -258,14 +258,14 @@
       }
     },
     {
-      "id": "8341bc7ccf96cbdc",
+      "id": "1f117e3fffa7d26a",
       "source": "billboard_hot100",
       "source_type": "chart_track",
       "external_id": "billboard_hot100-5-Ordinary",
       "title": "Ordinary",
       "creator": "Alex Warren",
       "url": "https://www.billboard.com/charts/hot-100",
-      "published_at": "2026-04-03T07:06:41.851928Z",
+      "published_at": "2026-04-03T10:06:00.018580Z",
       "summary": "chart snapshot rank=5",
       "tags": [
         "music",
@@ -273,7 +273,7 @@
         "billboard_hot100"
       ],
       "raw_ref": "app/static/data/billboard_hot100.json",
-      "collected_at": "2026-04-03T07:06:46.851124+00:00",
+      "collected_at": "2026-04-03T10:06:05.339398+00:00",
       "status": "active",
       "metadata": {
         "rank": 5,
@@ -282,14 +282,14 @@
       }
     },
     {
-      "id": "1a86ba3bdb1467d6",
+      "id": "5a2401ac3bbfc0b6",
       "source": "deezer_chart",
       "source_type": "chart_track",
       "external_id": "deezer_chart-1-Candy Store",
       "title": "Candy Store",
       "creator": "Jodie Steele",
       "url": "https://www.deezer.com/chart",
-      "published_at": "2026-04-03T07:06:42.330872+00:00",
+      "published_at": "2026-04-03T10:06:00.523168+00:00",
       "summary": "chart snapshot rank=1",
       "tags": [
         "music",
@@ -297,7 +297,7 @@
         "deezer_chart"
       ],
       "raw_ref": "app/static/data/deezer_chart.json",
-      "collected_at": "2026-04-03T07:06:46.851169+00:00",
+      "collected_at": "2026-04-03T10:06:05.339444+00:00",
       "status": "active",
       "metadata": {
         "rank": 1,
@@ -306,14 +306,14 @@
       }
     },
     {
-      "id": "12f228a1cf0b1b59",
+      "id": "9ed34dba8318ea2c",
       "source": "deezer_chart",
       "source_type": "chart_track",
       "external_id": "deezer_chart-2-12 to 12",
       "title": "12 to 12",
       "creator": "sombr",
       "url": "https://www.deezer.com/chart",
-      "published_at": "2026-04-03T07:06:42.330872+00:00",
+      "published_at": "2026-04-03T10:06:00.523168+00:00",
       "summary": "chart snapshot rank=2",
       "tags": [
         "music",
@@ -321,7 +321,7 @@
         "deezer_chart"
       ],
       "raw_ref": "app/static/data/deezer_chart.json",
-      "collected_at": "2026-04-03T07:06:46.851174+00:00",
+      "collected_at": "2026-04-03T10:06:05.339449+00:00",
       "status": "active",
       "metadata": {
         "rank": 2,
@@ -330,14 +330,14 @@
       }
     },
     {
-      "id": "50792e22c65a6952",
+      "id": "778e587c7a871b65",
       "source": "deezer_chart",
       "source_type": "chart_track",
       "external_id": "deezer_chart-3-OLD EL PASO (Radio Edit)",
       "title": "OLD EL PASO (Radio Edit)",
       "creator": "Nivk",
       "url": "https://www.deezer.com/chart",
-      "published_at": "2026-04-03T07:06:42.330872+00:00",
+      "published_at": "2026-04-03T10:06:00.523168+00:00",
       "summary": "chart snapshot rank=3",
       "tags": [
         "music",
@@ -345,7 +345,7 @@
         "deezer_chart"
       ],
       "raw_ref": "app/static/data/deezer_chart.json",
-      "collected_at": "2026-04-03T07:06:46.851179+00:00",
+      "collected_at": "2026-04-03T10:06:05.339453+00:00",
       "status": "active",
       "metadata": {
         "rank": 3,
@@ -354,14 +354,14 @@
       }
     },
     {
-      "id": "926558cc410f5825",
+      "id": "8c3337258c721b00",
       "source": "deezer_chart",
       "source_type": "chart_track",
       "external_id": "deezer_chart-4-I Luv U",
       "title": "I Luv U",
       "creator": "Fred again..",
       "url": "https://www.deezer.com/chart",
-      "published_at": "2026-04-03T07:06:42.330872+00:00",
+      "published_at": "2026-04-03T10:06:00.523168+00:00",
       "summary": "chart snapshot rank=4",
       "tags": [
         "music",
@@ -369,7 +369,7 @@
         "deezer_chart"
       ],
       "raw_ref": "app/static/data/deezer_chart.json",
-      "collected_at": "2026-04-03T07:06:46.851183+00:00",
+      "collected_at": "2026-04-03T10:06:05.339458+00:00",
       "status": "active",
       "metadata": {
         "rank": 4,
@@ -378,14 +378,14 @@
       }
     },
     {
-      "id": "eb8a7dfadf8affc0",
+      "id": "c758d87c80960f9b",
       "source": "deezer_chart",
       "source_type": "chart_track",
       "external_id": "deezer_chart-5-Simple Life",
       "title": "Simple Life",
       "creator": "Benny Sings",
       "url": "https://www.deezer.com/chart",
-      "published_at": "2026-04-03T07:06:42.330872+00:00",
+      "published_at": "2026-04-03T10:06:00.523168+00:00",
       "summary": "chart snapshot rank=5",
       "tags": [
         "music",
@@ -393,7 +393,7 @@
         "deezer_chart"
       ],
       "raw_ref": "app/static/data/deezer_chart.json",
-      "collected_at": "2026-04-03T07:06:46.851187+00:00",
+      "collected_at": "2026-04-03T10:06:05.339462+00:00",
       "status": "active",
       "metadata": {
         "rank": 5,
@@ -402,14 +402,14 @@
       }
     },
     {
-      "id": "d5e5440c46b84108",
+      "id": "af89075c195c13b9",
       "source": "deezer_chart",
       "source_type": "chart_track",
       "external_id": "deezer_chart-6-Get Lucky (Radio Edit - feat. Pharrell Williams and Nile Rodgers)",
       "title": "Get Lucky (Radio Edit - feat. Pharrell Williams and Nile Rodgers)",
       "creator": "Daft Punk",
       "url": "https://www.deezer.com/chart",
-      "published_at": "2026-04-03T07:06:42.330872+00:00",
+      "published_at": "2026-04-03T10:06:00.523168+00:00",
       "summary": "chart snapshot rank=6",
       "tags": [
         "music",
@@ -417,7 +417,7 @@
         "deezer_chart"
       ],
       "raw_ref": "app/static/data/deezer_chart.json",
-      "collected_at": "2026-04-03T07:06:46.851193+00:00",
+      "collected_at": "2026-04-03T10:06:05.339468+00:00",
       "status": "active",
       "metadata": {
         "rank": 6,

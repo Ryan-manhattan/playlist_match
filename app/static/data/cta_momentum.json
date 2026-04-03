@@ -1,38 +1,38 @@
 {
-  "generated_at": "2026-04-03T07:06:46.725722Z",
-  "context_line": "Seoul 18.9°C · Partly Cloudy · Signals lean toward brand partnership.",
+  "generated_at": "2026-04-03T10:06:05.215513Z",
+  "context_line": "Seoul 14.3°C · Partly Cloudy · Signals lean toward brand partnership.",
   "entries": [
     {
-      "tag": "Drama",
+      "tag": "Seats",
       "tag_count": 2,
       "keyword": "summary",
-      "keyword_count": 2,
+      "keyword_count": 1,
       "intent_label": "Brand Partnership",
-      "message": "Drama 감성과 'summary' 키워드가 Brand Partnership 문의를 자극하는 신호를 만들고 있습니다. Summary line에서 힘을 얻은 제안으로 CTA를 강화하세요.",
+      "message": "Seats 감성과 'summary' 키워드가 Brand Partnership 문의를 자극하는 신호를 만들고 있습니다. Summary line에서 힘을 얻은 제안으로 CTA를 강화하세요.",
       "cta": {
         "label": "Request Brand Call",
         "link": "/brand-studio"
       }
     },
     {
-      "tag": "Secret",
+      "tag": "Left",
       "tag_count": 2,
       "keyword": "line",
       "keyword_count": 1,
       "intent_label": "Brand Partnership",
-      "message": "Secret 감성과 'line' 키워드가 Brand Partnership 문의를 자극하는 신호를 만들고 있습니다. Summary line에서 힘을 얻은 제안으로 CTA를 강화하세요.",
+      "message": "Left 감성과 'line' 키워드가 Brand Partnership 문의를 자극하는 신호를 만들고 있습니다. Summary line에서 힘을 얻은 제안으로 CTA를 강화하세요.",
       "cta": {
         "label": "Request Brand Call",
         "link": "/brand-studio"
       }
     },
     {
-      "tag": "Crisis",
+      "tag": "Empty",
       "tag_count": 2,
       "keyword": "nytimes",
       "keyword_count": 1,
       "intent_label": "Brand Partnership",
-      "message": "Crisis 감성과 'nytimes' 키워드가 Brand Partnership 문의를 자극하는 신호를 만들고 있습니다. Summary line에서 힘을 얻은 제안으로 CTA를 강화하세요.",
+      "message": "Empty 감성과 'nytimes' 키워드가 Brand Partnership 문의를 자극하는 신호를 만들고 있습니다. Summary line에서 힘을 얻은 제안으로 CTA를 강화하세요.",
       "cta": {
         "label": "Request Brand Call",
         "link": "/brand-studio"

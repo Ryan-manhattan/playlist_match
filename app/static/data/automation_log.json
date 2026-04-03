@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-04-03T09:37:24.221750+00:00",
+  "generated_at": "2026-04-03T10:06:27.626823+00:00",
   "log_path": "/tmp/off-community-hourly.log",
-  "last_run": "2026-04-03T09:05:34.252462+00:00",
-  "next_expected_run_utc": "2026-04-03T10:05:34.252462+00:00",
-  "next_expected_run_local": "2026-04-03 19:05 KST",
-  "status": "failed",
-  "notes": "One or more scripts failed (see above). Exiting with failure code for scheduler alerting.",
+  "last_run": "2026-04-03T10:06:05.454128+00:00",
+  "next_expected_run_utc": "2026-04-03T11:06:05.454128+00:00",
+  "next_expected_run_local": "2026-04-03 20:06 KST",
+  "status": "success",
+  "notes": "All steps completed successfully.",
   "timeline": [
     {
       "label": "growth summary (update_growth_summary.py)",
@@ -73,13 +73,13 @@
     }
   ],
   "recent_lines": [
-    "• CTA momentum (compile_cta_momentum.py): OK in 1.6s",
     "• cultural insights (update_cultural_insights.py): OK in 0.1s",
     "• culture item build (build_culture_items.py): OK in 0.0s",
-    "• culture items Supabase import (import_culture_items_supabase.py): FAIL in 0.6s",
+    "• culture items Supabase import (import_culture_items_supabase.py): OK in 0.0s",
     "• data asset status (log_data_asset_status.py): OK in 0.0s",
     "• pipeline health (pipeline_health.py): OK in 0.0s",
-    "Total duration: 3.5s | finished at 2026-04-03T09:05:34.252462+00:00",
-    "One or more scripts failed (see above). Exiting with failure code for scheduler alerting."
+    "• automation log snapshot (collect_automation_log.py): OK in 0.0s",
+    "Total duration: 6.3s | finished at 2026-04-03T10:06:05.454128+00:00",
+    "All steps completed successfully."
   ]
 }

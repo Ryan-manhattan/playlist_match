@@ -1,5 +1,5 @@
 {
-  "captured_at": "2026-04-03T07:06:44.163413+00:00",
+  "captured_at": "2026-04-03T10:06:02.365283+00:00",
   "source_url": "https://kworb.net/spotify/country/global_daily.html",
   "notes": "scripts/update_spotify_kworb.py captures Kworb's Global Daily Spotify chart for Jun's radar.",
   "top_tracks": [
