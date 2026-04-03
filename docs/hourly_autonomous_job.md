@@ -18,8 +18,12 @@ This project now batches every revenue/identity signal update into a single scri
 13. `scripts/compile_cta_momentum.py`
 14. `scripts/update_cultural_insights.py`
 15. `scripts/build_culture_items.py`
-16. `scripts/import_culture_items_supabase.py` – upserts the normalized dataset into the `culture_items` table so the long-term proprietary snapshot lives beside the landing payloads.
-17. `scripts/log_data_asset_status.py`
+16. `scripts/compile_culture_source_summary.py` – summarizes normalized culture items per source so the Culture Source Pulse card and inventory can quote how many signals came from each feed.
+17. `scripts/import_culture_items_supabase.py` – upserts the normalized dataset into the `culture_items` table so the long-term proprietary snapshot lives beside the landing payloads.
+18. `scripts/log_data_asset_status.py`
+19. `scripts/pipeline_health.py` – reads `data_asset_status.json` and emits freshness/staleness metrics that the Pipeline Health card consumes.
+20. `scripts/update_analysis_summary.py` – folds `music_analysis.db` records into `app/static/data/analysis_summary.json` so the landing’s Analysis Summary card stays tied to the latest sessions.
+
 
 Once the summary and duration lines are printed, the orchestrator runs `scripts/collect_automation_log.py` as a lightweight post-run hook so `/tmp/off-community-hourly.log` is read after the pipeline summary actually exists. That keeps `app/static/data/automation_log.json` aligned with the very last run, letting the landing page surface the LaunchAgent success/failure message and timeline without lag.
 

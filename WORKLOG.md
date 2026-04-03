@@ -250,3 +250,11 @@
 - Saved data sources: 입력 `app/static/data/lead_summary.json`과 파생 `app/static/data/lead_source_spread.json`, 그리고 파이프라인 문서(`docs/hourly_autonomous_job.md`, `SESSION_HANDOFF.md`)에 흐름 기록을 남겼습니다.
 - Data-asset impact: `lead_source_spread.json`이 `data_asset_status.json`에 포함되어 hourly 파이프라인(이제 growth summary 직후에 실행)에서 추적되며, 랜딩 카드가 이 리드 유입 비중 데이터를 독점 분석 자산/Brand Studio CTA의 근거로 재활용할 수 있게 되었습니다.
 - Next candidate task: 실유입 값이 보이면 카드를 실제 퍼센트/소스별 CTA로 연동하거나 CRM/Supabase(또는 새로운 데이터 테이블)에 같은 분포를 기록해 파트너 캠페인 리포트로 재사용하는 방안을 고민합니다.
+### 21:40 KST
+- 무엇을 바꿨는지: `scripts/compile_culture_source_summary.py`를 추가해 `data/normalized/culture_items.jsonl`를 소스별로 집계해 `app/static/data/culture_source_summary.json`을 쓰고, 시간당 파이프라인에도 새 스크립트를 넣었으며, 랜딩 뷰/템플릿/CSS에 Culture Source Pulse 카드를 붙여 각 소스의 행수·최신 수집 시점을 브랜드 CTA 앞에서 보여주게 했습니다. docs/hourly_autonomous_job.md/SESSION_HANDOFF.md도 새로운 흐름을 설명하도록 맞췄습니다.
+- 왜 바꿨는지: Jun의 문화 신호가 어디서 나오는지를 브랜드/파트너에게 데이터로 보여주면 identity·monetization CTA 앞에서 신뢰도가 올라가고, source별 정량 데이터를 `pipeline_health`/Data Asset Inventory와 같은 downstream 카드도 쓸 수 있는 전략적 데이터 자산으로 쌓을 수 있기 때문입니다.
+- Blockers/risks: 없음.
+- Saved data sources: `data/normalized/culture_items.jsonl`에서 파생된 `app/static/data/culture_source_summary.json` (총 개수 + 각 소스 최신 수집 시점).
+- Data-asset impact: Culture Source Pulse card와 `culture_source_summary.json` 덕분에 각 source의 contribution/count가 노출되어 Brand Studio/CRM copy가 어떤 feed에서 신호가 오는지를 바로 보여줄 수 있으며, future reports나 alerts도 이 JSON을 읽어 top source 등을 재활용할 수 있는 기반이 마련되었습니다.
+- Next candidate task: launch/run hourly pipeline again and confirm the new script keeps `culture_source_summary.json` updated, then consider pushing the per-source counts into `data_asset_status.json` or Supabase so downstream analytics/alerts can detect stale sources and highlight pending updates.
+

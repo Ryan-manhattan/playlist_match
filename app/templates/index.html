@@ -1352,6 +1352,48 @@
         gap: 0.6rem;
     }
 
+    .culture-source-section {
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: rgba(3, 3, 6, 0.85);
+        border-radius: 20px;
+    }
+    .culture-source-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 1rem;
+        margin-bottom: 1rem;
+    }
+    .culture-source-card {
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 16px;
+        padding: 1rem;
+        background: rgba(255, 255, 255, 0.02);
+        min-height: 130px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+    .culture-source-card strong {
+        font-size: 1rem;
+        margin-bottom: 0.35rem;
+        display: block;
+    }
+    .culture-source-card .source-count {
+        font-size: 0.85rem;
+        opacity: 0.65;
+        margin-bottom: 0.25rem;
+    }
+    .culture-source-card .source-meta {
+        font-size: 0.65rem;
+        letter-spacing: 0.35em;
+        text-transform: uppercase;
+        opacity: 0.45;
+    }
+    .culture-source-empty {
+        margin: 0;
+        font-size: 0.95rem;
+    }
+
 </style>
 {% endblock %}
 
@@ -2291,6 +2333,36 @@
         {% else %}
         <p class="text-sm opacity-60">scripts/build_culture_items.py가 실행되어야 정규화된 문화 항목이 여기 나타납니다.</p>
         {% endif %}
+    </section>
+
+    <section class="pixel-card culture-source-section p-6 md:p-8 mb-10">
+        <div class="flex items-start justify-between mb-4">
+            <div>
+                <span class="text-[10px] uppercase tracking-[0.3em] opacity-40">Culture Source Pulse</span>
+                <h3 class="serif-font text-2xl mt-2 leading-tight">Jun의 문화 소스를 정리한 normalized pulse</h3>
+            </div>
+            {% if culture_source_summary.generated_at %}
+            <span class="text-[10px] uppercase tracking-[0.35em] opacity-55">Updated {{ culture_source_summary.generated_at[:16].replace('T', ' ') }}</span>
+            {% endif %}
+        </div>
+        <p class="text-sm opacity-60 leading-relaxed mb-5">{{ culture_source_summary.notes }}</p>
+        <div class="culture-source-grid">
+            {% if culture_source_summary.source_counts %}
+                {% for source in culture_source_summary.source_counts[:4] %}
+                <article class="culture-source-card">
+                    <strong>{{ source.source | replace('_', ' ') | title }}</strong>
+                    <p class="source-count">{{ source.count }} normalized items</p>
+                    <p class="source-meta">{{ source.latest_collected_at[:16].replace('T', ' ') if source.latest_collected_at else 'collection pending' }}</p>
+                </article>
+                {% endfor %}
+            {% else %}
+                <p class="text-sm opacity-60 culture-source-empty">scripts/build_culture_items.py와 scripts/compile_culture_source_summary.py를 실행하면 여기에 Jun의 문화 소스별 집계가 나타납니다.</p>
+            {% endif %}
+        </div>
+        <div class="mt-4 flex flex-wrap gap-3 items-center">
+            <a href="{{ url_for('brand_studio') }}" class="btn-pixel text-xs tracking-widest justify-center">Share source pulse</a>
+            <a href="{{ url_for('diary') }}" class="btn-outline text-xs tracking-widest justify-center">Document a reaction</a>
+        </div>
     </section>
 
     {% set pipeline_health_context = pipeline_health or {} %}

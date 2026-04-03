@@ -28,6 +28,7 @@ PIPELINE_SCRIPTS: List[Tuple[str, Path]] = [
     ("CTA momentum", ROOT / "scripts" / "compile_cta_momentum.py"),
     ("cultural insights", ROOT / "scripts" / "update_cultural_insights.py"),
     ("culture item build", ROOT / "scripts" / "build_culture_items.py"),
+    ("culture source summary", ROOT / "scripts" / "compile_culture_source_summary.py"),
     ("culture items Supabase import", ROOT / "scripts" / "import_culture_items_supabase.py"),
     ("data asset status", ROOT / "scripts" / "log_data_asset_status.py"),
     ("pipeline health", ROOT / "scripts" / "pipeline_health.py"),

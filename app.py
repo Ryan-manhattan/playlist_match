@@ -366,6 +366,13 @@ DEFAULT_CULTURE_ITEMS_LATEST = {
     'items': [],
     'notes': 'scripts/build_culture_items.py가 culture RSS/차트 데이터를 정규화한 최신 스냅샷입니다.'
 }
+CULTURE_SOURCE_SUMMARY_PATH = Path(app.static_folder) / 'data' / 'culture_source_summary.json'
+DEFAULT_CULTURE_SOURCE_SUMMARY = {
+    'generated_at': None,
+    'total_items': 0,
+    'source_counts': [],
+    'notes': 'scripts/compile_culture_source_summary.py를 실행해 normalized culture items를 source별로 집계하면 이 카드에 값이 표시됩니다.'
+}
 
 growth_lead_store = GrowthLeadStore(os.path.dirname(__file__))
 
@@ -1105,6 +1112,22 @@ def load_culture_items_latest() -> dict:
 
 
 
+def load_culture_source_summary() -> dict:
+    try:
+        if CULTURE_SOURCE_SUMMARY_PATH.exists():
+            with CULTURE_SOURCE_SUMMARY_PATH.open('r', encoding='utf-8') as f:
+                data = json.load(f)
+                if isinstance(data, dict):
+                    summary = {**DEFAULT_CULTURE_SOURCE_SUMMARY, **data}
+                    if not isinstance(summary.get('source_counts'), list):
+                        summary['source_counts'] = []
+                    return summary
+    except Exception:
+        pass
+    return {**DEFAULT_CULTURE_SOURCE_SUMMARY}
+
+
+
 def _normalize_growth_lead_payload(data: dict) -> tuple[Optional[dict], Optional[str]]:
     """리드 수집 페이로드 정규화/검증"""
     lead_type = str(data.get("lead_type", "")).strip().lower()
@@ -1718,6 +1741,7 @@ def index():
     analysis_summary = load_analysis_summary()
     spotify_daily_chart = load_spotify_daily_chart()
     culture_items_latest = load_culture_items_latest()
+    culture_source_summary = load_culture_source_summary()
 
     from datetime import datetime
     today_date = datetime.now().strftime('%Y.%m.%d')
@@ -1747,6 +1771,7 @@ def index():
         cta_momentum=cta_momentum,
         cultural_insights=cultural_insights,
         culture_items_latest=culture_items_latest,
+        culture_source_summary=culture_source_summary,
         guardian_feed=guardian_feed,
         spotify_daily_chart=spotify_daily_chart,
         data_asset_status=data_asset_status,
