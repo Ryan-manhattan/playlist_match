@@ -25,12 +25,13 @@
 - `scripts/log_data_asset_status.py`와 `app/static/data/data_asset_status.json`이 문화/리드/CTA 자산의 타임스탬프와 메트릭을 정리하고, 랜딩의 Data Asset Inventory 카드로 어떤 데이터 기반으로 수익화 흐름이 만들어지는지 투명하게 설명합니다.
 - `scripts/compile_identity_context_feed.py`가 identity_tags 컨텍스트를 `app/static/data/identity_context_feed.json`으로 정리하고, 랜딩에 Identity Context Feed 섹션을 추가해 CTA 직전에 Jun의 정체성과 문화 맥락을 다시 보여줍니다.
 - Guardian Music Radar 블록이 `scripts/update_guardian_music.py`와 `app/static/data/guardian_music_feed.json`를 이용해 Guardian music 기사 타이틀·요약·발행 시점을 기록하고, Jun의 브랜드/멤버십 CTA 앞뒤에 외부 문화 신호를 덧씌웁니다.
+- `scripts/update_spotify_kworb.py`가 Kworb Global Daily Spotify 차트를 `app/static/data/spotify_daily_chart.json`에 기록하고 있으며, 런딩의 Spotify Radar 블록과 데이터 자산 카드가 이 스냅샷을 추적합니다.
 - `scripts/build_culture_items.py`가 culture / RSS / Billboard / Deezer 데이터를 공통 스키마로 정규화해 `data/normalized/culture_items.jsonl`과 `data/derived/culture_items_manifest.json`을 생성하므로, 나중에 Supabase `culture_items` 테이블로 이관하기 쉬운 로컬 데이터 레이어가 생겼습니다.
 - `scripts/import_culture_items_supabase.py`가 정규화 JSONL을 Supabase `culture_items` 테이블에 upsert해 시간당 파이프라인만큼 Postgres에 장기 기록을 남기기 시작했습니다.
 
 ## Automation currently configured
 - Daily 9 AM report job exists.
-- Hourly autonomous improvement job now runs `scripts/hourly_autonomous_job.py`, which courts the promo, chart, RSS (now including Pitchfork), identity, CTA, Guardian, and data asset scripts in one sweep (see `docs/hourly_autonomous_job.md` for the schedule and Cron snippet; output lands in `/tmp/off-community-hourly.log`).
+- Hourly autonomous improvement job now runs `scripts/hourly_autonomous_job.py`, which courts the promo, chart, RSS (now including Pitchfork), identity, CTA, Guardian, Spotify, and data asset scripts in one sweep (see `docs/hourly_autonomous_job.md` for the schedule and Cron snippet; output lands in `/tmp/off-community-hourly.log`).
 - Cron entry described in `docs/hourly_autonomous_job.md` is still pending because `crontab /tmp/off-community-cron` hangs while writing to `/var/at/tabs/junkim`, so host-level permission or another scheduler (launchd/supervisor) is required before the hourly job runs automatically.
 - Both should think in terms of revenue + traffic + identity.
 - No automatic deploy.

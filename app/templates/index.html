@@ -583,6 +583,62 @@
         margin-top: 0.25rem;
     }
 
+    .spotify-section {
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        background: rgba(9, 7, 12, 0.75);
+        border-radius: 18px;
+    }
+
+    .spotify-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+
+    .spotify-card {
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 14px;
+        padding: 1rem;
+        background: rgba(255, 255, 255, 0.02);
+        min-height: 150px;
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+    }
+
+    .spotify-rank {
+        font-family: var(--font-serif);
+        font-size: 1.4rem;
+        opacity: 0.5;
+    }
+
+    .spotify-card strong {
+        font-size: 1.1rem;
+        display: block;
+    }
+
+    .spotify-artist {
+        font-size: 0.8rem;
+        opacity: 0.6;
+        letter-spacing: 0.35em;
+        text-transform: uppercase;
+    }
+
+    .spotify-meta {
+        font-size: 0.75rem;
+        opacity: 0.55;
+        letter-spacing: 0.3em;
+        text-transform: uppercase;
+    }
+
+    .spotify-notes {
+        font-size: 0.7rem;
+        opacity: 0.5;
+        letter-spacing: 0.3em;
+        text-transform: uppercase;
+    }
+
     @media (max-width: 980px) {
         .offer-grid {
             grid-template-columns: 1fr;
@@ -930,6 +986,8 @@
     {% set pitchfork_updated = pitchfork_feed.generated_at[:16].replace('T', ' ') if pitchfork_feed.generated_at else None %}
     {% set guardian_feed = guardian_feed or {'hero_line': 'Guardian의 music 지면을 통해 Jun의 감성과 브랜드 피치를 새로운 문맥으로 연결합니다.', 'entries': [], 'generated_at': None, 'source_url': 'https://www.theguardian.com/music', 'notes': 'scripts/update_guardian_music.py를 실행해 Guardian music feed를 갱신하세요.'} %}
     {% set guardian_feed_updated = guardian_feed.generated_at[:16].replace('T', ' ') if guardian_feed.generated_at else None %}
+    {% set spotify_chart = spotify_daily_chart or {'hero_line': 'Spotify Global Daily 신호가 Jun의 브랜드와 멤버십 라인을 가볍게 스캔 중입니다.', 'captured_at': None, 'source_url': 'https://kworb.net/spotify/country/global_daily.html', 'top_tracks': [], 'notes': 'scripts/update_spotify_kworb.py를 실행해 Kworb chart를 저장하세요.'} %}
+    {% set spotify_updated = spotify_chart.captured_at[:16].replace('T', ' ') if spotify_chart.captured_at else None %}
     {% set identity_tags = identity_tags or {'hero_line': 'Jun의 문화 레이더가 새로운 감성 태그를 기록 중입니다.', 'tags': [], 'generated_at': None} %}
     {% set identity_updated = identity_tags.generated_at[:16].replace('T', ' ') if identity_tags.generated_at else None %}
     {% set identity_context_feed = identity_context_feed or {'headline': 'Jun의 문화 컨텍스트 피드가 곧 정리됩니다.', 'summary': 'scripts/compile_identity_context_feed.py를 실행해 identity_tags를 모아서 브랜드/멤버십 CTA 흐름을 강화하세요.', 'top_tags': [], 'contexts': [], 'cta': {'label': 'Share this pulse with Brand Studio', 'link': url_for('brand_studio')}, 'notes': 'Run scripts/compile_identity_context_feed.py after identity tags refresh to keep this feed alive.'} %}
@@ -1475,6 +1533,53 @@
             <a href="{{ url_for('playlists') }}" class="btn-outline text-xs tracking-widest justify-center">ADD TO ARCHIVE</a>
             <a href="{{ url_for('brand_studio') }}" class="btn-outline text-xs tracking-widest justify-center">SHOW DATA TO PARTNERS</a>
         </div>
+    </section>
+
+    <section class="pixel-card spotify-section p-6 md:p-8 mb-10">
+        <div class="flex items-start justify-between mb-4">
+            <div>
+                <span class="text-[10px] uppercase tracking-[0.3em] opacity-40">Spotify Radar</span>
+                <h3 class="serif-font text-2xl mt-2 leading-tight">Jun의 Global Daily Spotify 감성이 브랜드/멤버십 CTA 앞에 뜹니다.</h3>
+            </div>
+            <div class="text-right space-y-1">
+                {% if spotify_updated %}
+                <span class="text-[10px] uppercase tracking-[0.35em] opacity-50">Updated {{ spotify_updated }}</span>
+                {% endif %}
+                <a href="{{ spotify_chart.source_url }}" target="_blank" rel="noreferrer" class="guardian-link">Open Kworb</a>
+            </div>
+        </div>
+        <p class="text-sm opacity-60 leading-relaxed mb-4">{{ spotify_chart.hero_line }}</p>
+        <div class="spotify-grid">
+            {% if spotify_chart.top_tracks %}
+                {% for track in spotify_chart.top_tracks[:6] %}
+                <article class="spotify-card">
+                    <div class="spotify-rank">#{{ track.rank or '—' }}</div>
+                    <strong>{{ track.title or 'Untitled Track' }}</strong>
+                    <p class="spotify-artist">{{ track.artist or 'Unknown Artist' }}</p>
+                    {% if track.link %}
+                    <a href="{{ track.link }}" target="_blank" rel="noreferrer" class="text-[10px] uppercase tracking-[0.3em] opacity-45">View chart entry</a>
+                    {% endif %}
+                    {% if track.daily_streams %}
+                    <p class="spotify-meta">Daily {{ '{:,}'.format(track.daily_streams) }} · Total {{ '{:,}'.format(track.total_streams) if track.total_streams else '—' }}</p>
+                    {% endif %}
+                    {% if track.daily_change or track.weekly_change %}
+                    <p class="spotify-notes">Δ {{ track.daily_change|int }} / {{ track.weekly_change|int }} · {{ track.peak_position or '—' }} peak · {{ track.days_on_chart or '—' }} days</p>
+                    {% endif %}
+                </article>
+                {% endfor %}
+            {% else %}
+                <article class="spotify-card">
+                    <p class="text-sm opacity-60">Spotify Global Daily 데이터를 수집 중입니다. scripts/update_spotify_kworb.py를 실행하면 이 블록을 채울 수 있습니다.</p>
+                </article>
+            {% endif %}
+        </div>
+        <div class="mt-6 flex flex-wrap gap-3">
+            <a href="{{ url_for('diary') }}" class="btn-outline text-xs tracking-widest justify-center">Document Reaction</a>
+            <a href="{{ url_for('brand_studio') }}" class="btn-outline text-xs tracking-widest justify-center">Share with Brand Studio</a>
+        </div>
+        {% if spotify_chart.notes %}
+        <p class="spotify-notes mt-4">{{ spotify_chart.notes }}</p>
+        {% endif %}
     </section>
 
     <section class="pixel-card billboard-section p-6 md:p-8 mb-10">

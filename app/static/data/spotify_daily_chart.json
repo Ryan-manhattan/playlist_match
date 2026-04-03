@@ -1,0 +1,91 @@
+{
+  "captured_at": "2026-04-03T05:08:47.733865+00:00",
+  "source_url": "https://kworb.net/spotify/country/global_daily.html",
+  "notes": "scripts/update_spotify_kworb.py captures Kworb's Global Daily Spotify chart for Jun's radar.",
+  "top_tracks": [
+    {
+      "rank": 1,
+      "artist": "BTS",
+      "title": "SWIM",
+      "link": "https://kworb.net/spotify//track/68lbSrXDORS51pmyjZv712.html",
+      "days_on_chart": 13,
+      "peak_position": 1,
+      "peak_multiplier": "(x13)",
+      "daily_streams": 9506305,
+      "daily_change": -109128,
+      "weekly_streams": 68667106,
+      "weekly_change": -1910088,
+      "total_streams": 140157070
+    },
+    {
+      "rank": 2,
+      "artist": "Dominic Fike",
+      "title": "Babydoll",
+      "link": "https://kworb.net/spotify//track/7yNf9YjeO5JXUE3JEBgnYc.html",
+      "days_on_chart": 130,
+      "peak_position": 1,
+      "peak_multiplier": "(x4)",
+      "daily_streams": 6346463,
+      "daily_change": -89801,
+      "weekly_streams": 43002360,
+      "weekly_change": 425153,
+      "total_streams": 321119363
+    },
+    {
+      "rank": 3,
+      "artist": "BTS",
+      "title": "Body to Body",
+      "link": "https://kworb.net/spotify//track/2rKkfc4VZ74FQDc1FF1Zo6.html",
+      "days_on_chart": 13,
+      "peak_position": 2,
+      "peak_multiplier": "(x6)",
+      "daily_streams": 4808432,
+      "daily_change": -151939,
+      "weekly_streams": 35492282,
+      "weekly_change": -1471984,
+      "total_streams": 79607490
+    },
+    {
+      "rank": 4,
+      "artist": "PinkPantheress",
+      "title": "Zara Larsson",
+      "link": "https://kworb.net/spotify//artist/1Xylc3o4UrD53lo9CvFvVg.html",
+      "days_on_chart": 85,
+      "peak_position": 1,
+      "peak_multiplier": "(x10)",
+      "daily_streams": 4427750,
+      "daily_change": 76125,
+      "weekly_streams": 30786983,
+      "weekly_change": -114049,
+      "total_streams": 292002586
+    },
+    {
+      "rank": 5,
+      "artist": "Bruno Mars",
+      "title": "Risk It All",
+      "link": "https://kworb.net/spotify//track/5y2ijHECwFYWqcAHKTZgzD.html",
+      "days_on_chart": 34,
+      "peak_position": 1,
+      "peak_multiplier": "(x2)",
+      "daily_streams": 4297231,
+      "daily_change": 329687,
+      "weekly_streams": 28348567,
+      "weekly_change": 16643,
+      "total_streams": 159041709
+    },
+    {
+      "rank": 6,
+      "artist": "Djo",
+      "title": "End of Beginning",
+      "link": "https://kworb.net/spotify//track/3qhlB30KknSejmIvZZLjOD.html",
+      "days_on_chart": 775,
+      "peak_position": 1,
+      "peak_multiplier": "(x35)",
+      "daily_streams": 4137772,
+      "daily_change": 315689,
+      "weekly_streams": 27090049,
+      "weekly_change": 193846,
+      "total_streams": 2365942554
+    }
+  ]
+}

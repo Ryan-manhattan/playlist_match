@@ -210,6 +210,14 @@ DEFAULT_DEEZER_CHART = {
     'captured_at': None,
     'top_tracks': [],
 }
+SPOTIFY_DAILY_PATH = Path(app.static_folder) / 'data' / 'spotify_daily_chart.json'
+DEFAULT_SPOTIFY_DAILY = {
+    'captured_at': None,
+    'source_url': 'https://kworb.net/spotify/country/global_daily.html',
+    'notes': 'scripts/update_spotify_kworb.py를 실행해 Kworb Global Daily Spotify 차트를 기록하세요.',
+    'hero_line': "Spotify Global Daily 신호가 Jun의 브랜드 신경망 어디에 놓일지 탐색 중입니다.",
+    'top_tracks': [],
+}
 DEFAULT_CULTURE_RSS = {
     'generated_at': None,
     'summary_line': 'Jun은 일상의 문화 신호를 스캔하며 다음 멤버십/브랜드 스토리를 준비하고 있습니다.',
@@ -802,6 +810,21 @@ def load_deezer_chart() -> dict:
     except Exception:
         pass
     return {**DEFAULT_DEEZER_CHART}
+
+
+def load_spotify_daily_chart() -> dict:
+    try:
+        if SPOTIFY_DAILY_PATH.exists():
+            with SPOTIFY_DAILY_PATH.open('r', encoding='utf-8') as f:
+                data = json.load(f)
+                if isinstance(data, dict):
+                    chart = {**DEFAULT_SPOTIFY_DAILY, **data}
+                    if not isinstance(chart.get('top_tracks'), list):
+                        chart['top_tracks'] = []
+                    return chart
+    except Exception:
+        pass
+    return {**DEFAULT_SPOTIFY_DAILY}
 
 
 def load_culture_rss() -> dict:
@@ -1550,6 +1573,7 @@ def index():
     data_asset_status = load_data_asset_status()
     identity_context_feed = load_identity_context_feed()
     guardian_feed = load_guardian_music_feed()
+    spotify_daily_chart = load_spotify_daily_chart()
 
     from datetime import datetime
     today_date = datetime.now().strftime('%Y.%m.%d')
@@ -1578,6 +1602,7 @@ def index():
         cta_momentum=cta_momentum,
         cultural_insights=cultural_insights,
         guardian_feed=guardian_feed,
+        spotify_daily_chart=spotify_daily_chart,
         data_asset_status=data_asset_status,
         pitchfork_rss=pitchfork_rss,
     )

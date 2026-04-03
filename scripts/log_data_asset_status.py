@@ -131,6 +131,14 @@ ASSET_CONFIGS = [
         'metric_fn': lambda data: len(data.get('top_tracks', [])) if isinstance(data, dict) else 0,
         'notes': 'Deezer 글로벌 차트 자료를 저장합니다.',
     },
+    {
+        'name': 'Spotify Global Daily',
+        'path': DATA_DIR / 'spotify_daily_chart.json',
+        'time_key': 'captured_at',
+        'metric_label': 'top tracks',
+        'metric_fn': lambda data: len(data.get('top_tracks', [])) if isinstance(data, dict) else 0,
+        'notes': 'scripts/update_spotify_kworb.py가 Kworb Global Daily 데이터로 Spotify 감성을 기록합니다.',
+    },
 ]
 
 

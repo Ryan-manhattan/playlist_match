@@ -7,17 +7,18 @@ This project now batches every revenue/identity signal update into a single scri
 2. `scripts/update_promo.py` – builds the hero/offers copy that already ran on its own before; now it rides with the rest of the pipeline.
 3. `scripts/update_billboard_hot100.py`
 4. `scripts/update_deezer_chart.py`
-5. `scripts/update_culture_rss.py`
-6. `scripts/update_pitchfork_rss.py` – captures Pitchfork News so Jun의 브랜드/멤버십 내러티브가 글로벌 음악 커버리지를 더 빠르게 반영합니다.
-7. `scripts/compile_identity_tags.py`
-8. `scripts/compile_identity_context_feed.py`
-9. `scripts/update_guardian_music.py`
-10. `scripts/compile_signal_insights.py`
-11. `scripts/compile_cta_momentum.py`
-12. `scripts/update_cultural_insights.py`
-13. `scripts/build_culture_items.py`
-14. `scripts/import_culture_items_supabase.py` – upserts the normalized dataset into the `culture_items` table so the long-term proprietary snapshot lives beside the landing payloads.
-15. `scripts/log_data_asset_status.py`
+5. `scripts/update_spotify_kworb.py` – Kworb의 Global Daily Spotify 차트를 스냅샷으로 남기고 landing의 음악 레이더를 강화합니다.
+6. `scripts/update_culture_rss.py`
+7. `scripts/update_pitchfork_rss.py` – captures Pitchfork News so Jun의 브랜드/멤버십 내러티브가 글로벌 음악 커버리지를 더 빠르게 반영합니다.
+8. `scripts/compile_identity_tags.py`
+9. `scripts/compile_identity_context_feed.py`
+10. `scripts/update_guardian_music.py`
+11. `scripts/compile_signal_insights.py`
+12. `scripts/compile_cta_momentum.py`
+13. `scripts/update_cultural_insights.py`
+14. `scripts/build_culture_items.py`
+15. `scripts/import_culture_items_supabase.py` – upserts the normalized dataset into the `culture_items` table so the long-term proprietary snapshot lives beside the landing payloads.
+16. `scripts/log_data_asset_status.py`
 
 Each step logs its own output and the orchestrator prints a summary with durations/failure status and exits non-zero if any of the scripts fail. That makes it easy to monitor `/tmp/off-community-hourly.log` from the host Cron job.
 

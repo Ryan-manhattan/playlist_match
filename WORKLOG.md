@@ -155,3 +155,11 @@
 - Saved data sources: Pitchfork News RSS (https://pitchfork.com/rss/news/).
 - Data-asset impact: Pitchfork Signal JSON이 landing뿐 아니라 data asset inventory와 hourly pipeline, log 스크립트에 포함되어 Brand Studio·CRM·CTA 흐름이 하나의 타임스탬프를 공유하는 새로운 문화 데이터 자산이 됐습니다.
 - 다음 후보 task: Cron scheduling 블록을 풀고 `/tmp/off-community-hourly.log`가 새로운 run을 기록하는지 확인한 뒤 Data Asset Inventory의 타임스탬프가 갱신되는지 살펴봅니다.
+
+### 14:30 KST
+- 무엇을 바꿨는지: Kworb Global Daily Spotify 차트를 가져오는 `scripts/update_spotify_kworb.py`를 만들고 `scripts/hourly_autonomous_job.py`, `docs/hourly_autonomous_job.md`, `scripts/log_data_asset_status.py`, `app.py`, 랜딩 템플릿을 모두 Spotify Radar 블록/데이터 자산으로 묶었습니다.
+- 왜 바꿨는지: Jun의 아이덴티티가 고급 문화 신호에서 명확히 드러나고 리드/브랜드 CTA 앞에 자연스럽게 Spotify 글로벌 감성을 더해 방문자 수익화와 재방문을 동시에 자극하며, 새 데이터 자산을 시간별 파이프라인과 기록에 결합해 고품질 기록을 빠르게 쌓기 위해서입니다.
+- Blockers/risks: 없음.
+- Saved data sources: Kworb Global Daily Spotify chart (https://kworb.net/spotify/country/global_daily.html).
+- Data-asset impact: `app/static/data/spotify_daily_chart.json` + Spotify Radar UI를 도입했고 `scripts/log_data_asset_status.py`/pipeline/Hourly doc이 이 자산을 추적/갱신하도록 바꿨습니다.
+- 다음 후보 task: Cron scheduling 블록을 풀고 `/tmp/off-community-hourly.log`가 새로운 run을 기록하는지 확인한 뒤 Data Asset Inventory의 타임스탬프가 갱신되는지 살펴봅니다.
