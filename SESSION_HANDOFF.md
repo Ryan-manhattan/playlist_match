@@ -23,6 +23,7 @@
 - `scripts/update_cultural_insights.py`가 RSS + Billboard + Deezer 데이터를 합쳐 `app/static/data/cultural_insights.json`을 만들고, 랜딩에 Cultural Insight Brief 섹션을 추가해 브랜드 CTA 앞에서 핵심 키워드/스토리/차트 포인트를 보여줍니다.
 - `scripts/log_data_asset_status.py`와 `app/static/data/data_asset_status.json`이 문화/리드/CTA 자산의 타임스탬프와 메트릭을 정리하고, 랜딩의 Data Asset Inventory 카드로 어떤 데이터 기반으로 수익화 흐름이 만들어지는지 투명하게 설명합니다.
 - `scripts/compile_identity_context_feed.py`가 identity_tags 컨텍스트를 `app/static/data/identity_context_feed.json`으로 정리하고, 랜딩에 Identity Context Feed 섹션을 추가해 CTA 직전에 Jun의 정체성과 문화 맥락을 다시 보여줍니다.
+- `scripts/build_culture_items.py`가 culture / RSS / Billboard / Deezer 데이터를 공통 스키마로 정규화해 `data/normalized/culture_items.jsonl`과 `data/derived/culture_items_manifest.json`을 생성하므로, 나중에 Supabase `culture_items` 테이블로 이관하기 쉬운 로컬 데이터 레이어가 생겼습니다.
 
 ## Automation currently configured
 - Daily 9 AM report job exists.
@@ -41,6 +42,7 @@
 2. Improve homepage conversion path for membership / brand inquiry
 3. Add clearer identity-rich storytelling blocks
 4. Strengthen trust/security presentation without hurting conversion
+5. Connect normalized local data layers to future Supabase import flows
 5. Hook the growth summary script into the hourly autonomous job so Lead Pulse numbers stay fresh
 6. Run `scripts/update_billboard_hot100.py` on the autonomous job schedule so the Billboard block always reflects a recent global snapshot
 7. Hook `scripts/update_deezer_chart.py` into the hourly autonomous job so the Deezer Pulse stays current.

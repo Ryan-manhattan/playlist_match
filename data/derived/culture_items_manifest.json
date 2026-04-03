@@ -1,0 +1,24 @@
+{
+  "generated_at": "2026-04-03T00:10:05.201776+00:00",
+  "normalized_path": "data/normalized/culture_items.jsonl",
+  "derived_path": "data/derived/culture_items_latest.json",
+  "schema_version": "1.0",
+  "fields": [
+    "id",
+    "source",
+    "source_type",
+    "external_id",
+    "title",
+    "creator",
+    "url",
+    "published_at",
+    "summary",
+    "tags",
+    "raw_ref",
+    "collected_at",
+    "status",
+    "metadata"
+  ],
+  "target_table_hint": "culture_items",
+  "count": 18
+}

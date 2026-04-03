@@ -107,3 +107,11 @@
 - Saved data sources: app/static/data/identity_tags.json (culture_rss-derived contexts).
 - Data-asset impact: identity_context_feed.json이 identity contexts + hero 키워드를 기록해 Brand Studio/리포트에서 재활용 가능하도록 했습니다.
 - 다음 후보: scripts/compile_identity_context_feed.py를 autonomous job에 넣어 컨텍스트 피드가 최신화되도록 한 뒤 이 데이터를 Brand Studio CRM/copy에 연동하기.
+
+### 09:10 KST
+- 무엇을 바꿨는지: `scripts/build_culture_items.py`를 추가해 기존 문화 데이터(`culture.json`, `culture_rss.json`, `billboard_hot100.json`, `deezer_chart.json`)를 Supabase 이관 가능한 공통 스키마로 정규화하고, `data/normalized/culture_items.jsonl`, `data/derived/culture_items_latest.json`, `data/derived/culture_items_manifest.json`을 생성했습니다. 또한 `docs/data_layer.md`로 raw/normalized/derived 데이터 레이어 원칙을 문서화했습니다.
+- 왜 바꿨는지: Supabase가 현재 비활성 상태여도 나중에 쉽게 붙일 수 있도록 로컬 데이터 자산을 테이블 친화적으로 쌓아두는 것이 중요했고, UI 위주 개선에서 한 단계 나아가 장기적인 데이터 자산 축적 구조를 실제로 구현하기 위해서입니다.
+- Blockers/risks: 아직 기존 개별 수집 스크립트들이 자동으로 이 정규화 스크립트를 후속 실행하지는 않음.
+- Saved data sources: `app/static/data/culture.json`, `culture_rss.json`, `billboard_hot100.json`, `deezer_chart.json` → `data/normalized/culture_items.jsonl`.
+- Data-asset impact: 향후 Supabase `culture_items` 테이블로 옮기기 쉬운 정규화 레이어가 생겼고, source/external_id/timestamp/tag 기반으로 중복 제거/이력 관리/재분석 기반이 마련되었습니다.
+- Next candidate task: 각 문화 수집 스크립트 실행 뒤 `build_culture_items.py`까지 이어서 돌도록 파이프라인을 묶고, 랜딩/브랜드 화면이 `data/derived/culture_items_latest.json`을 직접 활용하도록 전환합니다.
