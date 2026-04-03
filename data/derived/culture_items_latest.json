@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-03T11:05:40.827661+00:00",
+  "generated_at": "2026-04-03T12:05:44.490089+00:00",
   "count": 18,
   "sources": [
     "billboard_hot100",
@@ -23,7 +23,7 @@
         "nytimes-arts"
       ],
       "raw_ref": "app/static/data/culture_rss.json",
-      "collected_at": "2026-04-03T11:05:40.826373+00:00",
+      "collected_at": "2026-04-03T12:05:44.489459+00:00",
       "status": "active",
       "metadata": {
         "tagline": "뉴욕타임스 아트 섹션"
@@ -45,7 +45,7 @@
         "nytimes-arts"
       ],
       "raw_ref": "app/static/data/culture_rss.json",
-      "collected_at": "2026-04-03T11:05:40.826525+00:00",
+      "collected_at": "2026-04-03T12:05:44.489609+00:00",
       "status": "active",
       "metadata": {
         "tagline": "뉴욕타임스 아트 섹션"
@@ -67,7 +67,7 @@
         "nytimes-arts"
       ],
       "raw_ref": "app/static/data/culture_rss.json",
-      "collected_at": "2026-04-03T11:05:40.826533+00:00",
+      "collected_at": "2026-04-03T12:05:44.489618+00:00",
       "status": "active",
       "metadata": {
         "tagline": "뉴욕타임스 아트 섹션"
@@ -89,7 +89,7 @@
         "npr-music"
       ],
       "raw_ref": "app/static/data/culture_rss.json",
-      "collected_at": "2026-04-03T11:05:40.826543+00:00",
+      "collected_at": "2026-04-03T12:05:44.489628+00:00",
       "status": "active",
       "metadata": {
         "tagline": "NPR 뮤직 오프닝"
@@ -111,7 +111,7 @@
         "npr-music"
       ],
       "raw_ref": "app/static/data/culture_rss.json",
-      "collected_at": "2026-04-03T11:05:40.826549+00:00",
+      "collected_at": "2026-04-03T12:05:44.489635+00:00",
       "status": "active",
       "metadata": {
         "tagline": "NPR 뮤직 오프닝"
@@ -133,7 +133,7 @@
         "rolling-stone-music-news"
       ],
       "raw_ref": "app/static/data/culture_rss.json",
-      "collected_at": "2026-04-03T11:05:40.826559+00:00",
+      "collected_at": "2026-04-03T12:05:44.489642+00:00",
       "status": "active",
       "metadata": {
         "tagline": "롤링스톤 최신 커버"
@@ -155,7 +155,7 @@
         "rolling-stone-music-news"
       ],
       "raw_ref": "app/static/data/culture_rss.json",
-      "collected_at": "2026-04-03T11:05:40.826566+00:00",
+      "collected_at": "2026-04-03T12:05:44.489652+00:00",
       "status": "active",
       "metadata": {
         "tagline": "롤링스톤 최신 커버"
@@ -177,7 +177,7 @@
         "billboard_hot100"
       ],
       "raw_ref": "app/static/data/billboard_hot100.json",
-      "collected_at": "2026-04-03T11:05:40.826618+00:00",
+      "collected_at": "2026-04-03T12:05:44.489706+00:00",
       "status": "active",
       "metadata": {
         "rank": 1,
@@ -201,7 +201,7 @@
         "billboard_hot100"
       ],
       "raw_ref": "app/static/data/billboard_hot100.json",
-      "collected_at": "2026-04-03T11:05:40.826625+00:00",
+      "collected_at": "2026-04-03T12:05:44.489712+00:00",
       "status": "active",
       "metadata": {
         "rank": 2,
@@ -225,7 +225,7 @@
         "billboard_hot100"
       ],
       "raw_ref": "app/static/data/billboard_hot100.json",
-      "collected_at": "2026-04-03T11:05:40.826630+00:00",
+      "collected_at": "2026-04-03T12:05:44.489718+00:00",
       "status": "active",
       "metadata": {
         "rank": 3,
@@ -249,7 +249,7 @@
         "billboard_hot100"
       ],
       "raw_ref": "app/static/data/billboard_hot100.json",
-      "collected_at": "2026-04-03T11:05:40.826635+00:00",
+      "collected_at": "2026-04-03T12:05:44.489723+00:00",
       "status": "active",
       "metadata": {
         "rank": 4,
@@ -273,7 +273,7 @@
         "billboard_hot100"
       ],
       "raw_ref": "app/static/data/billboard_hot100.json",
-      "collected_at": "2026-04-03T11:05:40.826640+00:00",
+      "collected_at": "2026-04-03T12:05:44.489728+00:00",
       "status": "active",
       "metadata": {
         "rank": 5,
@@ -282,14 +282,14 @@
       }
     },
     {
-      "id": "df44f51b46278684",
+      "id": "54b7407037f74be5",
       "source": "deezer_chart",
       "source_type": "chart_track",
       "external_id": "deezer_chart-1-Candy Store",
       "title": "Candy Store",
       "creator": "Jodie Steele",
       "url": "https://www.deezer.com/chart",
-      "published_at": "2026-04-03T11:05:38.504904+00:00",
+      "published_at": "2026-04-03T12:05:42.140506+00:00",
       "summary": "chart snapshot rank=1",
       "tags": [
         "music",
@@ -297,7 +297,7 @@
         "deezer_chart"
       ],
       "raw_ref": "app/static/data/deezer_chart.json",
-      "collected_at": "2026-04-03T11:05:40.826690+00:00",
+      "collected_at": "2026-04-03T12:05:44.489778+00:00",
       "status": "active",
       "metadata": {
         "rank": 1,
@@ -306,14 +306,14 @@
       }
     },
     {
-      "id": "88cc1e399fd64b51",
+      "id": "ce0859fee7bda51d",
       "source": "deezer_chart",
       "source_type": "chart_track",
       "external_id": "deezer_chart-2-12 to 12",
       "title": "12 to 12",
       "creator": "sombr",
       "url": "https://www.deezer.com/chart",
-      "published_at": "2026-04-03T11:05:38.504904+00:00",
+      "published_at": "2026-04-03T12:05:42.140506+00:00",
       "summary": "chart snapshot rank=2",
       "tags": [
         "music",
@@ -321,7 +321,7 @@
         "deezer_chart"
       ],
       "raw_ref": "app/static/data/deezer_chart.json",
-      "collected_at": "2026-04-03T11:05:40.826696+00:00",
+      "collected_at": "2026-04-03T12:05:44.489784+00:00",
       "status": "active",
       "metadata": {
         "rank": 2,
@@ -330,14 +330,14 @@
       }
     },
     {
-      "id": "06e89982ede28d08",
+      "id": "1e669524dc0c70b4",
       "source": "deezer_chart",
       "source_type": "chart_track",
       "external_id": "deezer_chart-3-OLD EL PASO (Radio Edit)",
       "title": "OLD EL PASO (Radio Edit)",
       "creator": "Nivk",
       "url": "https://www.deezer.com/chart",
-      "published_at": "2026-04-03T11:05:38.504904+00:00",
+      "published_at": "2026-04-03T12:05:42.140506+00:00",
       "summary": "chart snapshot rank=3",
       "tags": [
         "music",
@@ -345,7 +345,7 @@
         "deezer_chart"
       ],
       "raw_ref": "app/static/data/deezer_chart.json",
-      "collected_at": "2026-04-03T11:05:40.826701+00:00",
+      "collected_at": "2026-04-03T12:05:44.489789+00:00",
       "status": "active",
       "metadata": {
         "rank": 3,
@@ -354,14 +354,14 @@
       }
     },
     {
-      "id": "3882fba7f4a0d922",
+      "id": "90ef7b7cf7641fb3",
       "source": "deezer_chart",
       "source_type": "chart_track",
       "external_id": "deezer_chart-4-I Luv U",
       "title": "I Luv U",
       "creator": "Fred again..",
       "url": "https://www.deezer.com/chart",
-      "published_at": "2026-04-03T11:05:38.504904+00:00",
+      "published_at": "2026-04-03T12:05:42.140506+00:00",
       "summary": "chart snapshot rank=4",
       "tags": [
         "music",
@@ -369,7 +369,7 @@
         "deezer_chart"
       ],
       "raw_ref": "app/static/data/deezer_chart.json",
-      "collected_at": "2026-04-03T11:05:40.826705+00:00",
+      "collected_at": "2026-04-03T12:05:44.489794+00:00",
       "status": "active",
       "metadata": {
         "rank": 4,
@@ -378,14 +378,14 @@
       }
     },
     {
-      "id": "078eea653a9b4d07",
+      "id": "7b8f4fd410fd2709",
       "source": "deezer_chart",
       "source_type": "chart_track",
       "external_id": "deezer_chart-5-Simple Life",
       "title": "Simple Life",
       "creator": "Benny Sings",
       "url": "https://www.deezer.com/chart",
-      "published_at": "2026-04-03T11:05:38.504904+00:00",
+      "published_at": "2026-04-03T12:05:42.140506+00:00",
       "summary": "chart snapshot rank=5",
       "tags": [
         "music",
@@ -393,7 +393,7 @@
         "deezer_chart"
       ],
       "raw_ref": "app/static/data/deezer_chart.json",
-      "collected_at": "2026-04-03T11:05:40.826710+00:00",
+      "collected_at": "2026-04-03T12:05:44.489799+00:00",
       "status": "active",
       "metadata": {
         "rank": 5,
@@ -402,14 +402,14 @@
       }
     },
     {
-      "id": "38731a723029fe3d",
+      "id": "7f0ac9e4e077ea2a",
       "source": "deezer_chart",
       "source_type": "chart_track",
       "external_id": "deezer_chart-6-Get Lucky (Radio Edit - feat. Pharrell Williams and Nile Rodgers)",
       "title": "Get Lucky (Radio Edit - feat. Pharrell Williams and Nile Rodgers)",
       "creator": "Daft Punk",
       "url": "https://www.deezer.com/chart",
-      "published_at": "2026-04-03T11:05:38.504904+00:00",
+      "published_at": "2026-04-03T12:05:42.140506+00:00",
       "summary": "chart snapshot rank=6",
       "tags": [
         "music",
@@ -417,7 +417,7 @@
         "deezer_chart"
       ],
       "raw_ref": "app/static/data/deezer_chart.json",
-      "collected_at": "2026-04-03T11:05:40.826715+00:00",
+      "collected_at": "2026-04-03T12:05:44.489805+00:00",
       "status": "active",
       "metadata": {
         "rank": 6,

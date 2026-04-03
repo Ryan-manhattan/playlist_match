@@ -125,6 +125,7 @@ os.makedirs(app.config['PROCESSED_FOLDER'], exist_ok=True)
 PROMO_CONTENT_PATH = Path(app.static_folder) / 'data' / 'promo.json'
 CULTURE_CONTENT_PATH = Path(app.static_folder) / 'data' / 'culture.json'
 LEAD_SUMMARY_PATH = Path(app.static_folder) / 'data' / 'lead_summary.json'
+LEAD_SOURCE_SPREAD_PATH = Path(app.static_folder) / 'data' / 'lead_source_spread.json'
 BILLBOARD_DATA_PATH = Path(app.static_folder) / 'data' / 'billboard_hot100.json'
 DEEZER_CHART_PATH = Path(app.static_folder) / 'data' / 'deezer_chart.json'
 CULTURE_RSS_PATH = Path(app.static_folder) / 'data' / 'culture_rss.json'
@@ -324,6 +325,13 @@ DEFAULT_AUTOMATION_LOG = {
     'notes': 'scripts/collect_automation_log.py를 실행해 LaunchAgent 로그를 요약하세요.',
     'timeline': [],
     'recent_lines': [],
+}
+
+DEFAULT_LEAD_SOURCE_SPREAD = {
+    'generated_at': None,
+    'total_leads': 0,
+    'sources': [],
+    'notes': 'scripts/update_lead_source_spread.py를 실행해 리드 유입 소스 점유율을 기록하세요.',
 }
 
 IDENTITY_CONTEXT_FEED_PATH = Path(app.static_folder) / 'data' / 'identity_context_feed.json'
@@ -838,6 +846,21 @@ def load_growth_summary() -> dict:
         })
     summary["ordered_lead_types"] = ordered
     return summary
+
+
+def load_lead_source_spread() -> dict:
+    spread = {**DEFAULT_LEAD_SOURCE_SPREAD}
+    if LEAD_SOURCE_SPREAD_PATH.exists():
+        try:
+            with LEAD_SOURCE_SPREAD_PATH.open('r', encoding='utf-8') as f:
+                data = json.load(f)
+                if isinstance(data, dict):
+                    spread.update(data)
+        except Exception:
+            pass
+    if not isinstance(spread.get('sources'), list):
+        spread['sources'] = []
+    return spread
 
 
 def load_billboard_content() -> dict:
@@ -1678,6 +1701,7 @@ def index():
     culture_content = load_culture_content()
     promo_content = load_promo_content()
     lead_summary = load_growth_summary()
+    lead_source_spread = load_lead_source_spread()
     billboard_data = load_billboard_content()
     deezer_data = load_deezer_chart()
     culture_rss = load_culture_rss()
@@ -1714,6 +1738,7 @@ def index():
         culture_content=culture_content,
         culture_rss=culture_rss,
         lead_summary=lead_summary,
+        lead_source_spread=lead_source_spread,
         billboard_data=billboard_data,
         deezer_data=deezer_data,
         identity_tags=identity_tags,

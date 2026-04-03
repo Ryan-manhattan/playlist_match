@@ -14,6 +14,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 PIPELINE_SCRIPTS: List[Tuple[str, Path]] = [
     ("growth summary", ROOT / "scripts" / "update_growth_summary.py"),
+    ("lead source spread", ROOT / "scripts" / "update_lead_source_spread.py"),
     ("promo refresh", ROOT / "scripts" / "update_promo.py"),
     ("Billboard Hot 100", ROOT / "scripts" / "update_billboard_hot100.py"),
     ("Deezer global chart", ROOT / "scripts" / "update_deezer_chart.py"),

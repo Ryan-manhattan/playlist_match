@@ -731,6 +731,63 @@
         opacity: 0.6;
     }
 
+    .lead-source-section {
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        background: rgba(8, 7, 12, 0.85);
+        border-radius: 18px;
+    }
+
+    .lead-source-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+
+    .lead-source-card {
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 14px;
+        padding: 1rem;
+        background: rgba(255, 255, 255, 0.02);
+        min-height: 140px;
+        display: flex;
+        flex-direction: column;
+        gap: 0.35rem;
+    }
+
+    .lead-source-label {
+        font-size: 0.75rem;
+        letter-spacing: 0.35em;
+        text-transform: uppercase;
+        opacity: 0.6;
+    }
+
+    .lead-source-count {
+        font-family: var(--font-serif);
+        font-size: 2rem;
+        opacity: 0.8;
+    }
+
+    .lead-source-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 0.75rem;
+        opacity: 0.65;
+    }
+
+    .lead-source-percent {
+        letter-spacing: 0.35em;
+        text-transform: uppercase;
+        color: #38bdf8;
+    }
+
+    .lead-source-note {
+        font-size: 0.7rem;
+        opacity: 0.55;
+        text-align: right;
+    }
+
     .keyword-chip {
         border: 1px solid rgba(255, 255, 255, 0.2);
         border-radius: 999px;
@@ -2116,6 +2173,43 @@
             주요 유입: {% for source_entry in lead_summary.top_sources[:3] %}{{ source_entry.source }}{% if not loop.last %}, {% endif %}{% endfor %}
         </p>
         {% endif %}
+    </section>
+
+    <section class="pixel-card lead-source-section p-6 md:p-8 mb-10">
+        <div class="flex items-start justify-between mb-4">
+            <div>
+                <span class="text-[10px] uppercase tracking-[0.3em] opacity-40">Lead Source Spotlight</span>
+                <h3 class="serif-font text-2xl mt-2 leading-tight">Jun의 리드 유입 채널을 한눈에</h3>
+            </div>
+            {% if lead_source_spread.generated_at %}
+            <span class="text-[10px] uppercase tracking-[0.35em] opacity-55">Updated {{ lead_source_spread.generated_at[:16].replace('T', ' ') }}</span>
+            {% endif %}
+        </div>
+        <p class="text-sm opacity-60 leading-relaxed mb-5">{{ lead_source_spread.notes }}</p>
+        <div class="lead-source-grid">
+            {% if lead_source_spread.sources %}
+                {% for source in lead_source_spread.sources[:3] %}
+                <article class="lead-source-card">
+                    <div class="lead-source-label">{{ source.source }}</div>
+                    <strong class="lead-source-count">{{ source.count }}</strong>
+                    <div class="lead-source-meta">
+                        <span class="lead-source-percent">
+                            {{ '{:.1f}'.format(source.percent) if source.percent is not none else '0.0' }}%
+                        </span>
+                        {% if source.detail %}
+                        <span class="lead-source-note">{{ source.detail }}</span>
+                        {% endif %}
+                    </div>
+                </article>
+                {% endfor %}
+            {% else %}
+                <p class="text-sm opacity-60">리드 파이프라인이 데이터를 수집하면 여기서 주요 유입 채널이 나타납니다.</p>
+            {% endif %}
+        </div>
+        <div class="mt-6 flex flex-wrap gap-3">
+            <a href="{{ url_for('brand_studio') }}" class="btn-outline text-xs tracking-widest justify-center">Show partners the funnel</a>
+            <a href="{{ url_for('diary') }}" class="btn-pixel text-xs tracking-widest justify-center">Document a reaction</a>
+        </div>
     </section>
 
     <section class="pixel-card data-asset-section p-6 md:p-8 mb-10">

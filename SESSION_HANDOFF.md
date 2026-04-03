@@ -14,6 +14,7 @@
 - `scripts/culture_data.py` creates internal cultural snapshots.
 - Pretext-based layout improvements were added to charts/worldcup UI.
 - Added `scripts/update_growth_summary.py` + `app/static/data/lead_summary.json` so the landing page can show lead counts, keywords, and source signals in the new Lead Pulse card.
+- `scripts/update_lead_source_spread.py` now runs right after the growth summary step, writes `app/static/data/lead_source_spread.json`, and feeds the new Lead Source Spotlight card plus the Data Asset Inventory card.
 - Billboard Hot 100 snapshot data now lives in `app/static/data/billboard_hot100.json` and is surfaced via a new landing block; `scripts/update_billboard_hot100.py` pulls it from Billboard via requests/BeautifulSoup.
 - Deezer Global Pulse JSON (`app/static/data/deezer_chart.json`) and `scripts/update_deezer_chart.py` now feed a new landing block so Jun의 글로벌 차트 감성이 실시간으로 기록됩니다.
 - “Cultural Notes” 섹션과 `app/static/data/culture_rss.json`을 추가하여 NYTimes Arts/NPR Music/Rolling Stone RSS 스냅샷이 브랜드·다이어리 CTA 앞에서 Jun의 취향을 보여주도록 했습니다 (`scripts/update_culture_rss.py`).
@@ -42,7 +43,7 @@
 
 ## Automation currently configured
 - Daily 9 AM report job exists.
-- Hourly autonomous improvement job now runs `scripts/hourly_autonomous_job.py`, which courts the promo, chart, RSS (now including Pitchfork), identity, CTA, Guardian, Spotify, and data asset scripts in one sweep. The new `com.offcommunity.hourly` LaunchAgent runs the orchestrator every 3600 seconds, logs to `/tmp/off-community-hourly.log`, and is described in `docs/hourly_autonomous_job.md`, so the full pipeline stays synchronized without hitting the old Cron spool block.
+- Hourly autonomous improvement job now runs `scripts/hourly_autonomous_job.py`, which courts the promo, chart, RSS (now including Pitchfork), identity, CTA, Guardian, Spotify, and data asset scripts in one sweep. It now runs `scripts/update_lead_source_spread.py` right after `scripts/update_growth_summary.py`, so the Lead Source Spotlight card stays fresh. The new `com.offcommunity.hourly` LaunchAgent runs the orchestrator every 3600 seconds, logs to `/tmp/off-community-hourly.log`, and is described in `docs/hourly_autonomous_job.md`, so the full pipeline stays synchronized without hitting the old Cron spool block.
 - I manually executed the LaunchAgent command (`/usr/bin/env python3 scripts/hourly_autonomous_job.py >> /tmp/off-community-hourly.log 2>&1`) today and saw the log finish with "All steps completed successfully" while `app/static/data/data_asset_status.json` refreshed; the post-summary hook now refreshes `app/static/data/automation_log.json` so it records the 2026-04-03T10:06:05 UTC success plus next expected run at 11:06 and keeps the assets aligned each hour.
 - `docs/hourly_autonomous_job.md` still documents the Cron snippet as an optional fallback, but it only works when the host user can write to `/var/at/tabs`, so prefer the LaunchAgent on macOS.
 - Both should think in terms of revenue + traffic + identity.

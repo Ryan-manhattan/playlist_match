@@ -243,3 +243,10 @@
 - Saved data sources: `music_analysis.db`의 analysis_sessions/genre_scores/mood_scores/video_tags 테이블 → `app/static/data/analysis_summary.json` (새로 생성).
 - Data-asset impact: analysis_summary JSON이 파이프라인에 포함되어 자동화 상태 카드와 함께 주기적인 런타임마다 갱신되며, landing의 Analysis Summary 블록이 Jun의 음악 분석 데이터를 문화 정체성과 연결된 수익화 자산으로 노출하여 미래 리포트/CTA 복사에서 재사용할 수 있는 기반을 만들었습니다.
 - Next candidate task: 실제 분석 세션을 기록하거나 Music Trend Analyzer 출력을 이 DB로 채워서 Analysis Summary 카드에 실질적인 장르/무드/태그/세션 히스토리를 보여주는 흐름을 마련해보는 것이 좋겠습니다.
+### 21:15 KST
+- 무엇을 바꿨는지: 새 스크립트 `scripts/update_lead_source_spread.py`를 만들어 `app/static/data/lead_summary.json`을 리샘플링해 `app/static/data/lead_source_spread.json`을 쓰고, 시간당 파이프라인/`docs/hourly_autonomous_job.md`/`SESSION_HANDOFF.md`에도 이 흐름을 반영한 뒤, 랜딩에 Lead Source Spotlight 카드와 CSS/CTA를 붙여 브랜드/CTA 앞에서 referral mix를 드러냈습니다.
+- 왜 바꿨는지: Jun의 수익화 리드가 어디서 들어오는지를 데이터를 통해 보여주면 방문자·파트너 신뢰도가 높아지고 Lead Pulse의 narrative를 referral mix로 확장해 새로운 conversion/retention 포인트를 만들 수 있기 때문입니다.
+- Blockers/risks: 없음.
+- Saved data sources: 입력 `app/static/data/lead_summary.json`과 파생 `app/static/data/lead_source_spread.json`, 그리고 파이프라인 문서(`docs/hourly_autonomous_job.md`, `SESSION_HANDOFF.md`)에 흐름 기록을 남겼습니다.
+- Data-asset impact: `lead_source_spread.json`이 `data_asset_status.json`에 포함되어 hourly 파이프라인(이제 growth summary 직후에 실행)에서 추적되며, 랜딩 카드가 이 리드 유입 비중 데이터를 독점 분석 자산/Brand Studio CTA의 근거로 재활용할 수 있게 되었습니다.
+- Next candidate task: 실유입 값이 보이면 카드를 실제 퍼센트/소스별 CTA로 연동하거나 CRM/Supabase(또는 새로운 데이터 테이블)에 같은 분포를 기록해 파트너 캠페인 리포트로 재사용하는 방안을 고민합니다.

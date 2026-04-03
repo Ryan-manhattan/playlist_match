@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-04-03T11:05:41.538655+00:00",
+  "generated_at": "2026-04-03T12:05:45.247055+00:00",
   "log_path": "/tmp/off-community-hourly.log",
-  "last_run": "2026-04-03T10:06:05.454128+00:00",
-  "next_expected_run_utc": "2026-04-03T11:06:05.454128+00:00",
-  "next_expected_run_local": "2026-04-03 20:06 KST",
-  "status": "success",
-  "notes": "All steps completed successfully.",
+  "last_run": "2026-04-03T11:05:41.514904+00:00",
+  "next_expected_run_utc": "2026-04-03T12:05:41.514904+00:00",
+  "next_expected_run_local": "2026-04-03 21:05 KST",
+  "status": "failed",
+  "notes": "One or more scripts failed (see above). Exiting with failure code for scheduler alerting.",
   "timeline": [
     {
       "label": "growth summary (update_growth_summary.py)",
@@ -17,7 +17,7 @@
     },
     {
       "label": "Billboard Hot 100 (update_billboard_hot100.py)",
-      "detail": "OK in 0.9s"
+      "detail": "FAIL in 0.1s"
     },
     {
       "label": "Deezer global chart (update_deezer_chart.py)",
@@ -25,11 +25,11 @@
     },
     {
       "label": "Spotify Global Daily (update_spotify_kworb.py)",
-      "detail": "OK in 1.8s"
+      "detail": "FAIL in 0.1s"
     },
     {
       "label": "culture RSS (update_culture_rss.py)",
-      "detail": "OK in 0.4s"
+      "detail": "FAIL in 0.1s"
     },
     {
       "label": "Pitchfork signal (update_pitchfork_rss.py)",
@@ -45,7 +45,7 @@
     },
     {
       "label": "Guardian music feed (update_guardian_music.py)",
-      "detail": "OK in 0.8s"
+      "detail": "FAIL in 0.1s"
     },
     {
       "label": "signal insights (compile_signal_insights.py)",
@@ -53,11 +53,11 @@
     },
     {
       "label": "CTA momentum (compile_cta_momentum.py)",
-      "detail": "OK in 1.3s"
+      "detail": "OK in 1.7s"
     },
     {
       "label": "cultural insights (update_cultural_insights.py)",
-      "detail": "OK in 0.1s"
+      "detail": "OK in 0.0s"
     },
     {
       "label": "culture item build (build_culture_items.py)",
@@ -65,7 +65,7 @@
     },
     {
       "label": "culture items Supabase import (import_culture_items_supabase.py)",
-      "detail": "OK in 0.0s"
+      "detail": "FAIL in 0.6s"
     },
     {
       "label": "data asset status (log_data_asset_status.py)",
@@ -74,20 +74,16 @@
     {
       "label": "pipeline health (pipeline_health.py)",
       "detail": "OK in 0.0s"
-    },
-    {
-      "label": "automation log snapshot (collect_automation_log.py)",
-      "detail": "OK in 0.0s"
     }
   ],
   "recent_lines": [
-    "resp = self._pool.handle_request(req)",
     "File \"/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/contextlib.py\", line 135, in __exit__",
     "self.gen.throw(type, value, traceback)",
     "File \"/Users/junkim/Library/Python/3.9/lib/python/site-packages/httpx/_transports/default.py\", line 118, in map_httpcore_exceptions",
     "raise mapped_exc(message) from exc",
     "httpx.ConnectError: [Errno 8] nodename nor servname provided, or not known",
     "Updated data asset status: /Users/junkim/Projects/off_community/app/static/data/data_asset_status.json",
-    "Pipeline health snapshot saved: /Users/junkim/Projects/off_community/app/static/data/pipeline_health.json"
+    "Pipeline health snapshot saved: /Users/junkim/Projects/off_community/app/static/data/pipeline_health.json",
+    "Analysis summary refreshed (0 sessions)."
   ]
 }

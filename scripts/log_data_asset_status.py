@@ -116,6 +116,14 @@ ASSET_CONFIGS = [
         'notes': 'growth summary 로그로 실시간 리드 집계를 유지합니다.',
     },
     {
+        'name': 'Lead Source Spread',
+        'path': DATA_DIR / 'lead_source_spread.json',
+        'time_key': 'generated_at',
+        'metric_label': 'top sources',
+        'metric_fn': lambda data: len(data.get('sources', [])) if isinstance(data, dict) else 0,
+        'notes': 'scripts/update_lead_source_spread.py가 리드 유입 소스 점유율을 기록합니다.',
+    },
+    {
         'name': 'Billboard Signal',
         'path': DATA_DIR / 'billboard_hot100.json',
         'time_key': 'captured_at',

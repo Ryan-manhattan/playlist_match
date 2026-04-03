@@ -4,21 +4,22 @@ This project now batches every revenue/identity signal update into a single scri
 
 ## What it runs (in order)
 1. `scripts/update_growth_summary.py` – refreshes the Lead Pulse snapshot.
-2. `scripts/update_promo.py` – builds the hero/offers copy that already ran on its own before; now it rides with the rest of the pipeline.
-3. `scripts/update_billboard_hot100.py`
-4. `scripts/update_deezer_chart.py`
-5. `scripts/update_spotify_kworb.py` – Kworb의 Global Daily Spotify 차트를 스냅샷으로 남기고 landing의 음악 레이더를 강화합니다.
-6. `scripts/update_culture_rss.py`
-7. `scripts/update_pitchfork_rss.py` – captures Pitchfork News so Jun의 브랜드/멤버십 내러티브가 글로벌 음악 커버리지를 더 빠르게 반영합니다.
-8. `scripts/compile_identity_tags.py`
-9. `scripts/compile_identity_context_feed.py`
-10. `scripts/update_guardian_music.py`
-11. `scripts/compile_signal_insights.py`
-12. `scripts/compile_cta_momentum.py`
-13. `scripts/update_cultural_insights.py`
-14. `scripts/build_culture_items.py`
-15. `scripts/import_culture_items_supabase.py` – upserts the normalized dataset into the `culture_items` table so the long-term proprietary snapshot lives beside the landing payloads.
-16. `scripts/log_data_asset_status.py`
+2. `scripts/update_lead_source_spread.py` – re-aggregates `app/static/data/lead_summary.json` into `app/static/data/lead_source_spread.json` so the landing’s Lead Source Spotlight card can show the freshest referral mix alongside the Lead Pulse metrics.
+3. `scripts/update_promo.py` – builds the hero/offers copy that already ran on its own before; now it rides with the rest of the pipeline.
+4. `scripts/update_billboard_hot100.py`
+5. `scripts/update_deezer_chart.py`
+6. `scripts/update_spotify_kworb.py` – Kworb의 Global Daily Spotify 차트를 스냅샷으로 남기고 landing의 음악 레이더를 강화합니다.
+7. `scripts/update_culture_rss.py`
+8. `scripts/update_pitchfork_rss.py` – captures Pitchfork News so Jun의 브랜드/멤버십 내러티브가 글로벌 음악 커버리지를 더 빠르게 반영합니다.
+9. `scripts/compile_identity_tags.py`
+10. `scripts/compile_identity_context_feed.py`
+11. `scripts/update_guardian_music.py`
+12. `scripts/compile_signal_insights.py`
+13. `scripts/compile_cta_momentum.py`
+14. `scripts/update_cultural_insights.py`
+15. `scripts/build_culture_items.py`
+16. `scripts/import_culture_items_supabase.py` – upserts the normalized dataset into the `culture_items` table so the long-term proprietary snapshot lives beside the landing payloads.
+17. `scripts/log_data_asset_status.py`
 
 Once the summary and duration lines are printed, the orchestrator runs `scripts/collect_automation_log.py` as a lightweight post-run hook so `/tmp/off-community-hourly.log` is read after the pipeline summary actually exists. That keeps `app/static/data/automation_log.json` aligned with the very last run, letting the landing page surface the LaunchAgent success/failure message and timeline without lag.
 

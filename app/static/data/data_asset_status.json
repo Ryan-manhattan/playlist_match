@@ -1,51 +1,51 @@
 {
-  "generated_at": "2026-04-03T11:05:41.485887+00:00",
+  "generated_at": "2026-04-03T12:05:45.163433+00:00",
   "assets": [
     {
       "name": "Cultural Insights Brief",
-      "updated_at": "2026-04-03T11:05:40.794787+00:00",
+      "updated_at": "2026-04-03T12:05:44.457702+00:00",
       "metric_label": "keywords",
       "metric_value": 6,
       "notes": "scripts/update_cultural_insights.py가 RSS+차트 데이터를 요약합니다."
     },
     {
       "name": "CTA Momentum",
-      "updated_at": "2026-04-03T11:05:40.717250Z",
+      "updated_at": "2026-04-03T12:05:44.380413Z",
       "metric_label": "momentum entries",
       "metric_value": 3,
       "notes": "identity/lead/날씨 신호로 CTA 메시지를 정리합니다."
     },
     {
       "name": "Signal Intelligence",
-      "updated_at": "2026-04-03T11:05:39.083939Z",
+      "updated_at": "2026-04-03T12:05:42.724002Z",
       "metric_label": "top tags",
       "metric_value": 5,
       "notes": "identity + lead signal을 통합하는 scripts/compile_signal_insights.py 결과입니다."
     },
     {
       "name": "Identity Tags",
-      "updated_at": "2026-04-03T11:05:38.941231+00:00",
+      "updated_at": "2026-04-03T12:05:42.592898+00:00",
       "metric_label": "tags",
       "metric_value": 6,
       "notes": "scripts/compile_identity_tags.py가 RSS 데이터에서 추출했습니다."
     },
     {
       "name": "Pitchfork Signal",
-      "updated_at": "2026-04-03T11:05:38.901677+00:00",
+      "updated_at": "2026-04-03T12:05:42.552151+00:00",
       "metric_label": "entries",
       "metric_value": 4,
       "notes": "scripts/update_pitchfork_rss.py가 글로벌 Pitchfork 뉴스를 기록합니다."
     },
     {
       "name": "Deezer Global Pulse",
-      "updated_at": "2026-04-03T11:05:38.504904+00:00",
+      "updated_at": "2026-04-03T12:05:42.140506+00:00",
       "metric_label": "top tracks",
       "metric_value": 6,
       "notes": "Deezer 글로벌 차트 자료를 저장합니다."
     },
     {
       "name": "Lead Pulse",
-      "updated_at": "2026-04-03T11:05:37.976584Z",
+      "updated_at": "2026-04-03T12:05:41.646854Z",
       "metric_label": "total leads",
       "metric_value": 0,
       "notes": "growth summary 로그로 실시간 리드 집계를 유지합니다."
