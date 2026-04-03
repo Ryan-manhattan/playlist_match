@@ -30,6 +30,9 @@
 - `scripts/import_culture_items_supabase.py`가 정규화 JSONL을 Supabase `culture_items` 테이블에 upsert해 시간당 파이프라인만큼 Postgres에 장기 기록을 남기기 시작했습니다.
 - `scripts/hourly_autonomous_job.py` now calls `datetime.now(tz=timezone.utc)` for log timestamps, `scripts/import_culture_items_supabase.py` prepends the repo root to `sys.path`, and `utils/app_settings.py` tolerates a missing `python-dotenv`; running `/usr/bin/env python3 scripts/hourly_autonomous_job.py >> /tmp/off-community-hourly.log 2>&1` refreshed the JSON assets and left `/tmp/off-community-hourly.log` ending with a success summary even though the Supabase client/credentials are still absent (that step now just logs a skip).
 
+- `scripts/pipeline_health.py`가 `data_asset_status.json`을 분석해 freshness/staleness 지표를 `app/static/data/pipeline_health.json`에 기록하며, `scripts/hourly_autonomous_job.py`가 새 스크립트를 호출하고 랜딩의 Pipeline Health 카드가 자동화 상태/CTA 앞에서 보이게 되었습니다.
+
+
 ## Automation currently configured
 - Daily 9 AM report job exists.
 - Hourly autonomous improvement job now runs `scripts/hourly_autonomous_job.py`, which courts the promo, chart, RSS (now including Pitchfork), identity, CTA, Guardian, Spotify, and data asset scripts in one sweep. The new `com.offcommunity.hourly` LaunchAgent runs the orchestrator every 3600 seconds, logs to `/tmp/off-community-hourly.log`, and is described in `docs/hourly_autonomous_job.md`, so the full pipeline stays synchronized without hitting the old Cron spool block.
@@ -42,6 +45,9 @@
 1. After the next scheduled LaunchAgent run, check `/tmp/off-community-hourly.log` again so it still ends with "All steps completed successfully" and verify `app/static/data/data_asset_status.json` shares the same timestamp as the Data Asset Inventory card, proving the automated run kept the assets fresh.
 2. Provide Supabase credentials plus the `supabase` library so `scripts/import_culture_items_supabase.py` can upsert into the `culture_items` table again; rerun the hourly pipeline afterwards to confirm Supabase reflects the latest normalized snapshot.
 3. Continue sourcing new cultural signals (YouTube dips, Spotify spikes, additional RSS beyond Pitchfork/NME) and, when ready, integrate the new worker scripts into `scripts/hourly_autonomous_job.py` so Jun's identity narrative keeps ahead of trends.
+
+4. After the next automation sweep, revisit the new Pipeline Health card and `app/static/data/pipeline_health.json` to confirm the fresh/stale counters reset; if stale assets accumulate, log a follow-up fix (e.g., add alerts or stronger retries).
+
 
 ## Operating rules for future sessions
 - Read `WORKLOG.md` first.

@@ -284,6 +284,22 @@ DEFAULT_DATA_ASSET_STATUS = {
     'notes': 'Hourly autonomous job에서 scripts/log_data_asset_status.py를 실행해 data_asset_status.json을 갱신하세요.',
 }
 
+PIPELINE_HEALTH_PATH = Path(app.static_folder) / 'data' / 'pipeline_health.json'
+DEFAULT_PIPELINE_HEALTH = {
+    'generated_at': None,
+    'last_run': None,
+    'asset_count': 0,
+    'fresh_assets': 0,
+    'stale_assets': 0,
+    'fresh_ratio': 0,
+    'thresholds': {},
+    'stale_details': [],
+    'oldest_asset': None,
+    'freshest_asset': None,
+    'notes': 'scripts/pipeline_health.py에서 data_asset_status 요약을 만듭니다.',
+}
+
+
 IDENTITY_CONTEXT_FEED_PATH = Path(app.static_folder) / 'data' / 'identity_context_feed.json'
 DEFAULT_IDENTITY_CONTEXT_FEED = {
     'generated_at': None,
@@ -933,6 +949,22 @@ def load_data_asset_status() -> dict:
     return {**DEFAULT_DATA_ASSET_STATUS}
 
 
+
+def load_pipeline_health() -> dict:
+    try:
+        if PIPELINE_HEALTH_PATH.exists():
+            with PIPELINE_HEALTH_PATH.open('r', encoding='utf-8') as f:
+                data = json.load(f)
+                if isinstance(data, dict):
+                    health = {**DEFAULT_PIPELINE_HEALTH, **data}
+                    if not isinstance(health.get('stale_details'), list):
+                        health['stale_details'] = []
+                    return health
+    except Exception:
+        pass
+    return {**DEFAULT_PIPELINE_HEALTH}
+
+
 def load_identity_context_feed() -> dict:
     try:
         if IDENTITY_CONTEXT_FEED_PATH.exists():
@@ -1571,6 +1603,7 @@ def index():
     signal_insights = load_signal_insights()
     cta_momentum = load_cta_momentum()
     data_asset_status = load_data_asset_status()
+    pipeline_health = load_pipeline_health()
     identity_context_feed = load_identity_context_feed()
     guardian_feed = load_guardian_music_feed()
     spotify_daily_chart = load_spotify_daily_chart()
@@ -1604,6 +1637,7 @@ def index():
         guardian_feed=guardian_feed,
         spotify_daily_chart=spotify_daily_chart,
         data_asset_status=data_asset_status,
+        pipeline_health=pipeline_health,
         pitchfork_rss=pitchfork_rss,
     )
 

@@ -178,3 +178,11 @@
 - Blockers/risks: Supabase client/credentials are still absent in this environment so the importer prints a warning and skips, but now the job exits cleanly instead of failing the pipeline.
 - Saved data sources / Data-asset impact: Fresh JSON snapshots for promo/growth/lead/culture/identity/CTA assets plus the normalized `culture_items` manifest and data asset status all reflect the 2026-04-03T07:06 run; the `data_asset_status.json` and `/tmp/off-community-hourly.log` entries now prove the pipeline executed successfully.
 - Next candidate task: Reintroduce Supabase credentials and the `supabase` package (or auto-install it) so the `culture_items` import starts populating Postgres again, then double-check the LaunchAgent log after the next run to keep the data-asset timeline trustworthy.
+
+### 17:10 KST
+- 무엇을 바꿨는지: `scripts/pipeline_health.py`로 data_asset_status 요약 + freshness/staleness 계산을 JSON으로 저장하고, 시간당 파이프라인에 이 스크립트를 추가했으며 랜딩 홈에 Pipeline Health 카드(CTA 포함)와 관련 CSS/렌더링 로직을 붙여 자동화 신뢰도를 노출했습니다.
+- 왜 바꿨는지: 데이터 파이프라인이 실제로 돌아가는지 여부를 실시간으로 보여주면 브랜드/멤버십 전환 메시지 앞에서 신뢰도를 끌어올리고, Jun의 정체성·수익화 흐름이 항상 신선한 데이터 위에 서 있다는 점을 직접 증명할 수 있기 때문입니다.
+- Blockers/risks: 없음; 새로운 스크립트는 데이터 자산 상태를 읽기만 하고, 만약 `data_asset_status.json` 이 없으면 fallback으로 기본값을 보여줍니다.
+- Saved data sources: `app/static/data/data_asset_status.json` (pipeline summary의 `assets` 리스트)를 읽어 시간/보정/이력 데이터를 재정의하여 `app/static/data/pipeline_health.json`을 생성함.
+- Data-asset impact: pipeline_health JSON이 Fresh/Stale/Ratio 값을 기록하여 future dashboard(Brand Studio, CRM)에서도 자동화 신뢰도를 스냅샷으로 재활용할 수 있고, UI 카드가 이 새 자산에 기반해 자동화 상태를 소구합니다.
+- Next candidate task: automation doc/launch agent 로그를 랜딩에 더 밀착해서 "Last run"을 검증하는 항목과, Supabase pipeline 미동작을 감지하면 브랜드팀에 알리는 경보를 고민합니다.

@@ -792,6 +792,77 @@
         opacity: 0.45;
     }
 
+
+    .pipeline-health-section {
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: rgba(8, 7, 12, 0.85);
+        border-radius: 18px;
+    }
+
+    .pipeline-health-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+
+    .pipeline-health-metric {
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 14px;
+        padding: 1rem;
+        background: rgba(255, 255, 255, 0.02);
+        min-height: 120px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .pipeline-health-label {
+        font-size: 0.65rem;
+        letter-spacing: 0.3em;
+        text-transform: uppercase;
+        opacity: 0.45;
+    }
+
+    .pipeline-health-value {
+        font-size: 1.7rem;
+        font-family: var(--font-serif);
+        margin-top: 0.35rem;
+    }
+
+    .pipeline-health-subtext {
+        font-size: 0.7rem;
+        opacity: 0.6;
+        margin-top: 0.4rem;
+    }
+
+    .pipeline-health-stale {
+        margin-top: 1.25rem;
+    }
+
+    .pipeline-health-chip-wrap {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.6rem;
+        margin-top: 0.65rem;
+    }
+
+    .pipeline-health-chip {
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 999px;
+        padding: 0.35rem 0.9rem;
+        font-size: 0.68rem;
+        letter-spacing: 0.3em;
+        text-transform: uppercase;
+        opacity: 0.6;
+    }
+
+    .pipeline-health-subline {
+        font-size: 0.75rem;
+        opacity: 0.55;
+        margin-top: 0.75rem;
+    }
+
     .signal-section {
         border: 1px solid rgba(255, 255, 255, 0.12);
         background: rgba(10, 8, 12, 0.75);
@@ -1812,6 +1883,59 @@
             {% else %}
                 <p class="text-sm opacity-60">데이터 자산 요약을 준비 중입니다. scripts/log_data_asset_status.py를 실행하면 나타납니다.</p>
             {% endif %}
+        </div>
+    </section>
+
+    {% set pipeline_health_context = pipeline_health or {} %}
+    {% set pipeline_last_run = pipeline_health_context.get('last_run') %}
+    {% set thresholds = pipeline_health_context.get('thresholds') or {} %}
+    {% set freshest_asset = pipeline_health_context.get('freshest_asset') %}
+    {% set stale_details = pipeline_health_context.get('stale_details') or [] %}
+
+    <section class="pixel-card pipeline-health-section p-6 md:p-8 mb-10">
+        <div class="flex items-start justify-between mb-4">
+            <div>
+                <span class="text-[10px] uppercase tracking-[0.3em] opacity-40">Pipeline Health</span>
+                <h3 class="serif-font text-2xl mt-2 leading-tight">Hourly automation keeps dataset signals trustworthy.</h3>
+            </div>
+            {% if pipeline_last_run %}
+            <span class="text-[10px] uppercase tracking-[0.35em] opacity-55">Last run {{ pipeline_last_run[:16].replace('T', ' ') }}</span>
+            {% endif %}
+        </div>
+        <p class="text-sm opacity-60 leading-relaxed mb-4">{{ pipeline_health_context.get('notes') or 'scripts/pipeline_health.py가 data_asset_status.json을 요약해 파이프라인 신뢰도를 보여줍니다.' }}</p>
+        <div class="pipeline-health-grid">
+            <article class="pipeline-health-metric">
+                <span class="pipeline-health-label">Assets tracked</span>
+                <span class="pipeline-health-value">{{ pipeline_health_context.get('asset_count', 0) }}</span>
+                <span class="pipeline-health-subtext">Landing + culture + CTA data rows</span>
+            </article>
+            <article class="pipeline-health-metric">
+                <span class="pipeline-health-label">Fresh ({{ thresholds.get('fresh_hours') or 2 }}h)</span>
+                <span class="pipeline-health-value">{{ pipeline_health_context.get('fresh_assets', 0) }}</span>
+                <span class="pipeline-health-subtext">{{ pipeline_health_context.get('fresh_ratio', 0) }}% fresh</span>
+            </article>
+            <article class="pipeline-health-metric">
+                <span class="pipeline-health-label">Stale ({{ thresholds.get('stale_hours') or 6 }}h)</span>
+                <span class="pipeline-health-value">{{ pipeline_health_context.get('stale_assets', 0) }}</span>
+                <span class="pipeline-health-subtext">Older updates need attention</span>
+            </article>
+        </div>
+        {% if freshest_asset %}
+        <p class="pipeline-health-subline">Most recent refresh: {{ freshest_asset.get('name') }} · {{ freshest_asset.get('updated_at')[:16].replace('T', ' ') if freshest_asset.get('updated_at') else 'unknown' }}</p>
+        {% endif %}
+        {% if stale_details %}
+        <div class="pipeline-health-stale">
+            <div class="text-[10px] uppercase tracking-[0.3em] opacity-40">Stale signals</div>
+            <div class="pipeline-health-chip-wrap">
+                {% for stale in stale_details %}
+                <span class="pipeline-health-chip">{{ stale.get('name') or 'Asset' }} · {{ stale.get('updated_at')[:16].replace('T', ' ') if stale.get('updated_at') else 'needs update' }}</span>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+        <div class="mt-6 flex flex-wrap gap-3 items-center">
+            <a href="{{ url_for('brand_studio') }}" class="btn-pixel text-xs tracking-widest justify-center">Share data health</a>
+            <a href="{{ url_for('diary') }}" class="btn-outline text-xs tracking-widest justify-center">Document the data story</a>
         </div>
     </section>
 
