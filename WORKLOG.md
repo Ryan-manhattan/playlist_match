@@ -227,3 +227,11 @@
 - Saved data sources: `/tmp/off-community-hourly.log`의 최신 pipeline summary 섹션을 다시 읽고 `python3 scripts/collect_automation_log.py`를 실행해 `app/static/data/automation_log.json`을 갱신했습니다.
 - Data-asset impact: automation log asset이 Latest run timeline/next expected run 필드를 올바르게 보여주므로 Pipeline Health 카드가 실시간 로그 상태를 반영하며, `automation_log.json`이 프레시한 run metadata를 다음 캠페인 리포트나 Brand Studio CTA copy에 재활용할 기반으로 남깁니다.
 - Next candidate task: writable Flutter 환경에서 `cd apps/mobile && flutter create . && flutter pub get && flutter analyze`를 돌려 Flutter package graph와 플랫폼 폴더를 생성한 뒤 모바일 payload 관련 다음 작업을 이어가십시오.
+
+### 20:08 KST
+- 무엇을 바꿨는지: Landing에 `culture_items_latest` JSON을 불러오는 로직과 Culture Items highlight 섹션을 추가해 정규화된 문화 항목을 브랜드 CTA 바로 앞에서 노출하고 Brand Studio 분기 CTA를 넣었습니다.
+- 왜 바꿨는지: normalized culture items를 방문자/파트너에게 보여주면 Jun의 identity+데이터 자산이 수익화/리드 흐름과 연결된다는 신뢰를 즉시 증명하고, 새로운 CTA로 재방문/문의 가능성을 키울 수 있습니다.
+- Blockers/risks: 없음.
+- Saved data sources: `data/derived/culture_items_latest.json` (scripts/build_culture_items.py 출력).
+- Data-asset impact: normalized rows가 UI에 드러나 Brand Studio/CRM copy에서 재활용할 준비가 되었고, 카드를 통해 각 항목의 source/collect 시간/summary를 즉시 확인할 수 있습니다.
+- Next candidate task: pipeline에서 culture_items_latest를 Supabase/alert 흐름과 묶거나 실패 감지를 붙여 놓거나, 동일 데이터를 Brand Studio storytelling copy에 자동 삽입하는 작업을 고민합니다.

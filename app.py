@@ -334,6 +334,15 @@ DEFAULT_GUARDIAN_FEED = {
     'notes': 'scripts/update_guardian_music.py를 실행해 Guardian music feed를 갱신하세요.',
 }
 
+CULTURE_ITEMS_LATEST_PATH = Path(__file__).resolve().parent / 'data' / 'derived' / 'culture_items_latest.json'
+DEFAULT_CULTURE_ITEMS_LATEST = {
+    'generated_at': None,
+    'count': 0,
+    'sources': [],
+    'items': [],
+    'notes': 'scripts/build_culture_items.py가 culture RSS/차트 데이터를 정규화한 최신 스냅샷입니다.'
+}
+
 growth_lead_store = GrowthLeadStore(os.path.dirname(__file__))
 
 # 콘솔 로그 함수 (디버깅용)
@@ -1025,6 +1034,25 @@ def load_guardian_music_feed() -> dict:
     return {**DEFAULT_GUARDIAN_FEED}
 
 
+def load_culture_items_latest() -> dict:
+    try:
+        if CULTURE_ITEMS_LATEST_PATH.exists():
+            with CULTURE_ITEMS_LATEST_PATH.open('r', encoding='utf-8') as f:
+                data = json.load(f)
+                if isinstance(data, dict):
+                    latest = {**DEFAULT_CULTURE_ITEMS_LATEST, **data}
+                    entries = data.get('items')
+                    if isinstance(entries, list):
+                        latest['items'] = entries
+                    else:
+                        latest['items'] = []
+                    return latest
+    except Exception:
+        pass
+    return {**DEFAULT_CULTURE_ITEMS_LATEST}
+
+
+
 def _normalize_growth_lead_payload(data: dict) -> tuple[Optional[dict], Optional[str]]:
     """리드 수집 페이로드 정규화/검증"""
     lead_type = str(data.get("lead_type", "")).strip().lower()
@@ -1635,6 +1663,7 @@ def index():
     identity_context_feed = load_identity_context_feed()
     guardian_feed = load_guardian_music_feed()
     spotify_daily_chart = load_spotify_daily_chart()
+    culture_items_latest = load_culture_items_latest()
 
     from datetime import datetime
     today_date = datetime.now().strftime('%Y.%m.%d')
@@ -1662,6 +1691,7 @@ def index():
         signal_insights=signal_insights,
         cta_momentum=cta_momentum,
         cultural_insights=cultural_insights,
+        culture_items_latest=culture_items_latest,
         guardian_feed=guardian_feed,
         spotify_daily_chart=spotify_daily_chart,
         data_asset_status=data_asset_status,

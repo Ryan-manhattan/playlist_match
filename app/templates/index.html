@@ -1096,6 +1096,86 @@
         opacity: 0.45;
         margin-top: 1rem;
     }
+    .culture-highlight-section {
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        background: rgba(6, 6, 12, 0.95);
+        border-radius: 20px;
+    }
+    .culture-highlight-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+    }
+    .culture-highlight-meta {
+        font-size: 0.75rem;
+        letter-spacing: 0.3em;
+        text-transform: uppercase;
+        opacity: 0.55;
+    }
+    .culture-highlight-main {
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 18px;
+        padding: 1rem;
+        background: rgba(255, 255, 255, 0.02);
+        display: flex;
+        flex-direction: column;
+        gap: 0.6rem;
+    }
+    .culture-highlight-main h4 {
+        margin: 0;
+        font-size: 1.3rem;
+    }
+    .culture-highlight-main p {
+        margin: 0;
+        opacity: 0.7;
+        line-height: 1.4;
+        font-size: 0.9rem;
+    }
+    .culture-highlight-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+    .culture-highlight-chip {
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 999px;
+        padding: 0.3rem 0.8rem;
+        font-size: 0.65rem;
+        letter-spacing: 0.35em;
+        text-transform: uppercase;
+        opacity: 0.6;
+    }
+    .culture-highlight-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+        gap: 0.9rem;
+        margin-top: 1rem;
+    }
+    .culture-highlight-mini {
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 16px;
+        padding: 0.9rem;
+        background: rgba(255, 255, 255, 0.02);
+    }
+    .culture-highlight-mini strong {
+        font-size: 0.95rem;
+        margin-bottom: 0.35rem;
+        display: block;
+    }
+    .culture-highlight-mini span {
+        font-size: 0.65rem;
+        letter-spacing: 0.35em;
+        text-transform: uppercase;
+        opacity: 0.55;
+    }
+    .culture-highlight-cta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.6rem;
+    }
+
 </style>
 {% endblock %}
 
@@ -1948,6 +2028,56 @@
                 <p class="text-sm opacity-60">데이터 자산 요약을 준비 중입니다. scripts/log_data_asset_status.py를 실행하면 나타납니다.</p>
             {% endif %}
         </div>
+    </section>
+
+    <section class="pixel-card culture-highlight-section p-6 md:p-8 mb-10">
+        <div class="culture-highlight-header">
+            <div>
+                <span class="text-[10px] uppercase tracking-[0.3em] opacity-40">Culture Items</span>
+                <h3 class="serif-font text-2xl mt-2 leading-tight">Normalized culture signal, ready for Brand Studio</h3>
+            </div>
+            {% if culture_items_latest.generated_at %}
+            <span class="culture-highlight-meta">Updated {{ culture_items_latest.generated_at[:16].replace('T', ' ') }}</span>
+            {% endif %}
+        </div>
+        {% if culture_items_latest.count %}
+        <p class="text-[10px] uppercase tracking-[0.3em] opacity-50 mb-2">
+            {{ culture_items_latest.count }} rows · Sources: {{ (culture_items_latest.sources | join(', ')) or 'none' }}
+        </p>
+        {% endif %}
+        <p class="text-sm opacity-60 leading-relaxed mb-4">{{ culture_items_latest.notes }}</p>
+        {% set culture_highlight = culture_items_latest.items[0] if culture_items_latest.items else None %}
+        {% if culture_highlight %}
+        {% set highlight_meta = culture_highlight.metadata or {} %}
+        <div class="culture-highlight-main">
+            <div class="culture-highlight-meta">
+                {{ culture_highlight.source | replace('_', ' ') | upper }} · {{ culture_highlight.source_type | replace('_', ' ') | title }}
+                {% if highlight_meta.get('rank') %}· Rank {{ highlight_meta.get('rank') }}{% endif %}
+            </div>
+            <h4 class="serif-font">{{ culture_highlight.title }}</h4>
+            <p>{{ culture_highlight.summary or culture_highlight.title }}</p>
+            <div class="culture-highlight-tags">
+                {% for tag in (culture_highlight.tags or [])[:6] %}
+                <span class="culture-highlight-chip">{{ tag }}</span>
+                {% endfor %}
+            </div>
+            <div class="culture-highlight-cta">
+                <a href="{{ culture_highlight.url }}" target="_blank" rel="noreferrer" class="btn-outline text-xs tracking-widest justify-center">View source</a>
+                <a href="{{ url_for('brand_studio') }}" class="btn-pixel text-xs tracking-widest justify-center">Build a pitch</a>
+            </div>
+        </div>
+        <div class="culture-highlight-grid">
+            {% for item in culture_items_latest.items[:3] %}
+            <article class="culture-highlight-mini">
+                <strong>{{ item.title }}</strong>
+                <p class="text-sm opacity-60">{{ item.creator }} · {{ item.source | replace('_', ' ') | title }}</p>
+                <span>{{ item.collected_at[:16].replace('T', ' ') if item.collected_at else 'collected unknown' }}</span>
+            </article>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p class="text-sm opacity-60">scripts/build_culture_items.py가 실행되어야 정규화된 문화 항목이 여기 나타납니다.</p>
+        {% endif %}
     </section>
 
     {% set pipeline_health_context = pipeline_health or {} %}
