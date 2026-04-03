@@ -18,6 +18,7 @@ PIPELINE_SCRIPTS: List[Tuple[str, Path]] = [
     ("Billboard Hot 100", ROOT / "scripts" / "update_billboard_hot100.py"),
     ("Deezer global chart", ROOT / "scripts" / "update_deezer_chart.py"),
     ("culture RSS", ROOT / "scripts" / "update_culture_rss.py"),
+    ("Pitchfork signal", ROOT / "scripts" / "update_pitchfork_rss.py"),
     ("identity tags", ROOT / "scripts" / "compile_identity_tags.py"),
     ("identity context feed", ROOT / "scripts" / "compile_identity_context_feed.py"),
     ("Guardian music feed", ROOT / "scripts" / "update_guardian_music.py"),

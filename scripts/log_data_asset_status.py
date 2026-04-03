@@ -68,6 +68,14 @@ ASSET_CONFIGS = [
         'notes': 'NYTimes Arts, NPR Music, Rolling Stone RSS 스냅샷.',
     },
     {
+        'name': 'Pitchfork Signal',
+        'path': DATA_DIR / 'pitchfork_rss.json',
+        'time_key': 'generated_at',
+        'metric_label': 'entries',
+        'metric_fn': lambda data: len(data.get('entries', [])) if isinstance(data, dict) else 0,
+        'notes': 'scripts/update_pitchfork_rss.py가 글로벌 Pitchfork 뉴스를 기록합니다.',
+    },
+    {
         'name': 'Identity Tags',
         'path': DATA_DIR / 'identity_tags.json',
         'time_key': 'generated_at',

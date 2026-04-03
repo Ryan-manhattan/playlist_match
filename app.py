@@ -215,6 +215,15 @@ DEFAULT_CULTURE_RSS = {
     'summary_line': 'Jun은 일상의 문화 신호를 스캔하며 다음 멤버십/브랜드 스토리를 준비하고 있습니다.',
     'sources': [],
 }
+PITCHFORK_RSS_PATH = Path(app.static_folder) / 'data' / 'pitchfork_rss.json'
+DEFAULT_PITCHFORK_RSS = {
+    'generated_at': None,
+    'hero_line': 'Pitchfork Signal: Jun의 브랜드/멤버십 내러티브에 글로벌 음악 트렌드를 포개고 있습니다.',
+    'summary_line': 'Pitchfork 뉴스가 Jun의 신호를 새롭게 기록하는 중입니다.',
+    'entries': [],
+    'source_url': 'https://pitchfork.com/rss/news/',
+    'notes': 'scripts/update_pitchfork_rss.py를 실행해 Pitchfork에서 빈틈없는 커버리지를 수집하세요.',
+}
 CULTURAL_INSIGHTS_PATH = Path(app.static_folder) / 'data' / 'cultural_insights.json'
 DEFAULT_CULTURAL_INSIGHTS = {
     'generated_at': None,
@@ -805,6 +814,21 @@ def load_culture_rss() -> dict:
     except Exception:
         pass
     return {**DEFAULT_CULTURE_RSS}
+
+
+def load_pitchfork_rss() -> dict:
+    try:
+        if PITCHFORK_RSS_PATH.exists():
+            with PITCHFORK_RSS_PATH.open('r', encoding='utf-8') as f:
+                data = json.load(f)
+                if isinstance(data, dict):
+                    pitchfork = {**DEFAULT_PITCHFORK_RSS, **data}
+                    if not isinstance(pitchfork.get('entries'), list):
+                        pitchfork['entries'] = []
+                    return pitchfork
+    except Exception:
+        pass
+    return {**DEFAULT_PITCHFORK_RSS}
 
 
 def load_cultural_insights() -> dict:
@@ -1518,6 +1542,7 @@ def index():
     billboard_data = load_billboard_content()
     deezer_data = load_deezer_chart()
     culture_rss = load_culture_rss()
+    pitchfork_rss = load_pitchfork_rss()
     cultural_insights = load_cultural_insights()
     identity_tags = load_identity_tags()
     signal_insights = load_signal_insights()
@@ -1554,6 +1579,7 @@ def index():
         cultural_insights=cultural_insights,
         guardian_feed=guardian_feed,
         data_asset_status=data_asset_status,
+        pitchfork_rss=pitchfork_rss,
     )
 
 

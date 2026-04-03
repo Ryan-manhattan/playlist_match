@@ -1,0 +1,33 @@
+{
+  "generated_at": "2026-04-03T04:07:55.065151+00:00",
+  "hero_line": "Pitchfork Signal: Jun의 브랜드 제안에 글로벌 음악 트렌드를 포갭니다.",
+  "summary_line": "Pitchfork가 Pooh Shiesty Arrested on Robbery, Kidnapping Charges Over Alleged Gucci Mane Label Dispute를 주목하고 있습니다. Jun은 이 신호를 브랜드/멤버십 서사에 녹입니다.",
+  "source_url": "https://pitchfork.com/rss/news/",
+  "entries": [
+    {
+      "title": "Pooh Shiesty Arrested on Robbery, Kidnapping Charges Over Alleged Gucci Mane Label Dispute",
+      "link": "https://pitchfork.com/news/pooh-shiesty-arrested-on-robbery-kidnapping-charges-over-alleged-gucci-mane-label-dispute/",
+      "summary": "The rapper—AKA Lontrell Williams, Jr.—was arrested on April 1 along with seven other suspects",
+      "published": "2026-04-02"
+    },
+    {
+      "title": "King Princess to Star in Aimee Mann’s Girl, Interrupted Musical",
+      "link": "https://pitchfork.com/news/king-princess-to-star-in-aimee-manns-girl-interrupted-musical/",
+      "summary": "Mikaela Straus will make her theatrical debut as Lisa, the same role Angelina Jolie played in the 1999 film",
+      "published": "2026-04-02"
+    },
+    {
+      "title": "Olivia Rodrigo Announces New Album You Seem Pretty Sad for a Girl So in Love",
+      "link": "https://pitchfork.com/news/olivia-rodrigo-announces-new-album-you-seem-pretty-sad-for-a-girl-so-in-love/",
+      "summary": "The Guts follow-up is officially out in June",
+      "published": "2026-04-02"
+    },
+    {
+      "title": "Ex-Turnstile Guitarist Brady Ebert Arrested for Attempted Murder of Brendan Yates’ Father",
+      "link": "https://pitchfork.com/news/ex-turnstile-guitarist-brady-ebert-arrested-for-attempted-murder-of-brendan-yates-father/",
+      "summary": "“We have no language left for Brady,” the band said, after Ebert’s arrest for allegedly hitting William Yates with a car",
+      "published": "2026-04-02"
+    }
+  ],
+  "notes": "scripts/update_pitchfork_rss.py를 실행해 Pitchfork 뉴스 피드에서 최근 시그널을 기록하세요."
+}

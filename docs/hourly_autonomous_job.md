@@ -8,15 +8,16 @@ This project now batches every revenue/identity signal update into a single scri
 3. `scripts/update_billboard_hot100.py`
 4. `scripts/update_deezer_chart.py`
 5. `scripts/update_culture_rss.py`
-6. `scripts/compile_identity_tags.py`
-7. `scripts/compile_identity_context_feed.py`
-8. `scripts/update_guardian_music.py`
-9. `scripts/compile_signal_insights.py`
-10. `scripts/compile_cta_momentum.py`
-11. `scripts/update_cultural_insights.py`
-12. `scripts/build_culture_items.py`
-13. `scripts/import_culture_items_supabase.py` – upserts the normalized dataset into the `culture_items` table so the long-term proprietary snapshot lives beside the landing payloads.
-14. `scripts/log_data_asset_status.py`
+6. `scripts/update_pitchfork_rss.py` – captures Pitchfork News so Jun의 브랜드/멤버십 내러티브가 글로벌 음악 커버리지를 더 빠르게 반영합니다.
+7. `scripts/compile_identity_tags.py`
+8. `scripts/compile_identity_context_feed.py`
+9. `scripts/update_guardian_music.py`
+10. `scripts/compile_signal_insights.py`
+11. `scripts/compile_cta_momentum.py`
+12. `scripts/update_cultural_insights.py`
+13. `scripts/build_culture_items.py`
+14. `scripts/import_culture_items_supabase.py` – upserts the normalized dataset into the `culture_items` table so the long-term proprietary snapshot lives beside the landing payloads.
+15. `scripts/log_data_asset_status.py`
 
 Each step logs its own output and the orchestrator prints a summary with durations/failure status and exits non-zero if any of the scripts fail. That makes it easy to monitor `/tmp/off-community-hourly.log` from the host Cron job.
 
