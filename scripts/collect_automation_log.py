@@ -4,9 +4,9 @@
 from __future__ import annotations
 
 import json
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
-from typing import Iterable
+from typing import Iterable, Optional
 
 ROOT = Path(__file__).resolve().parents[1]
 LOG_PATH = Path("/tmp/off-community-hourly.log")
@@ -73,12 +73,45 @@ def _detect_status(lines: list[str]) -> tuple[str, str]:
     return status, notes
 
 
+def _parse_iso_datetime(value: str | None) -> Optional[datetime]:
+    if not value:
+        return None
+    normalized = value.strip()
+    if normalized.endswith("Z"):
+        normalized = normalized[:-1] + "+00:00"
+    try:
+        parsed = datetime.fromisoformat(normalized)
+    except ValueError:
+        try:
+            parsed = datetime.fromisoformat(normalized[:26])
+        except Exception:
+            return None
+    if parsed.tzinfo is None:
+        parsed = parsed.replace(tzinfo=timezone.utc)
+    return parsed
+
+
+def _next_expected_run(last_run: str | None) -> dict[str, str] | None:
+    parsed = _parse_iso_datetime(last_run)
+    if not parsed:
+        return None
+    next_run = parsed + timedelta(hours=1)
+    return {
+        "utc": next_run.isoformat(),
+        "local": next_run.astimezone().strftime("%Y-%m-%d %H:%M %Z"),
+    }
+
+
 def _build_payload(lines: list[str]) -> dict:
     status, notes = _detect_status(lines)
+    last_run = _parse_last_run(lines)
+    next_run = _next_expected_run(last_run)
     return {
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "log_path": str(LOG_PATH),
-        "last_run": _parse_last_run(lines),
+        "last_run": last_run,
+        "next_expected_run_utc": next_run["utc"] if next_run else None,
+        "next_expected_run_local": next_run["local"] if next_run else None,
         "status": status,
         "notes": notes or "Batch log capture is available in /tmp/off-community-hourly.log",
         "timeline": _extract_timeline(lines),
@@ -93,6 +126,8 @@ def main() -> None:
             "generated_at": datetime.now(timezone.utc).isoformat(),
             "log_path": str(LOG_PATH),
             "last_run": None,
+            "next_expected_run_utc": None,
+            "next_expected_run_local": None,
             "status": "missing",
             "notes": "Log file not found yet. Run the hourly job once to create it.",
             "timeline": [],

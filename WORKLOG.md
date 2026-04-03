@@ -194,3 +194,11 @@
 - Saved data sources: `/tmp/off-community-hourly.log` 로그 → `automation_log.json` (timeline + recent lines), Pipeline Health UI/문서 업데이트.
 - Data-asset impact: 새로운 automation log JSON이 Pipeline Health 카드와 Brand Studio/CRM에서 재활용 가능한 자동화 신뢰도 자산이 되었고, LaunchAgent run 상태를 계속 기록해 다음 run 때 검증할 수 있는 기반을 만들었습니다.
 - Next candidate task: automation log JSON을 Brand Studio 알림 흐름이나 CRM 리포트의 감지기와 엮어 실패/지연을 확인할 수 있는 경보 스크립트를 고민해보는 것을 추천합니다.
+
+### 18:34 KST
+- 무엇을 바꿨는지: automation log JSON이 다음 실행 예상 시간을 저장하게 하고, 랜딩 Pipeline Health 카드 바로 아래 LaunchAgent 로그 패널에 "Next expected run" 라인을 추가해 시청자/브랜드가 시간당 파이프라인의 마지막/다음 타임스탬프를 동시에 확인할 수 있게 했습니다.
+- 왜 바꿨는지: 시간당 자동화가 실제로 돌아간다는 신뢰를 UI에서 직접 증명하면 수익화/재방문 CTA 앞의 신뢰도가 올라가고, 새로 기록된 next_expected_run 데이터가 향후 알림/보고용 데이터 자산으로 계속 재활용될 수 있기 때문입니다.
+- Blockers/risks: 없음.
+- Saved data sources: /tmp/off-community-hourly.log (latest run + summary lines).
+- Data-asset impact: automation_log JSON에 next_expected_run_{utc,local} 필드가 생기며, 랜딩 페이지가 해당 값을 바로 보여주도록 연동되어 파이프라인 신뢰도를 기록/재사용할 수 있는 기반이 확장되었습니다.
+- Next candidate task: pipeline에서 실패하는 스크립트들(예: Billboard/Guardian/Supabase import)의 로그를 수집해 롤백/재시도를 설계하거나, 실패 감지 시 Brand Studio/Slack에 경고를 보내는 흐름을 추가합니다.

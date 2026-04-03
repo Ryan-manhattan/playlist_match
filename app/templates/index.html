@@ -2011,6 +2011,11 @@
                 LaunchAgent 로그를 기다리는 중입니다.
                 {% endif %}
             </p>
+            {% if automation_log.next_expected_run_local %}
+            <p class="automation-log-subline">
+                Next expected run {{ automation_log.next_expected_run_local }}
+            </p>
+            {% endif %}
             {% if automation_log.notes %}
             <p class="automation-log-subline">{{ automation_log.notes }}</p>
             {% endif %}

@@ -31,7 +31,7 @@
 - `scripts/hourly_autonomous_job.py` now calls `datetime.now(tz=timezone.utc)` for log timestamps, `scripts/import_culture_items_supabase.py` prepends the repo root to `sys.path`, and `utils/app_settings.py` tolerates a missing `python-dotenv`; running `/usr/bin/env python3 scripts/hourly_autonomous_job.py >> /tmp/off-community-hourly.log 2>&1` refreshed the JSON assets and left `/tmp/off-community-hourly.log` ending with a success summary even though the Supabase client/credentials are still absent (that step now just logs a skip).
 
 - `scripts/pipeline_health.py`가 `data_asset_status.json`을 분석해 freshness/staleness 지표를 `app/static/data/pipeline_health.json`에 기록하며, `scripts/hourly_autonomous_job.py`가 새 스크립트를 호출하고 랜딩의 Pipeline Health 카드가 자동화 상태/CTA 앞에서 보이게 되었습니다.
-- `scripts/collect_automation_log.py`가 `/tmp/off-community-hourly.log`를 읽어 `app/static/data/automation_log.json`을 만들고 있으며, 홈 페이지의 Pipeline Health callout과 `automation_log` asset이 LaunchAgent가 실제로 완주했는지 빠르게 보증할 수 있도록 돕고 있습니다.
+- `scripts/collect_automation_log.py`가 `/tmp/off-community-hourly.log`를 읽어 `app/static/data/automation_log.json`을 만들고 있으며, 홈 페이지의 Pipeline Health callout과 `automation_log` asset이 LaunchAgent가 실제로 완주했는지 빠르게 보증할 수 있도록 돕고 있습니다. `automation_log.json`에는 이제 `next_expected_run_local`/`next_expected_run_utc` 필드가 생겨서 홈 UI에서 다음 시간당 실행 시점도 동시에 보여줄 수 있습니다.
 
 
 ## Automation currently configured
@@ -46,8 +46,9 @@
 1. After the next scheduled LaunchAgent run, check `/tmp/off-community-hourly.log` again so it still ends with "All steps completed successfully" and verify `app/static/data/data_asset_status.json` shares the same timestamp as the Data Asset Inventory card, proving the automated run kept the assets fresh.
 2. Provide Supabase credentials plus the `supabase` library so `scripts/import_culture_items_supabase.py` can upsert into the `culture_items` table again; rerun the hourly pipeline afterwards to confirm Supabase reflects the latest normalized snapshot.
 3. Continue sourcing new cultural signals (YouTube dips, Spotify spikes, additional RSS beyond Pitchfork/NME) and, when ready, integrate the new worker scripts into `scripts/hourly_autonomous_job.py` so Jun's identity narrative keeps ahead of trends.
-
 4. After the next automation sweep, revisit the new Pipeline Health card and `app/static/data/pipeline_health.json` to confirm the fresh/stale counters reset; if stale assets accumulate, log a follow-up fix (e.g., add alerts or stronger retries).
+5. Use `automation_log.next_expected_run_local` to ensure the next scheduled LaunchAgent run stays within an hour; if the predicted time drifts or `automation_log.status` flips to failed, investigate the failing scripts/logs before the next run and consider wiring an alert/Slack notice so the brand team knows the pipeline is misaligned.
+
 
 
 ## Operating rules for future sessions

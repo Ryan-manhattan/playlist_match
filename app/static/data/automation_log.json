@@ -1,7 +1,9 @@
 {
-  "generated_at": "2026-04-03T09:08:20.650076+00:00",
+  "generated_at": "2026-04-03T09:37:24.221750+00:00",
   "log_path": "/tmp/off-community-hourly.log",
   "last_run": "2026-04-03T09:05:34.252462+00:00",
+  "next_expected_run_utc": "2026-04-03T10:05:34.252462+00:00",
+  "next_expected_run_local": "2026-04-03 19:05 KST",
   "status": "failed",
   "notes": "One or more scripts failed (see above). Exiting with failure code for scheduler alerting.",
   "timeline": [
