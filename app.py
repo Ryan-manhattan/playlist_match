@@ -299,6 +299,22 @@ DEFAULT_PIPELINE_HEALTH = {
     'notes': 'scripts/pipeline_health.py에서 data_asset_status 요약을 만듭니다.',
 }
 
+ANALYSIS_SUMMARY_PATH = Path(app.static_folder) / 'data' / 'analysis_summary.json'
+DEFAULT_ANALYSIS_SUMMARY = {
+    'generated_at': None,
+    'session_count': 0,
+    'top_genres': [],
+    'top_moods': [],
+    'top_tags': [],
+    'energy_distribution': [],
+    'sentiment_summary': {
+        'average': None,
+        'count': 0,
+    },
+    'recent_sessions': [],
+    'notes': 'scripts/update_analysis_summary.py를 실행해 분석 세션 요약을 다시 만들고 랜딩 cards를 최신화하세요.',
+}
+
 AUTOMATION_LOG_PATH = Path(app.static_folder) / 'data' / 'automation_log.json'
 DEFAULT_AUTOMATION_LOG = {
     'generated_at': None,
@@ -1001,6 +1017,19 @@ def load_automation_log() -> dict:
     return {**DEFAULT_AUTOMATION_LOG}
 
 
+def load_analysis_summary() -> dict:
+    try:
+        if ANALYSIS_SUMMARY_PATH.exists():
+            with ANALYSIS_SUMMARY_PATH.open('r', encoding='utf-8') as f:
+                data = json.load(f)
+                if isinstance(data, dict):
+                    summary = {**DEFAULT_ANALYSIS_SUMMARY, **data}
+                    return summary
+    except Exception:
+        pass
+    return {**DEFAULT_ANALYSIS_SUMMARY}
+
+
 def load_identity_context_feed() -> dict:
     try:
         if IDENTITY_CONTEXT_FEED_PATH.exists():
@@ -1662,6 +1691,7 @@ def index():
     automation_log = load_automation_log()
     identity_context_feed = load_identity_context_feed()
     guardian_feed = load_guardian_music_feed()
+    analysis_summary = load_analysis_summary()
     spotify_daily_chart = load_spotify_daily_chart()
     culture_items_latest = load_culture_items_latest()
 
@@ -1697,6 +1727,7 @@ def index():
         data_asset_status=data_asset_status,
         pipeline_health=pipeline_health,
         automation_log=automation_log,
+        analysis_summary=analysis_summary,
         pitchfork_rss=pitchfork_rss,
     )
 

@@ -1,0 +1,300 @@
+{
+  "generated_at": "2026-04-03T09:05:33.551896+00:00",
+  "source_files": {
+    "cultural_insights": "app/static/data/cultural_insights.json",
+    "culture_rss": "app/static/data/culture_rss.json",
+    "identity_tags": "app/static/data/identity_tags.json",
+    "identity_context_feed": "app/static/data/identity_context_feed.json",
+    "signal_insights": "app/static/data/signal_insights.json",
+    "cta_momentum": "app/static/data/cta_momentum.json",
+    "promo": "app/static/data/promo.json",
+    "lead_summary": "app/static/data/lead_summary.json",
+    "data_asset_status": "app/static/data/data_asset_status.json",
+    "pipeline_health": "app/static/data/pipeline_health.json",
+    "culture_items_latest": "data/derived/culture_items_latest.json",
+    "culture_items_manifest": "data/derived/culture_items_manifest.json"
+  },
+  "hero": {
+    "eyebrow": "Jun taste system",
+    "title": "Culture-first community,\nshaped for an app-native future.",
+    "summary": "Jun의 레이더는 album과 arrives 신호를 문화 전선에서 동시 추적 중입니다. Hourly insight loop fueling creator membership + brand campaigns (recent 0 battles).",
+    "updated_at": "2026-04-03T09:05:30.763931Z",
+    "metrics": [
+      {
+        "label": "culture items",
+        "value": 18
+      },
+      {
+        "label": "fresh ratio",
+        "value": "90.9%"
+      },
+      {
+        "label": "offers",
+        "value": 3
+      },
+      {
+        "label": "leads",
+        "value": 0
+      }
+    ],
+    "primary_cta": {
+      "label": "ADD YOUR TRACK",
+      "link": "/playlists"
+    },
+    "secondary_cta": {
+      "label": "REQUEST MEDIA KIT",
+      "link": "/brand-studio"
+    }
+  },
+  "culture_pulse": {
+    "headline": "Jun의 레이더는 album과 arrives 신호를 문화 전선에서 동시 추적 중입니다.",
+    "summary": "Jun은 요즘 ‘The Drama’ Review: Her Secret Is His Crisis (NYTimes Arts)를 읽으며 파트너 리드에 감성을 붙이고 있습니다.",
+    "stories": [
+      {
+        "source": "NYTimes Arts",
+        "title": "‘The Drama’ Review: Her Secret Is His Crisis",
+        "summary": "Zendaya and Robert Pattinson play a couple upended when one confesses to coming close to committing a horrific crime.",
+        "published_at": "2026-04-02"
+      },
+      {
+        "source": "NPR Music",
+        "title": "Bush: Tiny Desk Concert",
+        "summary": "If you think you know \"Machinehead\" and \"Glycerine,\" prepare to be surprised by these Tiny Desk arrangements of beloved alt-rock hits.",
+        "published_at": "2026-04-02"
+      },
+      {
+        "source": "Rolling Stone Music News",
+        "title": "U2 Surprise Release Six-Song Spiritual EP ‘Easter Lily’",
+        "summary": "\"It’s a time that has our band digging deeper into our lives to find a wellspring of songs to try meet the moment,\" says Bono",
+        "published_at": "2026-04-03"
+      }
+    ],
+    "chart_highlights": [
+      {
+        "source": "Billboard Hot 100",
+        "title": "Swim",
+        "artist": "BTS",
+        "captured_at": "2026-04-03T07:06:41.851928Z"
+      },
+      {
+        "source": "Deezer Global Chart",
+        "title": "Candy Store",
+        "artist": "Jodie Steele",
+        "captured_at": "2026-04-03T09:05:31.263519+00:00"
+      }
+    ],
+    "normalized_items": [
+      {
+        "title": "‘The Drama’ Review: Her Secret Is His Crisis",
+        "creator": "NYTimes Arts",
+        "source_type": "rss_article",
+        "published_at": "2026-04-02"
+      },
+      {
+        "title": "Kanye West Plays First American Concert Since 2021",
+        "creator": "NYTimes Arts",
+        "source_type": "rss_article",
+        "published_at": "2026-04-02"
+      },
+      {
+        "title": "Danish Shows to Watch While We’re Still at Peace",
+        "creator": "NYTimes Arts",
+        "source_type": "rss_article",
+        "published_at": "2026-04-02"
+      },
+      {
+        "title": "Bush: Tiny Desk Concert",
+        "creator": "NPR Music",
+        "source_type": "rss_article",
+        "published_at": "2026-04-02"
+      }
+    ]
+  },
+  "identity": {
+    "headline": "Jun은 요즘 ‘The Drama’ Review: Her Secret Is His Crisis (NYTimes Arts)를 읽으며 파트너 리드에 감성을 붙이고 있습니다.",
+    "summary": "Derived from culture_rss snapshots. Run scripts/compile_identity_tags.py to refresh.",
+    "top_tags": [
+      {
+        "tag": "Crisis",
+        "count": 2,
+        "source": "culture_rss"
+      },
+      {
+        "tag": "Drama",
+        "count": 2,
+        "source": "culture_rss"
+      },
+      {
+        "tag": "First",
+        "count": 2,
+        "source": "culture_rss"
+      }
+    ],
+    "contexts": [
+      {
+        "tag": "Drama",
+        "context": "Summary line",
+        "source": "culture_rss",
+        "tag_count": 2
+      },
+      {
+        "tag": "Secret",
+        "context": "Summary line",
+        "source": "culture_rss",
+        "tag_count": 2
+      },
+      {
+        "tag": "Crisis",
+        "context": "Summary line",
+        "source": "culture_rss",
+        "tag_count": 2
+      },
+      {
+        "tag": "Drama",
+        "context": "NYTimes Arts: ‘The Drama’ Review: Her Secret Is His Crisis",
+        "source": "culture_rss",
+        "tag_count": 2
+      },
+      {
+        "tag": "Secret",
+        "context": "NYTimes Arts: ‘The Drama’ Review: Her Secret Is His Crisis",
+        "source": "culture_rss",
+        "tag_count": 2
+      },
+      {
+        "tag": "Crisis",
+        "context": "NYTimes Arts: ‘The Drama’ Review: Her Secret Is His Crisis",
+        "source": "culture_rss",
+        "tag_count": 2
+      }
+    ],
+    "signal_cta": {
+      "label": "Share signal with Brand Studio",
+      "link": "/brand-studio"
+    }
+  },
+  "monetization": {
+    "context_line": "Seoul 16.1°C · Partly Cloudy · Signals lean toward brand partnership.",
+    "lead_summary": {
+      "total_leads": 0,
+      "recent_seven_days": 0,
+      "goal_keywords": []
+    },
+    "offers": [
+      {
+        "tagline": "Launch Offer",
+        "title": "Archive Pass Beta",
+        "description": "Emotion-driven membership + exclusive creator features.",
+        "price": "9,900 KRW / month",
+        "bullets": [
+          "Prioritized track stats",
+          "Member-only badges",
+          "Beta access workflows"
+        ],
+        "cta_label": "JOIN BETA"
+      },
+      {
+        "tagline": "B2B Campaign",
+        "title": "Brand Studio Sprint",
+        "description": "Custom campaigns powered by fan diaries and worldcup buzz.",
+        "price": "690,000 KRW +",
+        "bullets": [
+          "Dedicated brand playlist",
+          "Live voting experiences",
+          "Narrative report deck"
+        ],
+        "cta_label": "OPEN BRAND STUDIO"
+      },
+      {
+        "tagline": "Insight Product",
+        "title": "Audience Insight Report",
+        "description": "Actionable narrative built from diaries, votes, and comments.",
+        "price": "290,000 KRW +",
+        "bullets": [
+          "Keyword heatmap",
+          "Format recommendations",
+          "Collab roadmap"
+        ],
+        "cta_label": "REQUEST REPORT"
+      }
+    ],
+    "momentum_entries": [
+      {
+        "tag": "Drama",
+        "intent_label": "Brand Partnership",
+        "message": "Drama 감성과 'summary' 키워드가 Brand Partnership 문의를 자극하는 신호를 만들고 있습니다. Summary line에서 힘을 얻은 제안으로 CTA를 강화하세요.",
+        "cta_label": "Request Brand Call"
+      },
+      {
+        "tag": "Secret",
+        "intent_label": "Brand Partnership",
+        "message": "Secret 감성과 'line' 키워드가 Brand Partnership 문의를 자극하는 신호를 만들고 있습니다. Summary line에서 힘을 얻은 제안으로 CTA를 강화하세요.",
+        "cta_label": "Request Brand Call"
+      },
+      {
+        "tag": "Crisis",
+        "intent_label": "Brand Partnership",
+        "message": "Crisis 감성과 'nytimes' 키워드가 Brand Partnership 문의를 자극하는 신호를 만들고 있습니다. Summary line에서 힘을 얻은 제안으로 CTA를 강화하세요.",
+        "cta_label": "Request Brand Call"
+      }
+    ]
+  },
+  "data_assets": {
+    "pipeline": {
+      "fresh_ratio": 90.9,
+      "fresh_assets": 10,
+      "stale_assets": 1,
+      "oldest_asset_name": "Culture Pulse"
+    },
+    "manifest": {
+      "count": 18,
+      "schema_version": "1.0",
+      "target_table_hint": "culture_items",
+      "normalized_path": "data/normalized/culture_items.jsonl"
+    },
+    "assets": [
+      {
+        "name": "Cultural Insights Brief",
+        "updated_at": "2026-04-03T09:05:33.517845+00:00",
+        "metric_label": "keywords",
+        "metric_value": 6,
+        "notes": "scripts/update_cultural_insights.py가 RSS+차트 데이터를 요약합니다."
+      },
+      {
+        "name": "CTA Momentum",
+        "updated_at": "2026-04-03T09:05:33.439808Z",
+        "metric_label": "momentum entries",
+        "metric_value": 3,
+        "notes": "identity/lead/날씨 신호로 CTA 메시지를 정리합니다."
+      },
+      {
+        "name": "Signal Intelligence",
+        "updated_at": "2026-04-03T09:05:31.825397Z",
+        "metric_label": "top tags",
+        "metric_value": 5,
+        "notes": "identity + lead signal을 통합하는 scripts/compile_signal_insights.py 결과입니다."
+      },
+      {
+        "name": "Identity Tags",
+        "updated_at": "2026-04-03T09:05:31.692339+00:00",
+        "metric_label": "tags",
+        "metric_value": 6,
+        "notes": "scripts/compile_identity_tags.py가 RSS 데이터에서 추출했습니다."
+      },
+      {
+        "name": "Pitchfork Signal",
+        "updated_at": "2026-04-03T09:05:31.655416+00:00",
+        "metric_label": "entries",
+        "metric_value": 4,
+        "notes": "scripts/update_pitchfork_rss.py가 글로벌 Pitchfork 뉴스를 기록합니다."
+      },
+      {
+        "name": "Deezer Global Pulse",
+        "updated_at": "2026-04-03T09:05:31.263519+00:00",
+        "metric_label": "top tracks",
+        "metric_value": 6,
+        "notes": "Deezer 글로벌 차트 자료를 저장합니다."
+      }
+    ]
+  }
+}

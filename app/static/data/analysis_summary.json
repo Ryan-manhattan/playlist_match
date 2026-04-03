@@ -1,0 +1,14 @@
+{
+  "generated_at": "2026-04-03T11:41:46.801473+00:00",
+  "session_count": 0,
+  "top_genres": [],
+  "top_moods": [],
+  "top_tags": [],
+  "energy_distribution": [],
+  "sentiment_summary": {
+    "average": null,
+    "count": 0
+  },
+  "recent_sessions": [],
+  "notes": "scripts/update_analysis_summary.py를 실행해 분석 세션 요약을 다시 만들고 랜딩의 Analysis Summary 카드를 최신 상태로 유지하세요."
+}

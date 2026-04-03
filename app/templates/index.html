@@ -927,6 +927,125 @@
         opacity: 0.5;
     }
 
+    .analysis-section {
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: rgba(6, 6, 12, 0.85);
+        border-radius: 18px;
+    }
+
+    .analysis-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+
+    .analysis-card {
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 14px;
+        padding: 1rem;
+        background: rgba(255, 255, 255, 0.02);
+        min-height: 150px;
+        display: flex;
+        flex-direction: column;
+        gap: 0.6rem;
+    }
+
+    .analysis-card-label {
+        font-size: 0.7rem;
+        letter-spacing: 0.35em;
+        text-transform: uppercase;
+        opacity: 0.5;
+    }
+
+    .analysis-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: grid;
+        gap: 0.35rem;
+    }
+
+    .analysis-list li {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.85rem;
+        opacity: 0.75;
+    }
+
+    .analysis-tag-stack {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+    }
+
+    .analysis-tag {
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 999px;
+        padding: 0.35rem 0.8rem;
+        font-size: 0.7rem;
+        letter-spacing: 0.3em;
+        text-transform: uppercase;
+        opacity: 0.6;
+    }
+
+    .analysis-stat {
+        font-size: 0.85rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.2rem;
+    }
+
+    .analysis-stat-value {
+        font-family: var(--font-serif);
+        font-size: 1.8rem;
+        opacity: 0.7;
+    }
+
+    .analysis-recent {
+        margin-top: 1.5rem;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 0.9rem;
+    }
+
+    .analysis-recent-card {
+        border: 1px dashed rgba(255, 255, 255, 0.2);
+        border-radius: 12px;
+        padding: 0.9rem;
+        background: rgba(0, 0, 0, 0.25);
+        min-height: 110px;
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+    }
+
+    .analysis-recent-card h5 {
+        margin: 0;
+        font-size: 1rem;
+    }
+
+    .analysis-recent-meta {
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 0.3em;
+        opacity: 0.5;
+    }
+
+    .analysis-energy-line {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.78rem;
+        opacity: 0.65;
+    }
+
+    .analysis-energy {
+        display: flex;
+        flex-direction: column;
+        gap: 0.3rem;
+        margin-top: 0.4rem;
+    }
+
     .signal-section {
         border: 1px solid rgba(255, 255, 255, 0.12);
         background: rgba(10, 8, 12, 0.75);
@@ -2167,6 +2286,109 @@
         <div class="mt-6 flex flex-wrap gap-3 items-center">
             <a href="{{ url_for('brand_studio') }}" class="btn-pixel text-xs tracking-widest justify-center">Share data health</a>
             <a href="{{ url_for('diary') }}" class="btn-outline text-xs tracking-widest justify-center">Document the data story</a>
+        </div>
+    </section>
+
+    <section class="pixel-card analysis-section p-6 md:p-8 mb-10">
+        <div class="flex items-start justify-between mb-4">
+            <div>
+                <span class="text-[10px] uppercase tracking-[0.3em] opacity-40">Analysis Summary</span>
+                <h3 class="serif-font text-2xl mt-2 leading-tight">Jun의 analysis sessions가 브랜드 내러티브로 어떻게 연결되는지 보여줍니다.</h3>
+            </div>
+            {% if analysis_summary.generated_at %}
+            <span class="text-[10px] uppercase tracking-[0.35em] opacity-50">Updated {{ analysis_summary.generated_at[:16].replace('T', ' ') }}</span>
+            {% endif %}
+        </div>
+        <p class="text-sm opacity-60 leading-relaxed">{{ analysis_summary.notes }}</p>
+        <div class="analysis-grid">
+            <article class="analysis-card">
+                <div class="analysis-card-label">Top genres</div>
+                {% if analysis_summary.top_genres %}
+                <ul class="analysis-list">
+                    {% for genre in analysis_summary.top_genres[:5] %}
+                    <li>
+                        <span>{{ genre.genre }}</span>
+                        <span>{{ genre.count }}</span>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p class="text-sm opacity-60">'analysis_sessions' 데이터를 수집하면 장르 요약이 나타납니다.</p>
+                {% endif %}
+            </article>
+
+            <article class="analysis-card">
+                <div class="analysis-card-label">Top moods</div>
+                {% if analysis_summary.top_moods %}
+                <ul class="analysis-list">
+                    {% for mood in analysis_summary.top_moods[:5] %}
+                    <li>
+                        <span>{{ mood.mood }}</span>
+                        <span>{{ mood.count }}</span>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p class="text-sm opacity-60">감정 분석이 입력되면 mood 요약이 표시됩니다.</p>
+                {% endif %}
+            </article>
+
+            <article class="analysis-card">
+                <div class="analysis-card-label">Top tags</div>
+                {% if analysis_summary.top_tags %}
+                <div class="analysis-tag-stack">
+                    {% for tag in analysis_summary.top_tags[:10] %}
+                    <span class="analysis-tag">{{ tag.tag }}</span>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p class="text-sm opacity-60">video_tags가 채워지면 주요 키워드 태그가 채워집니다.</p>
+                {% endif %}
+            </article>
+
+            <article class="analysis-card">
+                <div class="analysis-card-label">Sentiment & energy</div>
+                <div class="analysis-stat">
+                    {% if analysis_summary.sentiment_summary.average is not none %}
+                    <div class="analysis-stat-value">{{ analysis_summary.sentiment_summary.average }}</div>
+                    <div class="analysis-meta">Average sentiment · {{ analysis_summary.sentiment_summary.count }} sessions</div>
+                    {% else %}
+                    <div class="analysis-stat-value">—</div>
+                    <div class="analysis-meta">Sentiment data pending</div>
+                    {% endif %}
+                </div>
+                {% if analysis_summary.energy_distribution %}
+                <div class="analysis-energy">
+                    {% for energy in analysis_summary.energy_distribution[:3] %}
+                    <div class="analysis-energy-line">
+                        <span>{{ energy.energy }}</span>
+                        <span>{{ energy.count }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p class="text-sm opacity-60">Energy_level 값이 기록되면 여기서 보여줍니다.</p>
+                {% endif %}
+            </article>
+        </div>
+
+        {% if analysis_summary.recent_sessions %}
+        <div class="analysis-recent">
+            {% for session in analysis_summary.recent_sessions %}
+            <article class="analysis-recent-card">
+                <h5 class="serif-font">{{ session.title }}</h5>
+                <p class="analysis-recent-meta">{{ session.channel }} · {{ session.analyzed_at[:16].replace('T', ' ') if session.analyzed_at else 'timestamp N/A' }}</p>
+                <p class="text-sm opacity-60">Sentiment {{ session.sentiment_score if session.sentiment_score is not none else '—' }}</p>
+            </article>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p class="text-sm opacity-60 mt-4">최근 분석 세션이 없으면 이 공간은 곧 Jun의 데이터 자산으로 채워집니다.</p>
+        {% endif %}
+
+        <div class="mt-6 flex flex-wrap gap-3 items-center">
+            <a href="{{ url_for('brand_studio') }}" class="btn-pixel text-xs tracking-widest justify-center">Share analysis with partners</a>
+            <a href="{{ url_for('diary') }}" class="btn-outline text-xs tracking-widest justify-center">Document a new reaction</a>
         </div>
     </section>
 

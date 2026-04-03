@@ -34,6 +34,7 @@
 
 - `scripts/pipeline_health.py`가 `data_asset_status.json`을 분석해 freshness/staleness 지표를 `app/static/data/pipeline_health.json`에 기록하며, `scripts/hourly_autonomous_job.py`가 새 스크립트를 호출하고 랜딩의 Pipeline Health 카드가 자동화 상태/CTA 앞에서 보이게 되었습니다.
 - `scripts/collect_automation_log.py` now runs automatically right after the pipeline summary is printed so it reads `/tmp/off-community-hourly.log` after the final lines exist. `app/static/data/automation_log.json` continues to feed the Pipeline Health callout and proves the LaunchAgent completed while still offering `next_expected_run_local`/`next_expected_run_utc` for the UI to display the next scheduled run.
+- `scripts/update_analysis_summary.py`가 `music_analysis.db`의 `analysis_sessions`, `video_tags`, `genre_scores`, `mood_scores` 데이터를 요약해 `app/static/data/analysis_summary.json`을 만든 뒤 랜딩에 새 Analysis Summary 카드(Top genres/moods/tags + sentiment + energy + recent sessions)를 더해 Jun의 데이터 자산과 문화/수익화 관측을 한 번에 묶어 보여주고 있습니다.
 - `apps/mobile`에 첫 Flutter 앱 기반이 추가되었습니다. 현재는 `HomeRepository` + `LocalHomeDataSource`로 번들된 `assets/data/home_payload.json`을 읽어 Culture Pulse / Identity / Monetization / Data Assets 섹션을 렌더링하는 구조이며, `scripts/build_flutter_home_payload.py`가 기존 웹 JSON들과 `data/derived/culture_items_*`를 모바일용 payload로 합칩니다.
 - `docs/flutter_app_foundation.md`와 `apps/mobile/README.md`에 웹 데이터 파일이 모바일 섹션으로 어떻게 매핑되는지, 그리고 향후 `culture_items`/Supabase repository로 어떻게 연결할지 기록했습니다.
 - Flutter wrapper-based tooling (`flutter create`, `flutter pub get`, `flutter analyze`)은 이 환경에서 Homebrew SDK cache write restriction 때문에 아직 실행하지 못했습니다. 대신 direct Dart SDK 경로(`/opt/homebrew/share/flutter/bin/cache/dart-sdk/bin/dart`)로 포맷을 돌렸고, Python payload builder/JSON validation은 성공했습니다. 따라서 앱 코드/데이터 구조는 추가됐지만 platform shells(`android/`, `ios/`)와 lockfile 생성은 다음 writable Flutter session에서 마무리해야 합니다. 같은 이유로 `.git/index.lock` 생성도 막혀 이 세션에서는 commit을 남기지 못했습니다.
@@ -52,6 +53,7 @@
 2. After that Flutter bootstrap, add a `SupabaseHomeRepository` or API-backed repository that hydrates the same domain models as `MobileHomeRepository`, so the app can switch from bundled JSON to live data without touching the screen layer.
 3. Keep `scripts/build_flutter_home_payload.py` aligned with new website assets as more signals arrive (YouTube, Spotify spikes, extra RSS), and consider hooking it into the hourly pipeline once the mobile payload should auto-refresh.
 4. Provide Supabase credentials plus the `supabase` library so `scripts/import_culture_items_supabase.py` can upsert into the `culture_items` table again; rerun the hourly pipeline afterwards to confirm Supabase reflects the latest normalized snapshot.
+5. Capture real analysis sessions (or expose existing Music Trend Analyzer results) into `music_analysis.db` so `scripts/update_analysis_summary.py` powers the Analysis Summary card with live genres/moods/tags and a recent-session feed; consider shipping that card as part of upcoming Brand Studio narrative flows.
 
 
 

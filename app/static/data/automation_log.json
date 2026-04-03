@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-03T10:36:55.013740+00:00",
+  "generated_at": "2026-04-03T11:05:41.538655+00:00",
   "log_path": "/tmp/off-community-hourly.log",
   "last_run": "2026-04-03T10:06:05.454128+00:00",
   "next_expected_run_utc": "2026-04-03T11:06:05.454128+00:00",
@@ -81,13 +81,13 @@
     }
   ],
   "recent_lines": [
-    "• cultural insights (update_cultural_insights.py): OK in 0.1s",
-    "• culture item build (build_culture_items.py): OK in 0.0s",
-    "• culture items Supabase import (import_culture_items_supabase.py): OK in 0.0s",
-    "• data asset status (log_data_asset_status.py): OK in 0.0s",
-    "• pipeline health (pipeline_health.py): OK in 0.0s",
-    "• automation log snapshot (collect_automation_log.py): OK in 0.0s",
-    "Total duration: 6.3s | finished at 2026-04-03T10:06:05.454128+00:00",
-    "All steps completed successfully."
+    "resp = self._pool.handle_request(req)",
+    "File \"/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/contextlib.py\", line 135, in __exit__",
+    "self.gen.throw(type, value, traceback)",
+    "File \"/Users/junkim/Library/Python/3.9/lib/python/site-packages/httpx/_transports/default.py\", line 118, in map_httpcore_exceptions",
+    "raise mapped_exc(message) from exc",
+    "httpx.ConnectError: [Errno 8] nodename nor servname provided, or not known",
+    "Updated data asset status: /Users/junkim/Projects/off_community/app/static/data/data_asset_status.json",
+    "Pipeline health snapshot saved: /Users/junkim/Projects/off_community/app/static/data/pipeline_health.json"
   ]
 }

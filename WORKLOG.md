@@ -235,3 +235,11 @@
 - Saved data sources: `data/derived/culture_items_latest.json` (scripts/build_culture_items.py 출력).
 - Data-asset impact: normalized rows가 UI에 드러나 Brand Studio/CRM copy에서 재활용할 준비가 되었고, 카드를 통해 각 항목의 source/collect 시간/summary를 즉시 확인할 수 있습니다.
 - Next candidate task: pipeline에서 culture_items_latest를 Supabase/alert 흐름과 묶거나 실패 감지를 붙여 놓거나, 동일 데이터를 Brand Studio storytelling copy에 자동 삽입하는 작업을 고민합니다.
+
+### 20:43 KST
+- 무엇을 바꿨는지: `music_analysis.db`의 `analysis_sessions`, `video_tags`, `genre_scores`, `mood_scores`를 요약해 `app/static/data/analysis_summary.json`을 만드는 `scripts/update_analysis_summary.py`를 추가하고 시간당 파이프라인과 템플릿을 이 자산에 연결해 홈의 Analysis Summary 카드가 Jun의 정체성과 감성/에너지/태그 데이터를 동시에 보여주도록 했습니다.
+- 왜 바꿨는지: 감성/장르/태그 레코드를 브랜드/멤버십 CTA 앞에서 데이터로 증명하면 수익화·재방문 신뢰도가 높아지고, 새로운 데이터 자산을 쌓아둠으로써 향후 Brand Studio/CRM copy에서 이 기록을 재사용할 수 있도록 하기 위해서입니다.
+- Blockers/risks: 없음.
+- Saved data sources: `music_analysis.db`의 analysis_sessions/genre_scores/mood_scores/video_tags 테이블 → `app/static/data/analysis_summary.json` (새로 생성).
+- Data-asset impact: analysis_summary JSON이 파이프라인에 포함되어 자동화 상태 카드와 함께 주기적인 런타임마다 갱신되며, landing의 Analysis Summary 블록이 Jun의 음악 분석 데이터를 문화 정체성과 연결된 수익화 자산으로 노출하여 미래 리포트/CTA 복사에서 재사용할 수 있는 기반을 만들었습니다.
+- Next candidate task: 실제 분석 세션을 기록하거나 Music Trend Analyzer 출력을 이 DB로 채워서 Analysis Summary 카드에 실질적인 장르/무드/태그/세션 히스토리를 보여주는 흐름을 마련해보는 것이 좋겠습니다.

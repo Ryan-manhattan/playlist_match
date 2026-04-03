@@ -30,6 +30,7 @@ PIPELINE_SCRIPTS: List[Tuple[str, Path]] = [
     ("culture items Supabase import", ROOT / "scripts" / "import_culture_items_supabase.py"),
     ("data asset status", ROOT / "scripts" / "log_data_asset_status.py"),
     ("pipeline health", ROOT / "scripts" / "pipeline_health.py"),
+    ("analysis summary", ROOT / "scripts" / "update_analysis_summary.py"),
 ]
 AUTOMATION_LOG_SCRIPT: Tuple[str, Path] = (
     "automation log snapshot",
