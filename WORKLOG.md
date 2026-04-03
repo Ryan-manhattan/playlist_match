@@ -131,3 +131,11 @@
 - Saved data sources: growth lead logs → `lead_summary.json`, Supabase stats → `promo.json`, Billboard/Deezer RSS/Guardian feeds → 각 JSON, identity/CTA scripts → identity_tags/cta_momentum/cultural_insights, normalized culture items, data asset status.
 - Data-asset impact: 모든 데이터 JSON(lead summary, promo, charts, RSS, identity, CTA, cultural briefs, normalized culture items, asset inventory)이 한 시점에서 갱신되도록 보장하고, 후속 Supabase 수집이나 Brand Studio 복사도 동일한 타임스탬프를 참조할 수 있게 됐습니다.
 - 다음 후보: 크론 항목을 설치하고 `/tmp/off-community-hourly.log`에서 첫 실행을 확인한 뒤 Data Asset Inventory 카드와 `data/normalized/culture_items` 흐름을 Supabase import로 이어가기; 동시에 YouTube/Spotify 등 새 문화 신호를 캡처하는 스크립트를 파이프라인에 추가할 방법을 고민합니다.
+
+### 11:09 KST
+- 무엇을 바꿨는지: `scripts/import_culture_items_supabase.py`를 만들어 `scripts/hourly_autonomous_job.py`에 포함시키고, 관련 docs/SESSION_HANDOFF/data_layer를 업데이트하며 Supabase schema(`supabase/setup_all_tables.sql`)에 `culture_items` 테이블과 RLS/trigger를 추가하여 normalized JSONL이 클라우드 장기 데이터로 흘러가게 조율함.
+- 왜 바꿨는지: Jun의 문화·정체성 데이터가 UI와 리포트뿐 아니라 Supabase `culture_items` 테이블에도 동일하게 기록돼 수익화·리드 분석/CRM 로드맵에 재활용할 수 있도록 오래된 데이터 자산 기반을 단단히 만드는 것이 목적.
+- Blockers/risks: 없음.
+- Saved data sources: `data/normalized/culture_items.jsonl`, `data/derived/culture_items_manifest.json` (manifest로 schema/version까지 캡슐화).
+- Data-asset impact: normalized 데이터가 이제 매시간 Supabase에 upsert되고 `docs/data_layer.md`/`docs/hourly_autonomous_job.md`/SESSION_HANDOFF에서 그 흐름이 문서화돼 향후 Brand Studio·CRM·리포트가 단일 스키마를 바로 참조할 수 있음.
+- Next candidate task: Cron 항목 설치 후 `/tmp/off-community-hourly.log`와 Supabase `culture_items` 테이블을 체크하여 pipeline의 Supabase import 단계가 잘 돌아가는지 확인하고, 새 문화 신호(YouTube/Spotify/추가 RSS) 캡처를 파이프라인에 손쉽게 붙일 방안을 계속 고민하기.

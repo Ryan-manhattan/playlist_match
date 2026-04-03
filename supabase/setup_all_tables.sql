@@ -75,6 +75,46 @@ CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
 CREATE INDEX IF NOT EXISTS idx_users_google_id ON users(google_id);
 
 -- ============================================
+-- 5. visitor_logs 테이블 (방문자 로그)
+-- ============================================
+CREATE TABLE IF NOT EXISTS visitor_logs (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    ip_address TEXT,
+    user_agent TEXT,
+    page_url TEXT,
+    referer TEXT,
+    visited_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_visitor_logs_visited_at ON visitor_logs(visited_at DESC);
+CREATE INDEX IF NOT EXISTS idx_visitor_logs_ip_address ON visitor_logs(ip_address);
+
+-- ============================================
+-- 6. culture_items 테이블 (정규화된 문화 스냅샷)
+-- ============================================
+CREATE TABLE IF NOT EXISTS culture_items (
+    id TEXT PRIMARY KEY,
+    source TEXT NOT NULL,
+    source_type TEXT NOT NULL,
+    external_id TEXT,
+    title TEXT,
+    creator TEXT,
+    url TEXT,
+    published_at TIMESTAMPTZ,
+    summary TEXT,
+    tags TEXT[],
+    raw_ref TEXT,
+    collected_at TIMESTAMPTZ,
+    status TEXT,
+    metadata JSONB,
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_culture_items_source ON culture_items(source);
+CREATE INDEX IF NOT EXISTS idx_culture_items_source_type ON culture_items(source_type);
+CREATE INDEX IF NOT EXISTS idx_culture_items_collected_at ON culture_items(collected_at DESC);
+
+-- ============================================
 -- 트리거 함수 생성 (updated_at 자동 업데이트)
 -- ============================================
 CREATE OR REPLACE FUNCTION update_updated_at_column()
@@ -110,6 +150,12 @@ DROP TRIGGER IF EXISTS update_users_updated_at ON users;
 CREATE TRIGGER update_users_updated_at 
     BEFORE UPDATE ON users 
     FOR EACH ROW 
+    EXECUTE FUNCTION update_updated_at_column();
+
+DROP TRIGGER IF EXISTS update_culture_items_updated_at ON culture_items;
+CREATE TRIGGER update_culture_items_updated_at
+    BEFORE UPDATE ON culture_items
+    FOR EACH ROW
     EXECUTE FUNCTION update_updated_at_column();
 
 -- ============================================
@@ -203,22 +249,7 @@ CREATE POLICY "Users can update own data" ON users
     FOR UPDATE
     USING (true);
 
--- ============================================
--- 5. visitor_logs 테이블 (방문자 로그)
--- ============================================
-CREATE TABLE IF NOT EXISTS visitor_logs (
-    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-    ip_address TEXT,
-    user_agent TEXT,
-    page_url TEXT,
-    referer TEXT,
-    visited_at TIMESTAMPTZ DEFAULT NOW()
-);
-
-CREATE INDEX IF NOT EXISTS idx_visitor_logs_visited_at ON visitor_logs(visited_at DESC);
-CREATE INDEX IF NOT EXISTS idx_visitor_logs_ip_address ON visitor_logs(ip_address);
-
--- RLS 설정
+-- visitor_logs 테이블 RLS
 ALTER TABLE visitor_logs ENABLE ROW LEVEL SECURITY;
 
 DROP POLICY IF EXISTS "Anyone can read visitor_logs" ON visitor_logs;
@@ -231,13 +262,36 @@ CREATE POLICY "Anyone can insert visitor_logs" ON visitor_logs
     FOR INSERT
     WITH CHECK (true);
 
+-- culture_items 테이블 RLS
+ALTER TABLE culture_items ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "Anyone can read culture_items" ON culture_items;
+CREATE POLICY "Anyone can read culture_items" ON culture_items
+    FOR SELECT
+    USING (true);
+
+DROP POLICY IF EXISTS "Anyone can insert culture_items" ON culture_items;
+CREATE POLICY "Anyone can insert culture_items" ON culture_items
+    FOR INSERT
+    WITH CHECK (true);
+
+DROP POLICY IF EXISTS "Anyone can update culture_items" ON culture_items;
+CREATE POLICY "Anyone can update culture_items" ON culture_items
+    FOR UPDATE
+    USING (true);
+
+DROP POLICY IF EXISTS "Anyone can delete culture_items" ON culture_items;
+CREATE POLICY "Anyone can delete culture_items" ON culture_items
+    FOR DELETE
+    USING (true);
+
 -- ============================================
 -- 완료 메시지
 -- ============================================
 DO $$
 BEGIN
     RAISE NOTICE '✅ 모든 테이블 생성 완료!';
-    RAISE NOTICE '생성된 테이블: posts, tracks, track_comments, users, visitor_logs';
+    RAISE NOTICE '생성된 테이블: posts, tracks, track_comments, users, visitor_logs, culture_items';
 END $$;
 
 

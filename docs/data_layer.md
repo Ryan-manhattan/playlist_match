@@ -44,9 +44,11 @@
   - `data/normalized/culture_items.jsonl`
   - `data/derived/culture_items_latest.json`
   - `data/derived/culture_items_manifest.json`
+- `scripts/import_culture_items_supabase.py`가 정규화 JSONL을 Supabase `culture_items` 테이블에 upsert하여 장기 데이터를 클라우드에 싱크합니다 (manifest의 schema_version/fields를 참고).
 
 ## Why this matters
 이 구조를 먼저 잡아두면:
 1. Supabase 복구 후 `culture_items` 같은 테이블로 이관이 쉬워지고
 2. UI 변경과 데이터 자산 축적을 분리할 수 있고
-3. Jun의 문화/정체성 데이터를 장기적으로 쌓아 브랜드 자산으로 만들 수 있습니다.
+3. Jun의 문화/정체성 데이터를 장기적으로 쌓아 브랜드 자산으로 만들 수 있습니다
+4. 시간당 파이프라인이 정규화된 JSONL을 Supabase `culture_items`에 upsert하면서 장기 기록을 Postgres 상에 누적하므로 향후 트렌드 분석 · CRM 레이어로 즉시 활용 가능합니다.

@@ -25,6 +25,7 @@
 - `scripts/compile_identity_context_feed.py`가 identity_tags 컨텍스트를 `app/static/data/identity_context_feed.json`으로 정리하고, 랜딩에 Identity Context Feed 섹션을 추가해 CTA 직전에 Jun의 정체성과 문화 맥락을 다시 보여줍니다.
 - Guardian Music Radar 블록이 `scripts/update_guardian_music.py`와 `app/static/data/guardian_music_feed.json`를 이용해 Guardian music 기사 타이틀·요약·발행 시점을 기록하고, Jun의 브랜드/멤버십 CTA 앞뒤에 외부 문화 신호를 덧씌웁니다.
 - `scripts/build_culture_items.py`가 culture / RSS / Billboard / Deezer 데이터를 공통 스키마로 정규화해 `data/normalized/culture_items.jsonl`과 `data/derived/culture_items_manifest.json`을 생성하므로, 나중에 Supabase `culture_items` 테이블로 이관하기 쉬운 로컬 데이터 레이어가 생겼습니다.
+- `scripts/import_culture_items_supabase.py`가 정규화 JSONL을 Supabase `culture_items` 테이블에 upsert해 시간당 파이프라인만큼 Postgres에 장기 기록을 남기기 시작했습니다.
 
 ## Automation currently configured
 - Daily 9 AM report job exists.
@@ -40,5 +41,5 @@
 
 ## Next recommended tasks
 1. Install the Cron entry from `docs/hourly_autonomous_job.md`, watch `/tmp/off-community-hourly.log`, and verify the Data Asset Inventory card updates within minutes so the landing scripts keep reflecting fresh culture/lead signals.
-2. Tie `data/normalized/culture_items.jsonl` plus the derived manifest into the planned Supabase `culture_items` import so each hourly build feeds a long-term proprietary dataset.
+2. Confirm Supabase `culture_items` table reflects the latest normalized snapshot after each hourly run and document any gaps in the Data Asset Inventory/Brand Studio flow.
 3. Keep sourcing new culture signals (YouTube dips, Spotify spikes, additional RSS like Pitchfork or NME) and, when ready, add the worker scripts to `scripts/hourly_autonomous_job.py` so the identity narrative stays ahead of trends.

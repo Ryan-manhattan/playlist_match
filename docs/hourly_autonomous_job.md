@@ -15,7 +15,8 @@ This project now batches every revenue/identity signal update into a single scri
 10. `scripts/compile_cta_momentum.py`
 11. `scripts/update_cultural_insights.py`
 12. `scripts/build_culture_items.py`
-13. `scripts/log_data_asset_status.py`
+13. `scripts/import_culture_items_supabase.py` – upserts the normalized dataset into the `culture_items` table so the long-term proprietary snapshot lives beside the landing payloads.
+14. `scripts/log_data_asset_status.py`
 
 Each step logs its own output and the orchestrator prints a summary with durations/failure status and exits non-zero if any of the scripts fail. That makes it easy to monitor `/tmp/off-community-hourly.log` from the host Cron job.
 
@@ -31,4 +32,4 @@ If you already had individual cron jobs for the promo or culture feeds, you can 
 ## Monitoring & next steps
 - Inspect `/tmp/off-community-hourly.log` for failures or slow steps.
 - Use the `DATA_ASSET_STATUS` card on the landing page to confirm timestamps refresh after each run.
-- If you later expand the pipeline (Spotify feeds, Supabase imports, etc.), add the new scripts to `scripts/hourly_autonomous_job.py` and keep the list in sync with this document.
+- Confirm the Supabase `culture_items` table reflects the latest normalized asset after each run (the new `scripts/import_culture_items_supabase.py` step handles the upsert). If you later expand the pipeline (Spotify feeds, new data exports, etc.), add the new scripts to `scripts/hourly_autonomous_job.py` and keep the list in sync with this document.
