@@ -31,6 +31,7 @@
 - `scripts/hourly_autonomous_job.py` now calls `datetime.now(tz=timezone.utc)` for log timestamps, `scripts/import_culture_items_supabase.py` prepends the repo root to `sys.path`, and `utils/app_settings.py` tolerates a missing `python-dotenv`; running `/usr/bin/env python3 scripts/hourly_autonomous_job.py >> /tmp/off-community-hourly.log 2>&1` refreshed the JSON assets and left `/tmp/off-community-hourly.log` ending with a success summary even though the Supabase client/credentials are still absent (that step now just logs a skip).
 
 - `scripts/pipeline_health.py`가 `data_asset_status.json`을 분석해 freshness/staleness 지표를 `app/static/data/pipeline_health.json`에 기록하며, `scripts/hourly_autonomous_job.py`가 새 스크립트를 호출하고 랜딩의 Pipeline Health 카드가 자동화 상태/CTA 앞에서 보이게 되었습니다.
+- `scripts/collect_automation_log.py`가 `/tmp/off-community-hourly.log`를 읽어 `app/static/data/automation_log.json`을 만들고 있으며, 홈 페이지의 Pipeline Health callout과 `automation_log` asset이 LaunchAgent가 실제로 완주했는지 빠르게 보증할 수 있도록 돕고 있습니다.
 
 
 ## Automation currently configured

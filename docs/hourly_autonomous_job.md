@@ -19,6 +19,7 @@ This project now batches every revenue/identity signal update into a single scri
 14. `scripts/build_culture_items.py`
 15. `scripts/import_culture_items_supabase.py` – upserts the normalized dataset into the `culture_items` table so the long-term proprietary snapshot lives beside the landing payloads.
 16. `scripts/log_data_asset_status.py`
+17. `scripts/collect_automation_log.py` – reads `/tmp/off-community-hourly.log` and emits `app/static/data/automation_log.json` so the landing page can surface the LaunchAgent run status along with the data asset inventory.
 
 Each step logs its own output and the orchestrator prints a summary with durations/failure status and exits non-zero if any of the scripts fail. That makes it easy to monitor `/tmp/off-community-hourly.log` from the host Cron job.
 
@@ -50,5 +51,6 @@ Retire any standalone promo/culture cron jobs once the orchestrator is live.
 
 ## Monitoring & next steps
 - Inspect `/tmp/off-community-hourly.log` for failures or slow steps.
+- Check `app/static/data/automation_log.json` (and the new Pipeline Health log callout) so the landing page can quote the LaunchAgent status alongside the data asset summary.
 - Use the `DATA_ASSET_STATUS` card on the landing page to confirm timestamps refresh after each run.
 - Confirm the Supabase `culture_items` table reflects the latest normalized asset after each run (the new `scripts/import_culture_items_supabase.py` step handles the upsert). If you later expand the pipeline (Spotify feeds, new data exports, etc.), add the new scripts to `scripts/hourly_autonomous_job.py` and keep the list in sync with this document.

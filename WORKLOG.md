@@ -186,3 +186,11 @@
 - Saved data sources: `app/static/data/data_asset_status.json` (pipeline summary의 `assets` 리스트)를 읽어 시간/보정/이력 데이터를 재정의하여 `app/static/data/pipeline_health.json`을 생성함.
 - Data-asset impact: pipeline_health JSON이 Fresh/Stale/Ratio 값을 기록하여 future dashboard(Brand Studio, CRM)에서도 자동화 신뢰도를 스냅샷으로 재활용할 수 있고, UI 카드가 이 새 자산에 기반해 자동화 상태를 소구합니다.
 - Next candidate task: automation doc/launch agent 로그를 랜딩에 더 밀착해서 "Last run"을 검증하는 항목과, Supabase pipeline 미동작을 감지하면 브랜드팀에 알리는 경보를 고민합니다.
+
+### 18:20 KST
+- 무엇을 바꿨는지: LaunchAgent 로그를 읽어 `app/static/data/automation_log.json`을 만드는 `scripts/collect_automation_log.py`를 추가하고 `scripts/hourly_autonomous_job.py`/doc/SESSION_HANDOFF을 동기화했으며, `app.py`와 랜딩 템플릿에 새 데이터 자산을 노출해 Pipeline Health 카드가 실제 로그 상태(마지막 실행, 성공 여부, 최근 요약)를 바로 보여주게 했습니다.
+- 왜 바꿨는지: `/tmp/off-community-hourly.log`를 매번 열지 않아도 자동화가 성공적으로 끝났는지 데이터로 확인할 수 있어 방문자와 브랜드 대상 모두에게 수익화 신뢰도를 빠르게 증명하고, 자동화 기록 자체를 독점 데이터 자산으로 쌓기 위해서입니다.
+- Blockers/risks: 없음.
+- Saved data sources: `/tmp/off-community-hourly.log` 로그 → `automation_log.json` (timeline + recent lines), Pipeline Health UI/문서 업데이트.
+- Data-asset impact: 새로운 automation log JSON이 Pipeline Health 카드와 Brand Studio/CRM에서 재활용 가능한 자동화 신뢰도 자산이 되었고, LaunchAgent run 상태를 계속 기록해 다음 run 때 검증할 수 있는 기반을 만들었습니다.
+- Next candidate task: automation log JSON을 Brand Studio 알림 흐름이나 CRM 리포트의 감지기와 엮어 실패/지연을 확인할 수 있는 경보 스크립트를 고민해보는 것을 추천합니다.

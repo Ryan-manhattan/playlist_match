@@ -1,0 +1,83 @@
+{
+  "generated_at": "2026-04-03T09:08:20.650076+00:00",
+  "log_path": "/tmp/off-community-hourly.log",
+  "last_run": "2026-04-03T09:05:34.252462+00:00",
+  "status": "failed",
+  "notes": "One or more scripts failed (see above). Exiting with failure code for scheduler alerting.",
+  "timeline": [
+    {
+      "label": "growth summary (update_growth_summary.py)",
+      "detail": "OK in 0.0s"
+    },
+    {
+      "label": "promo refresh (update_promo.py)",
+      "detail": "OK in 0.0s"
+    },
+    {
+      "label": "Billboard Hot 100 (update_billboard_hot100.py)",
+      "detail": "FAIL in 0.2s"
+    },
+    {
+      "label": "Deezer global chart (update_deezer_chart.py)",
+      "detail": "OK in 0.4s"
+    },
+    {
+      "label": "Spotify Global Daily (update_spotify_kworb.py)",
+      "detail": "FAIL in 0.1s"
+    },
+    {
+      "label": "culture RSS (update_culture_rss.py)",
+      "detail": "FAIL in 0.1s"
+    },
+    {
+      "label": "Pitchfork signal (update_pitchfork_rss.py)",
+      "detail": "OK in 0.2s"
+    },
+    {
+      "label": "identity tags (compile_identity_tags.py)",
+      "detail": "OK in 0.0s"
+    },
+    {
+      "label": "identity context feed (compile_identity_context_feed.py)",
+      "detail": "OK in 0.0s"
+    },
+    {
+      "label": "Guardian music feed (update_guardian_music.py)",
+      "detail": "FAIL in 0.1s"
+    },
+    {
+      "label": "signal insights (compile_signal_insights.py)",
+      "detail": "OK in 0.0s"
+    },
+    {
+      "label": "CTA momentum (compile_cta_momentum.py)",
+      "detail": "OK in 1.6s"
+    },
+    {
+      "label": "cultural insights (update_cultural_insights.py)",
+      "detail": "OK in 0.0s"
+    },
+    {
+      "label": "culture item build (build_culture_items.py)",
+      "detail": "OK in 0.0s"
+    },
+    {
+      "label": "culture items Supabase import (import_culture_items_supabase.py)",
+      "detail": "FAIL in 0.0s"
+    },
+    {
+      "label": "data asset status (log_data_asset_status.py)",
+      "detail": "OK in 0.0s"
+    }
+  ],
+  "recent_lines": [
+    "• CTA momentum (compile_cta_momentum.py): OK in 1.6s",
+    "• cultural insights (update_cultural_insights.py): OK in 0.1s",
+    "• culture item build (build_culture_items.py): OK in 0.0s",
+    "• culture items Supabase import (import_culture_items_supabase.py): FAIL in 0.6s",
+    "• data asset status (log_data_asset_status.py): OK in 0.0s",
+    "• pipeline health (pipeline_health.py): OK in 0.0s",
+    "Total duration: 3.5s | finished at 2026-04-03T09:05:34.252462+00:00",
+    "One or more scripts failed (see above). Exiting with failure code for scheduler alerting."
+  ]
+}

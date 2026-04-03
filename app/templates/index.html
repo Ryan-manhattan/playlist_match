@@ -863,6 +863,70 @@
         margin-top: 0.75rem;
     }
 
+    .automation-log-panel {
+        margin-top: 1.8rem;
+        padding-top: 1rem;
+        border-top: 1px dashed rgba(255, 255, 255, 0.2);
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+    }
+
+    .automation-log-heading {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 0.75rem;
+        letter-spacing: 0.35em;
+        text-transform: uppercase;
+        opacity: 0.6;
+    }
+
+    .automation-log-status {
+        padding: 0.2rem 0.8rem;
+        border-radius: 999px;
+        font-size: 0.6rem;
+        letter-spacing: 0.4em;
+    }
+
+    .automation-log-status-success {
+        background: rgba(56, 189, 248, 0.25);
+        color: #22d3ee;
+    }
+
+    .automation-log-status-failed {
+        background: rgba(248, 113, 113, 0.2);
+        color: #fb7185;
+    }
+
+    .automation-log-status-missing,
+    .automation-log-status-unknown {
+        background: rgba(255, 255, 255, 0.07);
+        color: rgba(255, 255, 255, 0.7);
+    }
+
+    .automation-log-subline {
+        font-size: 0.8rem;
+        opacity: 0.55;
+    }
+
+    .automation-log-lines {
+        font-size: 0.75rem;
+        line-height: 1.4;
+        opacity: 0.55;
+        display: grid;
+        gap: 0.35rem;
+    }
+
+    .automation-log-timeline {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        font-size: 0.7rem;
+        letter-spacing: 0.25em;
+        opacity: 0.5;
+    }
+
     .signal-section {
         border: 1px solid rgba(255, 255, 255, 0.12);
         background: rgba(10, 8, 12, 0.75);
@@ -1933,6 +1997,38 @@
             </div>
         </div>
         {% endif %}
+        {% set automation_log = automation_log or {} %}
+        {% set log_status = automation_log.status or automation_log.get('status', 'unknown') %}
+        <div class="automation-log-panel">
+            <div class="automation-log-heading">
+                <span>LaunchAgent log</span>
+                <span class="automation-log-status automation-log-status-{{ log_status }}">{{ log_status|upper }}</span>
+            </div>
+            <p class="automation-log-subline">
+                {% if automation_log.last_run %}
+                Last finished {{ automation_log.last_run[:16].replace('T', ' ') }}
+                {% else %}
+                LaunchAgent 로그를 기다리는 중입니다.
+                {% endif %}
+            </p>
+            {% if automation_log.notes %}
+            <p class="automation-log-subline">{{ automation_log.notes }}</p>
+            {% endif %}
+            {% if automation_log.recent_lines %}
+            <div class="automation-log-lines">
+                {% for line in automation_log.recent_lines[:4] %}
+                <p>{{ line }}</p>
+                {% endfor %}
+            </div>
+            {% endif %}
+            {% if automation_log.timeline %}
+            <div class="automation-log-timeline">
+                {% for entry in automation_log.timeline[:4] %}
+                <span>• {{ entry.label }} · {{ entry.detail }}</span>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
         <div class="mt-6 flex flex-wrap gap-3 items-center">
             <a href="{{ url_for('brand_studio') }}" class="btn-pixel text-xs tracking-widest justify-center">Share data health</a>
             <a href="{{ url_for('diary') }}" class="btn-outline text-xs tracking-widest justify-center">Document the data story</a>

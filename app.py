@@ -299,6 +299,16 @@ DEFAULT_PIPELINE_HEALTH = {
     'notes': 'scripts/pipeline_health.py에서 data_asset_status 요약을 만듭니다.',
 }
 
+AUTOMATION_LOG_PATH = Path(app.static_folder) / 'data' / 'automation_log.json'
+DEFAULT_AUTOMATION_LOG = {
+    'generated_at': None,
+    'log_path': '/tmp/off-community-hourly.log',
+    'last_run': None,
+    'status': 'unknown',
+    'notes': 'scripts/collect_automation_log.py를 실행해 LaunchAgent 로그를 요약하세요.',
+    'timeline': [],
+    'recent_lines': [],
+}
 
 IDENTITY_CONTEXT_FEED_PATH = Path(app.static_folder) / 'data' / 'identity_context_feed.json'
 DEFAULT_IDENTITY_CONTEXT_FEED = {
@@ -965,6 +975,23 @@ def load_pipeline_health() -> dict:
     return {**DEFAULT_PIPELINE_HEALTH}
 
 
+def load_automation_log() -> dict:
+    try:
+        if AUTOMATION_LOG_PATH.exists():
+            with AUTOMATION_LOG_PATH.open('r', encoding='utf-8') as f:
+                data = json.load(f)
+                if isinstance(data, dict):
+                    log_snapshot = {**DEFAULT_AUTOMATION_LOG, **data}
+                    if not isinstance(log_snapshot.get('timeline'), list):
+                        log_snapshot['timeline'] = []
+                    if not isinstance(log_snapshot.get('recent_lines'), list):
+                        log_snapshot['recent_lines'] = []
+                    return log_snapshot
+    except Exception:
+        pass
+    return {**DEFAULT_AUTOMATION_LOG}
+
+
 def load_identity_context_feed() -> dict:
     try:
         if IDENTITY_CONTEXT_FEED_PATH.exists():
@@ -1604,6 +1631,7 @@ def index():
     cta_momentum = load_cta_momentum()
     data_asset_status = load_data_asset_status()
     pipeline_health = load_pipeline_health()
+    automation_log = load_automation_log()
     identity_context_feed = load_identity_context_feed()
     guardian_feed = load_guardian_music_feed()
     spotify_daily_chart = load_spotify_daily_chart()
@@ -1638,6 +1666,7 @@ def index():
         spotify_daily_chart=spotify_daily_chart,
         data_asset_status=data_asset_status,
         pipeline_health=pipeline_health,
+        automation_log=automation_log,
         pitchfork_rss=pitchfork_rss,
     )
 
