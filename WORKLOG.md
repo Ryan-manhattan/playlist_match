@@ -115,3 +115,11 @@
 - Saved data sources: `app/static/data/culture.json`, `culture_rss.json`, `billboard_hot100.json`, `deezer_chart.json` → `data/normalized/culture_items.jsonl`.
 - Data-asset impact: 향후 Supabase `culture_items` 테이블로 옮기기 쉬운 정규화 레이어가 생겼고, source/external_id/timestamp/tag 기반으로 중복 제거/이력 관리/재분석 기반이 마련되었습니다.
 - Next candidate task: 각 문화 수집 스크립트 실행 뒤 `build_culture_items.py`까지 이어서 돌도록 파이프라인을 묶고, 랜딩/브랜드 화면이 `data/derived/culture_items_latest.json`을 직접 활용하도록 전환합니다.
+
+### 09:30 KST
+- 무엇을 바꿨는지: Guardian Music Radar를 위한 scripts/update_guardian_music.py와 app/static/data/guardian_music_feed.json 자산을 만들고, 랜딩에 Guardian feed 블록을 새로 넣어 Jun의 브랜드/멤버십 내러티브가 Guardian 음악 커버리지와 직접 연결되도록 했습니다.
+- 왜 바꿨는지: Guardian의 문화 기사로 수익화 CTA 앞뒤에 Jun 고유의 음악 취향을 덧붙여 방문자/재방문 가능성을 높이고, 외부 문화 데이터를 구조화된 자산으로 보존해 장기적인 리포트·카피에 재활용할 기반을 마련하기 위해서입니다.
+- Blockers/risks: 없음.
+- Saved data sources: https://www.theguardian.com/music (리스트 페이지 + 선택 기사 메타).
+- Data-asset impact: Guardian music feed JSON이 시간대별 Guardian 기사 타이틀·요약·타임스탬프를 기록하며, 랜딩 Data Asset Inventory 주변에서 새로운 문화/identity 신호를 드라이브하는 데이터 접점을 제공합니다.
+- 다음 후보: 이 스크립트를 시간당 autonomous job에 넣어 Guardian Music Radar가 최신 Guardian 커버리지를 자동으로 반영하게 하고, data_asset_status.json이나 Brand Studio/CRM 화면에서 동일한 자산을 다시 참조하는 흐름을 고민합니다.

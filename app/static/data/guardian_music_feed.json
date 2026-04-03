@@ -1,0 +1,41 @@
+{
+  "source": "The Guardian Music Section",
+  "source_url": "https://www.theguardian.com/music",
+  "hero_line": "Jun reads Guardian music dispatches to keep every membership and brand pitch rooted in culture.",
+  "generated_at": "2026-04-03T00:12:26.013516+00:00",
+  "entries": [
+    {
+      "title": "‘People are exhausted by Blackpink and BTS’: the DIY Chinese bands redefining corporate ‘idol’ pop",
+      "summary": "Since the regime quashed China’s version of the K-pop industry in 2021, an underground ‘alt-idol’ culture has emerged, championing freedom and experimentation",
+      "published_at": "2026-04-02T15:23:10.000Z",
+      "url": "https://www.theguardian.com/music/2026/apr/02/diy-chinese-bands-redefining-corporate-idol-pop",
+      "author": null,
+      "image": "https://i.guim.co.uk/img/media/2c8ae33891aa15df6643308fbb41ac632f6eec8d/220_0_4800_3840/master/4800.jpg?width=1200&height=630&quality=85&auto=format&fit=crop&precrop=40:21,offset-x50,offset-y0&overlay-align=bottom%2Cleft&overlay-width=100p&overlay-base64=L2ltZy9zdGF0aWMvb3ZlcmxheXMvdGctZGVmYXVsdC5wbmc&enable=upscale&s=c650b2a9205f7b09f18db13a9ccf1612"
+    },
+    {
+      "title": "Sunn O))): Sunn O))) review | Alexis Petridis's album of the week",
+      "summary": "The doomy duo strip back their sound to tectonic guitars and feedback, conjuring an immersive, strangely euphoric listening experience recorded in the wilds of Washington",
+      "published_at": "2026-04-02T15:22:50.000Z",
+      "url": "https://www.theguardian.com/music/2026/apr/02/sunn-o-review-sub-pop",
+      "author": null,
+      "image": "https://i.guim.co.uk/img/media/900ff3303d88deb0368126de2ff8d80c2add613f/1111_0_6499_5200/master/6499.jpg?width=1200&height=630&quality=85&auto=format&fit=crop&precrop=40:21,offset-x50,offset-y0&overlay-align=bottom%2Cleft&overlay-width=100p&overlay-base64=L2ltZy9zdGF0aWMvb3ZlcmxheXMvdGctcmV2aWV3LTQucG5n&enable=upscale&s=c124416bf63ff0350d620bee640956dd"
+    },
+    {
+      "title": "‘Ring the alarm! Wake up! Be human!’: Aurora and Tom Rowlands on their new dance-pop duo Tomora",
+      "summary": "The Norwegian singer-songwriter and the Chemical Brother have combined their talents, and names, to create a wildly inventive new band. The collaboration has gone smoothly so far – but will they soon need separate tour buses?",
+      "published_at": "2026-04-02T07:00:19.000Z",
+      "url": "https://www.theguardian.com/music/2026/apr/02/tomora-aurora-tom-rowlands-chemical-brothers-interview-come-closer",
+      "author": null,
+      "image": "https://i.guim.co.uk/img/media/89197afb577ec80ceb4c3946fadfe26d26af0755/1182_941_3982_3186/master/3982.jpg?width=1200&height=630&quality=85&auto=format&fit=crop&precrop=40:21,offset-x50,offset-y0&overlay-align=bottom%2Cleft&overlay-width=100p&overlay-base64=L2ltZy9zdGF0aWMvb3ZlcmxheXMvdGctZGVmYXVsdC5wbmc&enable=upscale&s=82fbec9de92fce3eb9c4704667fde331"
+    },
+    {
+      "title": "Megan Thee Stallion diagnosed with extreme exhaustion after hospitalization",
+      "summary": "The rapper was hospitalized in New York City after feeling unwell during her Moulin Rouge performance on Broadway",
+      "published_at": "2026-04-01T17:49:43.000Z",
+      "url": "https://www.theguardian.com/music/2026/apr/01/megan-thee-stallion-hospitalized",
+      "author": null,
+      "image": "https://i.guim.co.uk/img/media/e6fd1e71c3c4e6356e74ba5bf73742f53445ac97/773_0_2490_1992/master/2490.jpg?width=1200&height=630&quality=85&auto=format&fit=crop&precrop=40:21,offset-x50,offset-y0&overlay-align=bottom%2Cleft&overlay-width=100p&overlay-base64=L2ltZy9zdGF0aWMvb3ZlcmxheXMvdGctZGVmYXVsdC5wbmc&enable=upscale&s=3d6f4b1131519b9e5339f750e13d2490"
+    }
+  ],
+  "notes": "Hourly autonomous job에서 scripts/update_guardian_music.py를 실행해 Guardian music feed를 갱신하세요."
+}

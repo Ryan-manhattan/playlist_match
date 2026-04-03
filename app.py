@@ -281,6 +281,16 @@ DEFAULT_IDENTITY_CONTEXT_FEED = {
     'notes': 'Run scripts/compile_identity_context_feed.py after identity tags refresh to keep this feed alive.',
 }
 
+GUARDIAN_MUSIC_PATH = Path(app.static_folder) / 'data' / 'guardian_music_feed.json'
+DEFAULT_GUARDIAN_FEED = {
+    'generated_at': None,
+    'hero_line': 'Guardian music 지면을 통해 Jun의 감성과 브랜드 피치를 새로운 문맥으로 연결합니다.',
+    'source': 'The Guardian Music Section',
+    'source_url': 'https://www.theguardian.com/music',
+    'entries': [],
+    'notes': 'scripts/update_guardian_music.py를 실행해 Guardian music feed를 갱신하세요.',
+}
+
 growth_lead_store = GrowthLeadStore(os.path.dirname(__file__))
 
 # 콘솔 로그 함수 (디버깅용)
@@ -893,6 +903,22 @@ def load_identity_context_feed() -> dict:
     return {**DEFAULT_IDENTITY_CONTEXT_FEED}
 
 
+def load_guardian_music_feed() -> dict:
+    try:
+        if GUARDIAN_MUSIC_PATH.exists():
+            with GUARDIAN_MUSIC_PATH.open('r', encoding='utf-8') as f:
+                data = json.load(f)
+                if isinstance(data, dict):
+                    feed = {**DEFAULT_GUARDIAN_FEED, **data}
+                    entries = feed.get('entries')
+                    if not isinstance(entries, list):
+                        feed['entries'] = []
+                    return feed
+    except Exception:
+        pass
+    return {**DEFAULT_GUARDIAN_FEED}
+
+
 def _normalize_growth_lead_payload(data: dict) -> tuple[Optional[dict], Optional[str]]:
     """리드 수집 페이로드 정규화/검증"""
     lead_type = str(data.get("lead_type", "")).strip().lower()
@@ -1498,6 +1524,7 @@ def index():
     cta_momentum = load_cta_momentum()
     data_asset_status = load_data_asset_status()
     identity_context_feed = load_identity_context_feed()
+    guardian_feed = load_guardian_music_feed()
 
     from datetime import datetime
     today_date = datetime.now().strftime('%Y.%m.%d')
@@ -1525,6 +1552,7 @@ def index():
         signal_insights=signal_insights,
         cta_momentum=cta_momentum,
         cultural_insights=cultural_insights,
+        guardian_feed=guardian_feed,
         data_asset_status=data_asset_status,
     )
 

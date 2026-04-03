@@ -744,6 +744,86 @@
         text-transform: uppercase;
         opacity: 0.45;
     }
+
+    .guardian-section {
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: rgba(7, 7, 12, 0.85);
+        border-radius: 18px;
+    }
+
+    .guardian-header {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 1rem;
+    }
+
+    .guardian-link {
+        font-size: 0.65rem;
+        letter-spacing: 0.4em;
+        text-transform: uppercase;
+        opacity: 0.55;
+    }
+
+    .guardian-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 0.9rem;
+    }
+
+    .guardian-card {
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 14px;
+        padding: 1.1rem;
+        background: rgba(255, 255, 255, 0.02);
+        min-height: 190px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .guardian-title {
+        font-size: 1.05rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+
+    .guardian-summary {
+        font-size: 0.85rem;
+        opacity: 0.65;
+        line-height: 1.5;
+        flex-grow: 1;
+    }
+
+    .guardian-meta {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.7rem;
+        letter-spacing: 0.35em;
+        text-transform: uppercase;
+        opacity: 0.45;
+        margin-top: 0.9rem;
+    }
+
+    .guardian-meta .guardian-author {
+        opacity: 0.6;
+    }
+
+    .guardian-card a {
+        font-size: 0.7rem;
+        letter-spacing: 0.35em;
+        text-transform: uppercase;
+        opacity: 0.55;
+        margin-top: 0.5rem;
+    }
+
+    .guardian-notes {
+        font-size: 0.65rem;
+        letter-spacing: 0.35em;
+        text-transform: uppercase;
+        opacity: 0.45;
+        margin-top: 1rem;
+    }
 </style>
 {% endblock %}
 
@@ -765,6 +845,8 @@
     {% set culture_updated = culture.updated_at[:16].replace('T', ' ') if culture.updated_at else None %}
     {% set culture_rss = culture_rss or {'summary_line': 'Jun은 일상의 문화 신호를 스캔하며 다음 멤버십/브랜드 스토리를 준비하고 있습니다.', 'sources': []} %}
     {% set culture_rss_updated = culture_rss.generated_at[:16].replace('T', ' ') if culture_rss.generated_at else None %}
+    {% set guardian_feed = guardian_feed or {'hero_line': 'Guardian의 music 지면을 통해 Jun의 감성과 브랜드 피치를 새로운 문맥으로 연결합니다.', 'entries': [], 'generated_at': None, 'source_url': 'https://www.theguardian.com/music', 'notes': 'scripts/update_guardian_music.py를 실행해 Guardian music feed를 갱신하세요.'} %}
+    {% set guardian_feed_updated = guardian_feed.generated_at[:16].replace('T', ' ') if guardian_feed.generated_at else None %}
     {% set identity_tags = identity_tags or {'hero_line': 'Jun의 문화 레이더가 새로운 감성 태그를 기록 중입니다.', 'tags': [], 'generated_at': None} %}
     {% set identity_updated = identity_tags.generated_at[:16].replace('T', ' ') if identity_tags.generated_at else None %}
     {% set identity_context_feed = identity_context_feed or {'headline': 'Jun의 문화 컨텍스트 피드가 곧 정리됩니다.', 'summary': 'scripts/compile_identity_context_feed.py를 실행해 identity_tags를 모아서 브랜드/멤버십 CTA 흐름을 강화하세요.', 'top_tags': [], 'contexts': [], 'cta': {'label': 'Share this pulse with Brand Studio', 'link': url_for('brand_studio')}, 'notes': 'Run scripts/compile_identity_context_feed.py after identity tags refresh to keep this feed alive.'} %}
@@ -981,6 +1063,46 @@
             <a href="{{ url_for('diary') }}" class="btn-outline text-xs tracking-widest justify-center">Document Reaction</a>
             <a href="{{ url_for('brand_studio') }}" class="btn-outline text-xs tracking-widest justify-center">Share with Partner</a>
         </div>
+    </section>
+
+    <section class="pixel-card guardian-section p-6 md:p-8 mb-10">
+        <div class="guardian-header">
+            <div>
+                <span class="text-[10px] uppercase tracking-[0.3em] opacity-40">Guardian Music Radar</span>
+                <h3 class="serif-font text-2xl mt-2 leading-tight">Jun의 브랜드/멤버십 내러티브를 Guardian 커버리지와 연결합니다.</h3>
+            </div>
+            <div class="text-right space-y-1">
+                {% if guardian_feed_updated %}
+                <span class="text-[10px] uppercase tracking-[0.35em] opacity-50">Updated {{ guardian_feed_updated }}</span>
+                {% endif %}
+                <a href="{{ guardian_feed.source_url or 'https://www.theguardian.com/music' }}" target="_blank" rel="noreferrer" class="guardian-link">Open Guardian</a>
+            </div>
+        </div>
+        <p class="text-sm opacity-60 leading-relaxed mb-5">{{ guardian_feed.hero_line }}</p>
+        <div class="guardian-grid">
+            {% if guardian_feed.entries %}
+                {% for article in guardian_feed.entries %}
+                <article class="guardian-card">
+                    <div class="guardian-title">{{ article.title or 'Guardian story' }}</div>
+                    {% if article.summary %}
+                    <p class="guardian-summary">{{ article.summary }}</p>
+                    {% endif %}
+                    <div class="guardian-meta">
+                        <span>{{ article.published_at[:16].replace('T', ' ') if article.published_at else 'Latest' }}</span>
+                        {% if article.author %}
+                        <span class="guardian-author">{{ article.author }}</span>
+                        {% endif %}
+                    </div>
+                    <a href="{{ article.url }}" target="_blank" rel="noreferrer">Read on Guardian</a>
+                </article>
+                {% endfor %}
+            {% else %}
+                <p class="text-sm opacity-60">Guardian music feed를 준비 중입니다. scripts/update_guardian_music.py를 실행하면 최신 Guardian 커버리지를 확보합니다.</p>
+            {% endif %}
+        </div>
+        {% if guardian_feed.notes %}
+        <p class="guardian-notes">{{ guardian_feed.notes }}</p>
+        {% endif %}
     </section>
 
     <section class="pixel-card identity-section p-6 md:p-8 mb-10">

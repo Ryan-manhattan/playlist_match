@@ -23,6 +23,7 @@
 - `scripts/update_cultural_insights.py`가 RSS + Billboard + Deezer 데이터를 합쳐 `app/static/data/cultural_insights.json`을 만들고, 랜딩에 Cultural Insight Brief 섹션을 추가해 브랜드 CTA 앞에서 핵심 키워드/스토리/차트 포인트를 보여줍니다.
 - `scripts/log_data_asset_status.py`와 `app/static/data/data_asset_status.json`이 문화/리드/CTA 자산의 타임스탬프와 메트릭을 정리하고, 랜딩의 Data Asset Inventory 카드로 어떤 데이터 기반으로 수익화 흐름이 만들어지는지 투명하게 설명합니다.
 - `scripts/compile_identity_context_feed.py`가 identity_tags 컨텍스트를 `app/static/data/identity_context_feed.json`으로 정리하고, 랜딩에 Identity Context Feed 섹션을 추가해 CTA 직전에 Jun의 정체성과 문화 맥락을 다시 보여줍니다.
+- Guardian Music Radar 블록이 `scripts/update_guardian_music.py`와 `app/static/data/guardian_music_feed.json`를 이용해 Guardian music 기사 타이틀·요약·발행 시점을 기록하고, Jun의 브랜드/멤버십 CTA 앞뒤에 외부 문화 신호를 덧씌웁니다.
 - `scripts/build_culture_items.py`가 culture / RSS / Billboard / Deezer 데이터를 공통 스키마로 정규화해 `data/normalized/culture_items.jsonl`과 `data/derived/culture_items_manifest.json`을 생성하므로, 나중에 Supabase `culture_items` 테이블로 이관하기 쉬운 로컬 데이터 레이어가 생겼습니다.
 
 ## Automation currently configured
@@ -53,3 +54,4 @@
 12. Schedule `scripts/update_cultural_insights.py` within the hourly autonomous job so the Cultural Insight Brief reflects the freshest RSS + chart keywords and stories for CTA storytelling.
 13. scripts/log_data_asset_status.py를 시간당 autonomous job에 넣어 Data Asset Inventory가 최신 상태를 유지하고 랜딩/Brand Studio에서 동일한 데이터 자산 흐름을 재사용할 수 있도록 합니다.
 14. scripts/compile_identity_context_feed.py를 시간당 autonomous job에 넣어 Identity Context Feed/JSON이 항상 최신 상태로 유지되고 Brand Studio/CRM copy가 동일한 컨텍스트 데이터를 참조할 수 있도록 합니다.
+15. scripts/update_guardian_music.py를 시간당 autonomous job에 넣어 Guardian Music Radar가 최신 Guardian 기사로 자동 갱신되도록 하고, data_asset_status.json이나 Brand Studio/CRM 복사에서 동일한 Guardian 자산을 다시 참조하는 흐름을 마련합니다.
