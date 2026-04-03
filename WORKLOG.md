@@ -139,3 +139,11 @@
 - Saved data sources: `data/normalized/culture_items.jsonl`, `data/derived/culture_items_manifest.json` (manifest로 schema/version까지 캡슐화).
 - Data-asset impact: normalized 데이터가 이제 매시간 Supabase에 upsert되고 `docs/data_layer.md`/`docs/hourly_autonomous_job.md`/SESSION_HANDOFF에서 그 흐름이 문서화돼 향후 Brand Studio·CRM·리포트가 단일 스키마를 바로 참조할 수 있음.
 - Next candidate task: Cron 항목 설치 후 `/tmp/off-community-hourly.log`와 Supabase `culture_items` 테이블을 체크하여 pipeline의 Supabase import 단계가 잘 돌아가는지 확인하고, 새 문화 신호(YouTube/Spotify/추가 RSS) 캡처를 파이프라인에 손쉽게 붙일 방안을 계속 고민하기.
+
+### 12:20 KST
+- 무엇을 바꿨는지: `docs/hourly_autonomous_job.md`에 있던 Cron 행(`0 * * * * cd /Users/junkim/Projects/off_community && /usr/bin/env python3 scripts/hourly_autonomous_job.py >> /tmp/off-community-hourly.log 2>&1`)을 사용자 crontab에 등록하려고 `/tmp/off-community-cron` 파일을 만들고 `crontab /tmp/off-community-cron`을 여러 차례 실행해 보았습니다.
+- 왜 바꿨는지: 시간당 자동 파이프라인을 시스템 Cron으로 예약하면 데이터 자산, Identity/CTA 블록, Data Asset Inventory 카드가 매시간 같은 시점으로 새로 고침돼 수익화와 문화 정체성 신호가 항상 최신 상태로 유지되도록 하기 위함입니다.
+- Blockers/risks: `crontab /tmp/off-community-cron`은 `/var/at/tabs/junkim` 같은 스풀 위치에 쓰려다 멈춘 듯 계속 실행 상태로 남았고 아무 메시지 없이 종료되지 않아 실제로 새로운 Cron entry가 등록되지 않았습니다. 권한/스풀 잠금 문제가 있는 것 같으니 호스트 측에서 추가적인 허용이나 다른 방식(launchd/관리자 권한)으로 등록할 수 있어야 합니다.
+- Saved data sources: 시간당 파이프라인 스크립트(`scripts/hourly_autonomous_job.py` 및 포함된 수집/정리 스크립트들)와 `docs/hourly_autonomous_job.md`의 설명이 있어 준비 상태입니다.
+- Data-asset impact: 자동 실행이 아직 걸려 있지 않아 새로운 JSON 자산들이 수동 실행 시점 이후로 고정돼 있고 Data Asset Inventory 카드가 자동으로 리프레시되지 않으며, 차후 Cron이 정상화되기 전까지는 수동 실행·검증이 필요합니다.
+- Next candidate task: 호스트 cron 쓰기가 가능하도록 시스템 측 조치를 받거나 대체 스케줄러(launchd, supervisor 등)를 마련한 뒤 `docs/hourly_autonomous_job.md`의 Cron entry를 다시 등록하고 `/tmp/off-community-hourly.log` + Data Asset Inventory 카드 타임스탬프가 새로워졌는지 확인합니다.

@@ -30,6 +30,7 @@
 ## Automation currently configured
 - Daily 9 AM report job exists.
 - Hourly autonomous improvement job now runs `scripts/hourly_autonomous_job.py`, which courts the promo, chart, RSS, identity, CTA, Guardian, and data asset scripts in one sweep (see `docs/hourly_autonomous_job.md` for the schedule and Cron snippet; output lands in `/tmp/off-community-hourly.log`).
+- Cron entry described in `docs/hourly_autonomous_job.md` is still pending because `crontab /tmp/off-community-cron` hangs while writing to `/var/at/tabs/junkim`, so host-level permission or another scheduler (launchd/supervisor) is required before the hourly job runs automatically.
 - Both should think in terms of revenue + traffic + identity.
 - No automatic deploy.
 
@@ -40,6 +41,6 @@
 - If blocked or risky, write the blocker in `WORKLOG.md` and propose the safest next step.
 
 ## Next recommended tasks
-1. Install the Cron entry from `docs/hourly_autonomous_job.md`, watch `/tmp/off-community-hourly.log`, and verify the Data Asset Inventory card updates within minutes so the landing scripts keep reflecting fresh culture/lead signals.
+1. Resolve the Cron scheduling block so the `docs/hourly_autonomous_job.md` entry (`0 * * * * cd /Users/junkim/Projects/off_community && /usr/bin/env python3 scripts/hourly_autonomous_job.py >> /tmp/off-community-hourly.log 2>&1`) can be installed (host-level permission or alternative scheduler), then confirm `/tmp/off-community-hourly.log` records the hourly runs and the Data Asset Inventory card timestamps refresh shortly thereafter.
 2. Confirm Supabase `culture_items` table reflects the latest normalized snapshot after each hourly run and document any gaps in the Data Asset Inventory/Brand Studio flow.
 3. Keep sourcing new culture signals (YouTube dips, Spotify spikes, additional RSS like Pitchfork or NME) and, when ready, add the worker scripts to `scripts/hourly_autonomous_job.py` so the identity narrative stays ahead of trends.
