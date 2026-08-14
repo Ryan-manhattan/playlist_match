@@ -56,6 +56,15 @@ def sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
+def release_description(title: str) -> str:
+    year = datetime.now(timezone.utc).year
+    return (
+        f"{title} (Official Audio)\n\n"
+        f"© {year} OFF THE COMMUNITY. All rights reserved.\n\n"
+        "#music #officialaudio #offthecommunity"
+    )
+
+
 def main() -> None:
     options = args()
     if options.privacy == "public" and not options.confirm_public:
@@ -120,7 +129,7 @@ def main() -> None:
             video_size=(1920, 1080), fps=30, watermark_title=title,
         )
         youtube = publisher.upload_video(
-            str(video_path), title=title, description="Official audio\n\nOFF THE COMMUNITY",
+            str(video_path), title=title, description=release_description(title),
             tags=["official audio", "OFF THE COMMUNITY"], privacy_status=options.privacy, category_id="10",
         )
         completed = source_folder.upload_completed_video(video_path)
