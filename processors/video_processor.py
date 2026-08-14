@@ -6,7 +6,7 @@ Music Merger - 동영상 처리 엔진 (MoviePy 기반)
 import os
 import tempfile
 from datetime import datetime
-from PIL import Image
+from PIL import Image, ImageDraw, ImageFont
 from moviepy import AudioFileClip, ImageClip
 
 class VideoProcessor:
@@ -22,7 +22,8 @@ class VideoProcessor:
         
     def create_video_from_audio_image(self, audio_path, image_path, output_path, 
                                     video_size=(1920, 1080), fps=30, 
-                                    progress_callback=None):
+                                    progress_callback=None, add_brand_watermark=True,
+                                    watermark_title=None):
         """
         오디오 파일과 이미지를 결합하여 동영상 생성
         
@@ -33,6 +34,8 @@ class VideoProcessor:
             video_size: 동영상 해상도 (width, height)
             fps: 프레임 레이트
             progress_callback: 진행률 콜백 함수
+            add_brand_watermark: 최종 영상에 OFF 워터마크 합성 여부
+            watermark_title: 로고 아래에 표시할 트랙명 (생략 시 음원 파일명)
             
         Returns:
             dict: 생성 결과 정보
@@ -58,7 +61,12 @@ class VideoProcessor:
                 progress_callback(30, "이미지 처리 중...")
                 
             # 이미지 전처리 (크기 조정)
-            processed_image_path = self._resize_image(image_path, video_size)
+            processed_image_path = self._resize_image(
+                image_path,
+                video_size,
+                add_brand_watermark=add_brand_watermark,
+                watermark_title=watermark_title or os.path.splitext(os.path.basename(audio_path))[0],
+            )
             
             if progress_callback:
                 progress_callback(50, "이미지 클립 생성 중...")
@@ -165,7 +173,7 @@ class VideoProcessor:
             self.log(f"동영상 생성 실패: {str(e)}")
             raise
             
-    def _resize_image(self, image_path, target_size):
+    def _resize_image(self, image_path, target_size, add_brand_watermark=True, watermark_title=None):
         """이미지 크기 조정 및 최적화"""
         self.log(f"이미지 크기 조정: {target_size}")
         
@@ -204,6 +212,8 @@ class VideoProcessor:
                 bottom = top + target_size[1]
                 
                 img = img.crop((left, top, right, bottom))
+                if add_brand_watermark:
+                    self._add_brand_watermark(img, title=watermark_title)
                 
                 # 임시 파일로 저장
                 temp_dir = os.path.dirname(image_path)
@@ -244,6 +254,121 @@ class VideoProcessor:
                 'description': '모바일 최적화 (720p)'
             }
         }
+
+    def create_default_cover(self, title, output_path, video_size=(1920, 1080), logo_path=None):
+        """Create a clean branded 16:9 title card when audio has no artwork."""
+        width, height = video_size
+        title = (title or "Untitled track").strip()[:100]
+        image = Image.new('RGB', (width, height), '#10131b')
+        draw = ImageDraw.Draw(image)
+
+        # A small deterministic-looking gradient makes the generated video usable
+        # without requiring an image-generation API or an extra upload.
+        for y in range(height):
+            ratio = y / max(height - 1, 1)
+            red = int(16 + 20 * ratio)
+            green = int(19 + 14 * ratio)
+            blue = int(27 + 44 * ratio)
+            draw.line((0, y, width, y), fill=(red, green, blue))
+
+        accent = '#ff5c7a'
+        draw.ellipse((width * .58, height * .12, width * 1.05, height * .95), fill='#252d52')
+        draw.ellipse((width * .68, height * .20, width * .98, height * .78), outline=accent, width=8)
+        draw.rectangle((120, 160, 136, 720), fill=accent)
+        draw.text((175, 166), 'OFF THE COMMUNITY', fill='#c9d1e6', font=self._font(28))
+        draw.text((175, 245), 'NEW RELEASE', fill=accent, font=self._font(34))
+
+        draw.text((175, height - 180), 'Official audio', fill='#c9d1e6', font=self._font(32))
+        image.save(output_path, 'JPEG', quality=95, optimize=True)
+        self.log(f"Default music-video cover created: {output_path}")
+        return output_path
+
+    @staticmethod
+    def _add_brand_watermark(canvas, title=None, logo_path=None):
+        """Composite the centered OFF logo plus restrained track title into each video frame."""
+        if logo_path is None:
+            logo_path = os.path.join(
+                os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'app', 'Frame 1.png'
+            )
+        if not os.path.isfile(logo_path):
+            return
+
+        try:
+            with Image.open(logo_path) as source:
+                watermark = source.convert('RGBA')
+                target_width = max(175, min(300, canvas.width // 6))
+                target_height = round(watermark.height * target_width / watermark.width)
+                watermark = watermark.resize((target_width, target_height), Image.Resampling.LANCZOS)
+
+                # The source asset has a transparent background. Preserve it,
+                # while keeping the mark present but secondary to the track title.
+                alpha = watermark.getchannel('A').point(lambda value: int(value * 0.78))
+                watermark.putalpha(alpha)
+                position = (
+                    (canvas.width - target_width) // 2,
+                    # Keep the logo itself on the visual centreline, matching
+                    # the existing OFF official-audio artwork. The title then
+                    # sits naturally below without making the mark look high.
+                    max(80, int(canvas.height * .35)),
+                )
+                canvas.paste(watermark, position, watermark)
+
+                clean_title = (title or '').strip()[:100]
+                if not clean_title:
+                    return
+                title_font = VideoProcessor._brand_font(max(34, canvas.width // 46))
+                title_layer = Image.new('RGBA', canvas.size, (0, 0, 0, 0))
+                title_draw = ImageDraw.Draw(title_layer)
+                lines = VideoProcessor._wrap_title(
+                    title_draw, clean_title, title_font, max_width=int(canvas.width * .48)
+                )[:2]
+                y = position[1] + target_height + max(22, canvas.height // 48)
+                for line in lines:
+                    bbox = title_draw.textbbox((0, 0), line, font=title_font)
+                    x = (canvas.width - (bbox[2] - bbox[0])) // 2
+                    # A quiet shadow keeps the title readable on light artwork.
+                    title_draw.text((x + 2, y + 3), line, fill=(0, 0, 0, 105), font=title_font)
+                    title_draw.text((x, y), line, fill=(245, 242, 232, 225), font=title_font)
+                    y += (bbox[3] - bbox[1]) + max(10, canvas.height // 90)
+                canvas.paste(title_layer, (0, 0), title_layer)
+        except Exception as error:
+            # Branding should never prevent a creator's video from rendering.
+            self.log(f"Brand watermark skipped: {error}")
+
+    @staticmethod
+    def _font(size):
+        """Use a common bold system font, with Pillow's default as a safe fallback."""
+        for path in (
+            '/System/Library/Fonts/Supplemental/Arial Bold.ttf',
+            '/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf',
+            'C:/Windows/Fonts/arialbd.ttf',
+        ):
+            if os.path.exists(path):
+                return ImageFont.truetype(path, size)
+        return ImageFont.load_default()
+
+    @staticmethod
+    def _brand_font(size):
+        """Use Apple SD Gothic Neo Medium for the clean Korean/English wordmark style."""
+        try:
+            return ImageFont.truetype('/System/Library/Fonts/AppleSDGothicNeo.ttc', size, index=2)
+        except OSError:
+            return VideoProcessor._font(size)
+
+    @staticmethod
+    def _wrap_title(draw, title, font, max_width):
+        words = title.split() or [title]
+        lines, current = [], ''
+        for word in words:
+            candidate = f"{current} {word}".strip()
+            if current and draw.textbbox((0, 0), candidate, font=font)[2] > max_width:
+                lines.append(current)
+                current = word
+            else:
+                current = candidate
+        if current:
+            lines.append(current)
+        return lines[:3]
         
     def estimate_processing_time(self, audio_duration):
         """
