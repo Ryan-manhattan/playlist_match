@@ -296,7 +296,7 @@ class VideoProcessor:
         try:
             with Image.open(logo_path) as source:
                 watermark = source.convert('RGBA')
-                target_width = max(175, min(300, canvas.width // 6))
+                target_width = max(190, min(330, canvas.width // 5))
                 target_height = round(watermark.height * target_width / watermark.width)
                 watermark = watermark.resize((target_width, target_height), Image.Resampling.LANCZOS)
 
@@ -316,7 +316,7 @@ class VideoProcessor:
                 clean_title = (title or '').strip()[:100]
                 if not clean_title:
                     return
-                title_font = VideoProcessor._brand_font(max(34, canvas.width // 46))
+                title_font = VideoProcessor._brand_font(max(44, canvas.width // 46 + 10))
                 title_layer = Image.new('RGBA', canvas.size, (0, 0, 0, 0))
                 title_draw = ImageDraw.Draw(title_layer)
                 lines = VideoProcessor._wrap_title(
