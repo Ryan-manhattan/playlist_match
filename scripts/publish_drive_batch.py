@@ -28,6 +28,7 @@ def args() -> argparse.Namespace:
     parser.add_argument("--wallpaper-folder-id", default=DEFAULT_WALLPAPER_FOLDER_ID)
     parser.add_argument("--privacy", choices=("private", "unlisted", "public"), default="private")
     parser.add_argument("--confirm-public", action="store_true")
+    parser.add_argument("--force", action="store_true", help="Allow replacing audio already recorded as uploaded")
     parser.add_argument("--dry-run", action="store_true")
     return parser.parse_args()
 
@@ -106,8 +107,8 @@ def main() -> None:
         download_dir = root_output / ".drive_batch" / audio_item["id"]
         audio_path = source_folder.download(audio_item, download_dir)
         source_hash = sha256(audio_path)
-        if source_hash in existing_hashes:
-            results.append({"audio": audio_item["name"], "skipped": True, "reason": "already uploaded"})
+        if source_hash in existing_hashes and not options.force:
+            results.append({"audio": audio_item["name"], "skipped": True, "reason": "already uploaded (use --force to replace)"})
             continue
         cover_path = wallpapers.download(cover_item, download_dir)
         title = clean_title(audio_item["name"])
