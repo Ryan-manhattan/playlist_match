@@ -6,7 +6,7 @@ Music Merger - 동영상 처리 엔진 (MoviePy 기반)
 import os
 import tempfile
 from datetime import datetime
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFont, ImageFilter
 from moviepy import AudioFileClip, ImageClip
 
 class VideoProcessor:
@@ -296,9 +296,24 @@ class VideoProcessor:
         try:
             with Image.open(logo_path) as source:
                 watermark = source.convert('RGBA')
-                target_width = max(190, min(330, canvas.width // 5))
+                target_width = max(230, min(420, canvas.width // 4))
                 target_height = round(watermark.height * target_width / watermark.width)
                 watermark = watermark.resize((target_width, target_height), Image.Resampling.LANCZOS)
+
+                # Bright or pale artwork needs a quiet contrast field so the mark
+                # stays legible without permanently darkening the full wallpaper.
+                scrim = Image.new('RGBA', canvas.size, (0, 0, 0, 0))
+                scrim_draw = ImageDraw.Draw(scrim)
+                scrim_draw.rounded_rectangle(
+                    (
+                        int(canvas.width * .22), int(canvas.height * .25),
+                        int(canvas.width * .78), int(canvas.height * .74),
+                    ),
+                    radius=max(45, canvas.width // 28),
+                    fill=(5, 10, 20, 120),
+                )
+                scrim = scrim.filter(ImageFilter.GaussianBlur(radius=max(24, canvas.width // 64)))
+                canvas.paste(scrim, (0, 0), scrim)
 
                 # The source asset has a transparent background. Preserve it,
                 # while keeping the mark present but secondary to the track title.
@@ -316,7 +331,7 @@ class VideoProcessor:
                 clean_title = (title or '').strip()[:100]
                 if not clean_title:
                     return
-                title_font = VideoProcessor._brand_font(max(44, canvas.width // 46 + 10))
+                title_font = VideoProcessor._brand_font(max(80, canvas.width // 24))
                 title_layer = Image.new('RGBA', canvas.size, (0, 0, 0, 0))
                 title_draw = ImageDraw.Draw(title_layer)
                 lines = VideoProcessor._wrap_title(
