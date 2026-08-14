@@ -24,6 +24,7 @@ class FakeGrantedCredentials(FakeCredentials):
     def has_scopes(self, scopes):
         return scopes == [
             "https://www.googleapis.com/auth/youtube.upload",
+            "https://www.googleapis.com/auth/youtube.force-ssl",
             "https://www.googleapis.com/auth/drive",
         ]
 

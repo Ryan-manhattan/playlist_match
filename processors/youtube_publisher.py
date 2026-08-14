@@ -15,10 +15,11 @@ from urllib.parse import urlsplit
 
 
 YOUTUBE_UPLOAD_SCOPE = "https://www.googleapis.com/auth/youtube.upload"
+YOUTUBE_MANAGE_SCOPE = "https://www.googleapis.com/auth/youtube.force-ssl"
 GOOGLE_DRIVE_SCOPE = "https://www.googleapis.com/auth/drive"
 # A single operator consent connects the local publisher to both the YouTube
 # channel and the designated Drive media inbox/completed-output folder.
-GOOGLE_PUBLISHER_SCOPES = [YOUTUBE_UPLOAD_SCOPE, GOOGLE_DRIVE_SCOPE]
+GOOGLE_PUBLISHER_SCOPES = [YOUTUBE_UPLOAD_SCOPE, YOUTUBE_MANAGE_SCOPE, GOOGLE_DRIVE_SCOPE]
 
 
 class YouTubePublisher:
@@ -245,3 +246,15 @@ class YouTubePublisher:
             "url": f"https://www.youtube.com/watch?v={video_id}",
             "privacy_status": privacy_status,
         }
+
+    def delete_video(self, video_id: str) -> None:
+        """Permanently delete one video owned by the authorized channel."""
+        if not video_id or not isinstance(video_id, str):
+            raise ValueError("video_id is required")
+        credentials = self._load_credentials()
+        if credentials is None:
+            raise RuntimeError("YouTube channel is not connected. Complete OAuth authorization first.")
+        from googleapiclient.discovery import build
+
+        youtube = build("youtube", "v3", credentials=credentials, cache_discovery=False)
+        youtube.videos().delete(id=video_id).execute()
