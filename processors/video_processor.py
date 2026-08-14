@@ -6,7 +6,7 @@ Music Merger - 동영상 처리 엔진 (MoviePy 기반)
 import os
 import tempfile
 from datetime import datetime
-from PIL import Image, ImageDraw, ImageFont, ImageFilter
+from PIL import Image, ImageDraw, ImageFont
 from moviepy import AudioFileClip, ImageClip
 
 class VideoProcessor:
@@ -296,55 +296,44 @@ class VideoProcessor:
         try:
             with Image.open(logo_path) as source:
                 watermark = source.convert('RGBA')
-                target_width = max(230, min(420, canvas.width // 4))
+                target_width = max(200, min(360, canvas.width // 5))
                 target_height = round(watermark.height * target_width / watermark.width)
                 watermark = watermark.resize((target_width, target_height), Image.Resampling.LANCZOS)
-
-                # Bright or pale artwork needs a quiet contrast field so the mark
-                # stays legible without permanently darkening the full wallpaper.
-                scrim = Image.new('RGBA', canvas.size, (0, 0, 0, 0))
-                scrim_draw = ImageDraw.Draw(scrim)
-                scrim_draw.rounded_rectangle(
-                    (
-                        int(canvas.width * .22), int(canvas.height * .25),
-                        int(canvas.width * .78), int(canvas.height * .74),
-                    ),
-                    radius=max(45, canvas.width // 28),
-                    fill=(5, 10, 20, 120),
-                )
-                scrim = scrim.filter(ImageFilter.GaussianBlur(radius=max(24, canvas.width // 64)))
-                canvas.paste(scrim, (0, 0), scrim)
 
                 # The source asset has a transparent background. Preserve it,
                 # while keeping the mark present but secondary to the track title.
                 alpha = watermark.getchannel('A').point(lambda value: int(value * 0.78))
                 watermark.putalpha(alpha)
-                position = (
-                    (canvas.width - target_width) // 2,
-                    # Keep the logo itself on the visual centreline, matching
-                    # the existing OFF official-audio artwork. The title then
-                    # sits naturally below without making the mark look high.
-                    max(80, int(canvas.height * .35)),
-                )
-                canvas.paste(watermark, position, watermark)
-
                 clean_title = (title or '').strip()[:100]
-                if not clean_title:
-                    return
                 title_font = VideoProcessor._brand_font(max(80, canvas.width // 24))
                 title_layer = Image.new('RGBA', canvas.size, (0, 0, 0, 0))
                 title_draw = ImageDraw.Draw(title_layer)
                 lines = VideoProcessor._wrap_title(
-                    title_draw, clean_title, title_font, max_width=int(canvas.width * .48)
-                )[:2]
-                y = position[1] + target_height + max(22, canvas.height // 48)
+                    title_draw, clean_title, title_font, max_width=int(canvas.width * .56)
+                )[:2] if clean_title else []
+                line_heights = [
+                    title_draw.textbbox((0, 0), line, font=title_font)[3]
+                    - title_draw.textbbox((0, 0), line, font=title_font)[1]
+                    for line in lines
+                ]
+                line_gap = max(12, canvas.height // 90)
+                logo_title_gap = max(28, canvas.height // 38)
+                title_height = sum(line_heights) + line_gap * max(0, len(lines) - 1)
+                stack_height = target_height + (logo_title_gap + title_height if lines else 0)
+                position = (
+                    (canvas.width - target_width) // 2,
+                    max(80, (canvas.height - stack_height) // 2),
+                )
+                canvas.paste(watermark, position, watermark)
+
+                if not lines:
+                    return
+                y = position[1] + target_height + logo_title_gap
                 for line in lines:
                     bbox = title_draw.textbbox((0, 0), line, font=title_font)
                     x = (canvas.width - (bbox[2] - bbox[0])) // 2
-                    # A quiet shadow keeps the title readable on light artwork.
-                    title_draw.text((x + 2, y + 3), line, fill=(0, 0, 0, 105), font=title_font)
-                    title_draw.text((x, y), line, fill=(245, 242, 232, 225), font=title_font)
-                    y += (bbox[3] - bbox[1]) + max(10, canvas.height // 90)
+                    title_draw.text((x, y), line, fill=(255, 255, 255, 245), font=title_font)
+                    y += (bbox[3] - bbox[1]) + line_gap
                 canvas.paste(title_layer, (0, 0), title_layer)
         except Exception as error:
             # Branding should never prevent a creator's video from rendering.
@@ -364,9 +353,9 @@ class VideoProcessor:
 
     @staticmethod
     def _brand_font(size):
-        """Use Apple SD Gothic Neo Medium for the clean Korean/English wordmark style."""
+        """Use Apple SD Gothic Neo Bold for readable Korean/English track titles."""
         try:
-            return ImageFont.truetype('/System/Library/Fonts/AppleSDGothicNeo.ttc', size, index=2)
+            return ImageFont.truetype('/System/Library/Fonts/AppleSDGothicNeo.ttc', size, index=6)
         except OSError:
             return VideoProcessor._font(size)
 
