@@ -247,6 +247,33 @@ class YouTubePublisher:
             "privacy_status": privacy_status,
         }
 
+    def update_video_description(self, video_id: str, description: str) -> None:
+        """Replace the description for one video owned by the authorized channel."""
+        if not video_id or not isinstance(video_id, str):
+            raise ValueError("video_id is required")
+        credentials = self._load_credentials()
+        if credentials is None:
+            raise RuntimeError("YouTube channel is not connected. Complete OAuth authorization first.")
+        from googleapiclient.discovery import build
+
+        youtube = build("youtube", "v3", credentials=credentials, cache_discovery=False)
+        response = youtube.videos().list(part="snippet", id=video_id).execute()
+        items = response.get("items", [])
+        if not items:
+            raise RuntimeError(f"YouTube video was not found: {video_id}")
+        snippet = items[0]["snippet"]
+        youtube.videos().update(
+            part="snippet",
+            body={
+                "id": video_id,
+                "snippet": {
+                    "title": snippet["title"],
+                    "description": description[:5000],
+                    "categoryId": snippet["categoryId"],
+                },
+            },
+        ).execute()
+
     def delete_video(self, video_id: str) -> None:
         """Permanently delete one video owned by the authorized channel."""
         if not video_id or not isinstance(video_id, str):

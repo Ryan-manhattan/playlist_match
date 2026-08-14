@@ -59,9 +59,9 @@ def sha256(path: Path) -> str:
 def release_description(title: str) -> str:
     year = datetime.now(timezone.utc).year
     return (
-        f"{title} (Official Audio)\n\n"
+        f"{title}(Official Audio)\n\n"
         f"© {year} OFF THE COMMUNITY. All rights reserved.\n\n"
-        "#music #officialaudio #offthecommunity"
+        "#music #playlist #sound #rnb"
     )
 
 
