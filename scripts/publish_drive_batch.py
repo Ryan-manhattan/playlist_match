@@ -60,8 +60,7 @@ def release_description(title: str) -> str:
     year = datetime.now(timezone.utc).year
     return (
         f"{title}(Official Audio)\n\n"
-        f"© {year} OFF THE COMMUNITY. All rights reserved.\n\n"
-        "#music #playlist #sound #rnb"
+        f"© {year} OFF THE COMMUNITY. All rights reserved."
     )
 
 
