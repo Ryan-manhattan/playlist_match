@@ -22,6 +22,7 @@ from flask_login import login_required
 from flask_cors import CORS
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
 # Flask-Dance 제거, Supabase Auth 사용
+from dotenv import load_dotenv
 # from flask_dance.contrib.google import make_google_blueprint, google
 from werkzeug.utils import secure_filename
 from datetime import datetime, timedelta
@@ -30,6 +31,7 @@ import json
 import threading
 import uuid
 from core.utils import validate_audio_file, generate_safe_filename, get_file_size_mb
+from urllib.parse import urlsplit
 from processors.audio_processor import AudioProcessor
 from processors.link_extractor import LinkExtractor
 from processors.video_processor import VideoProcessor
@@ -120,6 +122,23 @@ app.config['PERMANENT_SESSION_LIFETIME'] = 86400  # 24시간
 
 # 폴더 생성 확인
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+# Video publishing uses the app's existing Google Web OAuth client.
+app.config['YOUTUBE_UPLOAD_TOKEN_FILE'] = os.getenv(
+    'YOUTUBE_UPLOAD_TOKEN_FILE',
+    os.path.join(os.path.dirname(__file__), 'data', 'youtube_upload_token.json'),
+)
+app.config['YOUTUBE_UPLOAD_REDIRECT_URI'] = os.getenv('YOUTUBE_UPLOAD_REDIRECT_URI', '').strip()
+app.config['YOUTUBE_UPLOAD_CLIENT_ID'] = os.getenv('GOOGLE_CLIENT_ID')
+app.config['YOUTUBE_UPLOAD_CLIENT_SECRET'] = os.getenv('GOOGLE_CLIENT_SECRET')
+_youtube_upload_allowed_ids = {
+    user_id.strip() for user_id in os.getenv('YOUTUBE_UPLOAD_ALLOWED_USER_IDS', '').split(',') if user_id.strip()
+}
+# The local development setup deliberately signs every request in as this fixed
+# demo account. Keep the one-click local flow usable without weakening a shared
+# production deployment, where an explicit operator allow-list is required.
+if not _youtube_upload_allowed_ids and os.getenv('FLASK_ENV', '').lower() == 'development':
+    _youtube_upload_allowed_ids = {'guest-demo-user'}
+app.config['YOUTUBE_UPLOAD_ALLOWED_USER_IDS'] = _youtube_upload_allowed_ids
 os.makedirs(app.config['PROCESSED_FOLDER'], exist_ok=True)
 
 PROMO_CONTENT_PATH = Path(app.static_folder) / 'data' / 'promo.json'
@@ -4641,6 +4660,197 @@ def trend_analyzer_v2_comprehensive():
 def get_spotify_charts():
     """Spotify 차트 데이터만 가져오기"""
     try:
+def _youtube_publisher():
+    return YouTubePublisher(
+        None,
+        app.config['YOUTUBE_UPLOAD_TOKEN_FILE'],
+        logger=console.log,
+        client_id=app.config['YOUTUBE_UPLOAD_CLIENT_ID'],
+        client_secret=app.config['YOUTUBE_UPLOAD_CLIENT_SECRET'],
+    )
+
+
+def _youtube_upload_redirect_uri():
+    """Return the Google-registered redirect URI, rejecting ambiguous config."""
+    configured_uri = app.config['YOUTUBE_UPLOAD_REDIRECT_URI']
+    parsed_uri = urlsplit(configured_uri)
+    callback_path = url_for('youtube_upload_oauth_callback')
+    if (
+        not configured_uri
+        or parsed_uri.scheme not in {'http', 'https'}
+        or not parsed_uri.netloc
+        or parsed_uri.path != callback_path
+        or parsed_uri.query
+        or parsed_uri.fragment
+    ):
+        raise RuntimeError(
+            'YOUTUBE_UPLOAD_REDIRECT_URI must be an absolute URL for '
+            f'{callback_path} with no query string or fragment.'
+        )
+    return configured_uri
+
+
+def _youtube_publish_is_allowed():
+    """Restrict a channel-wide publishing credential to its intended operator(s)."""
+    allowed_user_ids = app.config['YOUTUBE_UPLOAD_ALLOWED_USER_IDS']
+    return bool(allowed_user_ids) and current_user.is_authenticated and str(current_user.id) in allowed_user_ids
+
+
+@app.route('/api/youtube/upload/status', methods=['GET'])
+@login_required
+def youtube_upload_status():
+    """Report whether the server is ready to publish to the connected channel."""
+    publisher = _youtube_publisher()
+    redirect_uri = None
+    try:
+        redirect_uri = _youtube_upload_redirect_uri()
+        redirect_uri_ready = True
+    except RuntimeError:
+        redirect_uri_ready = False
+    configured = publisher.configured and redirect_uri_ready
+    return jsonify({
+        'success': True,
+        'configured': configured,
+        'authorized': publisher.is_authorized() if configured else False,
+        'allowed': _youtube_publish_is_allowed(),
+        'authorization_url': '/api/youtube/upload/authorize' if configured and _youtube_publish_is_allowed() else None,
+        'redirect_uri': redirect_uri,
+    })
+
+
+@app.route('/api/youtube/upload/authorize', methods=['GET'])
+@login_required
+def youtube_upload_authorize():
+    """Start the OAuth consent flow required for uploads to a YouTube channel."""
+    if not _youtube_publish_is_allowed():
+        return jsonify({'success': False, 'error': '이 계정은 YouTube 업로드 권한이 없습니다.'}), 403
+    try:
+        state = str(uuid.uuid4())
+        authorization_url, code_verifier = _youtube_publisher().authorization_request(
+            _youtube_upload_redirect_uri(), state
+        )
+        session['youtube_upload_oauth'] = {
+            'state': state,
+            'user_id': str(current_user.id),
+            'code_verifier': code_verifier,
+        }
+        return redirect(authorization_url)
+    except Exception:
+        console.log('[YouTube OAuth] authorization start failed')
+        return jsonify({'success': False, 'error': 'YouTube 연결을 시작할 수 없습니다. OAuth 설정을 확인하세요.'}), 500
+
+
+@app.route('/api/youtube/upload/callback', methods=['GET'])
+@login_required
+def youtube_upload_oauth_callback():
+    """Store the server-side upload token after the channel owner grants consent."""
+    if not _youtube_publish_is_allowed():
+        return jsonify({'success': False, 'error': '이 계정은 YouTube 업로드 권한이 없습니다.'}), 403
+    oauth_request = session.pop('youtube_upload_oauth', None) or {}
+    if request.args.get('error'):
+        return jsonify({'success': False, 'error': 'YouTube 연결이 취소되었거나 Google에서 승인하지 않았습니다.'}), 400
+    if (
+        request.args.get('state') != oauth_request.get('state')
+        or oauth_request.get('user_id') != str(current_user.id)
+    ):
+        return jsonify({'success': False, 'error': 'YouTube OAuth state verification failed.'}), 400
+    try:
+        _youtube_publisher().complete_authorization(
+            request.url,
+            _youtube_upload_redirect_uri(),
+            oauth_request.get('code_verifier'),
+        )
+        return jsonify({'success': True, 'message': 'YouTube 채널이 연결되었습니다. 이제 음악만 업로드하면 자동 게시할 수 있습니다.'})
+    except Exception as error:
+        # Return only provider-safe diagnostic codes. OAuth exception strings can
+        # contain request details, so never echo them to the browser or logs.
+        provider_code = getattr(error, 'error', None)
+        console.log(f'[YouTube OAuth] callback failed ({type(error).__name__}, {provider_code or "no-provider-code"})')
+        detail_by_code = {
+            'invalid_client': 'OAuth 클라이언트 ID와 비밀값 조합이 맞지 않습니다.',
+            'invalid_grant': '인증 코드가 만료됐거나 이미 사용되었습니다. 새 인증을 시작하세요.',
+            'redirect_uri_mismatch': 'Google Cloud의 승인된 리디렉션 URI가 앱 설정과 다릅니다.',
+        }
+        return jsonify({
+            'success': False,
+            'error': 'YouTube 연결에 실패했습니다. OAuth 설정을 확인한 뒤 다시 시도하세요.',
+            'detail': detail_by_code.get(
+                provider_code,
+                f'Google OAuth 토큰 교환 오류 유형: {type(error).__name__}',
+            ),
+        }), 500
+
+
+@app.route('/api/music-video/publish', methods=['POST'])
+@login_required
+def publish_music_video():
+    """Audio-only entrypoint: generate title-card video then upload it to YouTube."""
+    if not _youtube_publish_is_allowed():
+        return jsonify({'success': False, 'error': '이 계정은 YouTube 업로드 권한이 없습니다.'}), 403
+    publisher = _youtube_publisher()
+    try:
+        _youtube_upload_redirect_uri()
+    except RuntimeError:
+        return jsonify({'success': False, 'error': 'YouTube OAuth redirect URI 설정이 필요합니다.'}), 503
+    if not publisher.configured:
+        return jsonify({'success': False, 'error': 'YouTube OAuth client 설정이 필요합니다.'}), 503
+    if not publisher.is_authorized():
+        return jsonify({
+            'success': False,
+            'error': 'YouTube 채널 연결이 필요합니다.',
+            'authorization_url': '/api/youtube/upload/authorize',
+        }), 409
+    if 'audio' not in request.files or not request.files['audio'].filename:
+        return jsonify({'success': False, 'error': 'audio 파일을 업로드해주세요.'}), 400
+
+    audio_file = request.files['audio']
+    if not allowed_file(audio_file.filename):
+        return jsonify({'success': False, 'error': '지원하지 않는 음원 형식입니다.'}), 400
+
+    title = request.form.get('title', '').strip()[:100]
+    if not title:
+        title = os.path.splitext(audio_file.filename)[0].strip()[:100] or 'Untitled track'
+    description = request.form.get('description', '').strip()[:5000]
+    tags = [tag.strip() for tag in request.form.get('tags', '').split(',') if tag.strip()][:30]
+    privacy_status = request.form.get('privacy_status', 'private').strip().lower()
+    if privacy_status not in {'private', 'unlisted', 'public'}:
+        return jsonify({'success': False, 'error': 'privacy_status는 private, unlisted, public 중 하나여야 합니다.'}), 400
+
+    audio_filename = generate_safe_filename(audio_file.filename)
+    audio_path = os.path.join(app.config['UPLOAD_FOLDER'], audio_filename)
+    audio_file.save(audio_path)
+    validation = validate_audio_file(audio_path)
+    if not validation['valid']:
+        try:
+            os.remove(audio_path)
+        except OSError:
+            pass
+        return jsonify({'success': False, 'error': validation['error']}), 400
+
+    job_id = str(uuid.uuid4())
+    processing_jobs[job_id] = {
+        'status': 'queued',
+        'progress': 0,
+        'message': '음원 영상을 준비하고 있습니다...',
+        'result': None,
+    }
+    metadata = {
+        'title': title,
+        'description': description,
+        'tags': tags,
+        'privacy_status': privacy_status,
+        'category_id': request.form.get('category_id', '10').strip() or '10',
+    }
+    thread = threading.Thread(target=publish_music_video_job, args=(job_id, audio_filename, metadata), daemon=True)
+    thread.start()
+    return jsonify({
+        'success': True,
+        'job_id': job_id,
+        'status_url': f'/status/{job_id}',
+        'message': '음원 영상 생성 및 YouTube 업로드를 시작했습니다.',
+    }), 202
+
+
         if not trend_analyzer_v2:
             return jsonify({'success': False, 'error': 'Music Trend Analyzer V2가 초기화되지 않았습니다'}), 500
         
@@ -5451,6 +5661,80 @@ def process_image_for_video():
         
         return jsonify({
             'success': True,
+def publish_music_video_job(job_id, audio_filename, metadata):
+    """Generate a default visual from an audio upload and publish the MP4 to YouTube."""
+    processing_jobs[job_id].update({
+        'status': 'processing',
+        'progress': 1,
+        'message': '자동 커버 이미지를 만들고 있습니다...',
+    })
+    try:
+        audio_path = os.path.join(app.config['UPLOAD_FOLDER'], audio_filename)
+        if not os.path.isfile(audio_path):
+            raise FileNotFoundError(f"음원 파일을 찾을 수 없습니다: {audio_filename}")
+
+        video_processor = VideoProcessor(console_log=console.log)
+        cover_filename = f"auto_cover_{job_id}.jpg"
+        cover_path = os.path.join(app.config['UPLOAD_FOLDER'], cover_filename)
+        video_processor.create_default_cover(metadata['title'], cover_path)
+
+        output_filename = f"youtube_music_video_{job_id}.mp4"
+        output_path = os.path.join(app.config['PROCESSED_FOLDER'], output_filename)
+
+        def render_progress(progress, message):
+            # Reserve the last quarter of this job for the network upload stage.
+            processing_jobs[job_id]['progress'] = min(75, max(5, int(progress * .75)))
+            processing_jobs[job_id]['message'] = f'영상 생성: {message}'
+
+        video_processor.create_video_from_audio_image(
+            audio_path=audio_path,
+            image_path=cover_path,
+            output_path=output_path,
+            video_size=(1920, 1080),
+            fps=30,
+            progress_callback=render_progress,
+            watermark_title=metadata['title'],
+        )
+
+        processing_jobs[job_id]['progress'] = 76
+        processing_jobs[job_id]['message'] = 'YouTube 업로드를 시작합니다...'
+
+        def upload_progress(progress, message):
+            processing_jobs[job_id]['progress'] = min(99, 76 + int(progress * .23))
+            processing_jobs[job_id]['message'] = message
+
+        youtube_result = _youtube_publisher().upload_video(
+            output_path,
+            title=metadata['title'],
+            description=metadata['description'],
+            tags=metadata['tags'],
+            privacy_status=metadata['privacy_status'],
+            category_id=metadata['category_id'],
+            progress_callback=upload_progress,
+        )
+        processing_jobs[job_id].update({
+            'status': 'completed',
+            'progress': 100,
+            'message': 'YouTube 업로드가 완료되었습니다.',
+            'result': {
+                'type': 'youtube_music_video',
+                'youtube': youtube_result,
+                'video_info': {
+                    'filename': output_filename,
+                    'download_url': f'/download/{output_filename}',
+                },
+                'metadata': metadata,
+            },
+        })
+        console.log(f"[YouTube Publish Job] {job_id} - uploaded: {youtube_result['url']}")
+    except Exception:
+        console.log(f"[YouTube Publish Job] {job_id} - failed")
+        processing_jobs[job_id].update({
+            'status': 'error',
+            'message': '음원 영상 게시에 실패했습니다. 서버 로그와 YouTube 연결 상태를 확인하세요.',
+        })
+
+
             'file_info': file_info
         })
         

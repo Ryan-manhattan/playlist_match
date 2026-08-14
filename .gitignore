@@ -19,6 +19,8 @@ instance/
 # Google Cloud Service Account
 service-account-key.json
 *service-account*.json
+youtube_client_secrets.json
+data/youtube_upload_token.json
 
 # Audio files
 app/uploads/*
