@@ -45,6 +45,7 @@ numpy<2.0
 gunicorn
 google-api-python-client
 google-auth-oauthlib
+google-genai>=1.0,<2.0
 
 # Music Trend Analysis
 praw==7.7.1
