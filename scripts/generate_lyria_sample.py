@@ -25,6 +25,9 @@ DEFAULT_PROMPT = (
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--prompt", default=DEFAULT_PROMPT)
+    parser.add_argument("--prompt-file", type=Path, help="Read the Lyria prompt from a UTF-8 text file.")
+    parser.add_argument("--model", default="lyria-3-clip-preview")
+    parser.add_argument("--output-prefix", default="lyria_sample")
     parser.add_argument("--output-dir", type=Path, default=PROJECT_ROOT / "app" / "processed" / "lyria_samples")
     parser.add_argument("--drive-folder-id", default=DEFAULT_DRIVE_INBOX_ID)
     parser.add_argument("--no-drive-upload", action="store_true")
@@ -77,12 +80,18 @@ def main() -> None:
     if not api_key:
         raise SystemExit("Set GEMINI_API_KEY or GOOGLE_API_KEY in the project .env.")
 
+    prompt = options.prompt
+    if options.prompt_file:
+        prompt = options.prompt_file.expanduser().read_text(encoding="utf-8").strip()
+        if not prompt:
+            raise SystemExit("The prompt file is empty.")
+
     sys.path.insert(0, str(PROJECT_ROOT))
     from google import genai
 
     client = genai.Client(api_key=api_key)
     try:
-        interaction = client.interactions.create(model="lyria-3-clip-preview", input=options.prompt)
+        interaction = client.interactions.create(model=options.model, input=prompt)
     except Exception as error:
         raise SystemExit(f"Lyria request failed: {error}") from None
     audio = interaction.output_audio
@@ -91,7 +100,8 @@ def main() -> None:
 
     output_dir = options.output_dir.expanduser().resolve()
     output_dir.mkdir(parents=True, exist_ok=True)
-    output_path = output_dir / f"lyria_sample_{datetime.now().strftime('%Y%m%d_%H%M%S')}.mp3"
+    output_prefix = re.sub(r"[^A-Za-z0-9_-]+", "_", options.output_prefix).strip("_") or "lyria_sample"
+    output_path = output_dir / f"{output_prefix}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.mp3"
     output_path.write_bytes(base64.b64decode(audio.data))
 
     drive_file = None
@@ -99,8 +109,8 @@ def main() -> None:
         drive_file = upload_to_drive(output_path, options.drive_folder_id)
     print(json.dumps({
         "success": True,
-        "model": "lyria-3-clip-preview",
-        "prompt": options.prompt,
+        "model": options.model,
+        "prompt": prompt,
         "audio_path": str(output_path),
         "size_bytes": output_path.stat().st_size,
         "lyrics_or_structure": interaction.output_text,
