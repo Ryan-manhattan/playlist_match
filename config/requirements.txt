@@ -42,7 +42,7 @@ numpy<2.0
 # WSGI HTTP Server
 gunicorn
 google-api-python-client
-google-genai>=1.0,<2.0
+google-genai>=2.0,<3.0
 
 # Music Trend Analysis
 praw==7.7.1
