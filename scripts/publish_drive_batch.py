@@ -132,12 +132,14 @@ def main() -> None:
             tags=["official audio", "OFF THE COMMUNITY"], privacy_status=options.privacy, category_id="10",
         )
         completed = source_folder.upload_completed_video(video_path)
+        completed_source_audio = source_folder.move_source_to_completed(audio_item)
         receipt = {
             "published_at": datetime.now(timezone.utc).isoformat(), "source_audio": str(audio_path),
             "source_sha256": source_hash, "title": title, "privacy": options.privacy,
             "video_path": str(video_path), "cover_path": str(cover_path), "youtube_url": youtube["url"],
             "youtube_video_id": youtube["video_id"], "drive_source_file_id": audio_item["id"],
             "drive_completed_video": completed,
+            "drive_completed_source_audio": completed_source_audio,
         }
         with receipt_file.open("a", encoding="utf-8") as handle:
             handle.write(json.dumps(receipt, ensure_ascii=False, sort_keys=True) + "\n")

@@ -124,3 +124,22 @@ class GoogleDriveMediaFolder:
             "url": response.get("webViewLink"),
             "folder_name": completed_folder_name,
         }
+
+    def move_source_to_completed(self, item: dict, completed_folder_name: str = "upload_완료") -> dict:
+        """Move a successfully published source file out of the active inbox."""
+        if not item.get("id"):
+            raise ValueError("Drive source item must include an id")
+        completed_folder_id = self.completed_folder_id(completed_folder_name)
+        response = self.service.files().update(
+            fileId=item["id"],
+            addParents=completed_folder_id,
+            removeParents=self.folder_id,
+            fields="id,name,webViewLink,parents",
+            supportsAllDrives=True,
+        ).execute()
+        return {
+            "file_id": response["id"],
+            "name": response.get("name", item.get("name")),
+            "url": response.get("webViewLink"),
+            "folder_name": completed_folder_name,
+        }

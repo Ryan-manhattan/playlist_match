@@ -18,8 +18,8 @@ https://drive.google.com/drive/folders/1XklZ6JTuaCrUeAxAchlwdmyTAG5MatlS
   `Night Tide.mp3` + `Night Tide.png`.
 - Hermes는 최신 음원을 로컬로 내려받아 1920×1080 영상으로 렌더링한다. OFF 로고는
   중앙·세로 35% 위치에 고정하고, 곡 제목을 바로 아래에 표시한다.
-- YouTube 업로드에 성공한 MP4는 같은 Drive 폴더의 `upload_완료` 하위 폴더에 저장한다.
-  원본 음원과 이미지는 이동·삭제하지 않는다.
+- YouTube 업로드에 성공한 MP4와 원본 음원은 같은 Drive 폴더의 `upload_완료` 하위 폴더에 저장/이동한다. 따라서 최상위 폴더에는 아직 처리하지 않은 음원만 남는다.
+  같은 이름의 커버 이미지는 입력 폴더에 유지한다.
 - YouTube 채널 계정과 Drive 소유 계정이 다르면, Drive 입력 폴더를 게시 계정에
   **편집자** 권한으로 공유해야 한다.
 - OAuth 동의 범위에는 `https://www.googleapis.com/auth/youtube.upload`와
