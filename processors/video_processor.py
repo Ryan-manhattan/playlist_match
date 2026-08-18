@@ -213,6 +213,7 @@ class VideoProcessor:
                 
                 img = img.crop((left, top, right, bottom))
                 if add_brand_watermark:
+                    self._apply_official_audio_finish(img)
                     self._add_brand_watermark(img, title=watermark_title)
                 
                 # 임시 파일로 저장
@@ -282,6 +283,40 @@ class VideoProcessor:
         image.save(output_path, 'JPEG', quality=95, optimize=True)
         self.log(f"Default music-video cover created: {output_path}")
         return output_path
+
+    @staticmethod
+    def _apply_official_audio_finish(canvas):
+        """Apply restrained cover-art finishing without adding metadata text."""
+        width, height = canvas.size
+
+        # Very subtle monochrome grain removes the overly clean, digital-card feel.
+        grain = Image.effect_noise(canvas.size, 9).convert('RGB')
+        textured = Image.blend(canvas, grain, 0.028)
+        canvas.paste(textured)
+
+        # A top charcoal wash and bottom warm-brown wash give the vertical edges
+        # visual weight while preserving the supplied cover art.
+        finish = Image.new('RGBA', canvas.size, (0, 0, 0, 0))
+        finish_draw = ImageDraw.Draw(finish)
+        top_end = max(1, round(height * 0.20))
+        bottom_start = round(height * 0.76)
+        for y in range(top_end):
+            alpha = round(46 * (1 - y / top_end) ** 1.7)
+            finish_draw.line((0, y, width, y), fill=(12, 18, 26, alpha))
+        for y in range(bottom_start, height):
+            progress = (y - bottom_start) / max(1, height - bottom_start)
+            alpha = round(56 * progress ** 1.5)
+            finish_draw.line((0, y, width, y), fill=(38, 25, 19, alpha))
+        canvas.paste(finish, (0, 0), finish)
+
+        # Keep the frame inside the player-safe area rather than flush to the edge.
+        inset = max(20, round(min(width, height) * 0.026))
+        frame = ImageDraw.Draw(canvas, 'RGBA')
+        frame.rectangle(
+            (inset, inset, width - inset - 1, height - inset - 1),
+            outline=(246, 239, 224, 92),
+            width=1,
+        )
 
     @staticmethod
     def _add_brand_watermark(canvas, title=None, logo_path=None):
