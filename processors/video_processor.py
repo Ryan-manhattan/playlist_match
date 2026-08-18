@@ -296,7 +296,9 @@ class VideoProcessor:
         try:
             with Image.open(logo_path) as source:
                 watermark = source.convert('RGBA')
-                target_width = max(200, min(360, canvas.width // 5))
+                # Keep the identity mark clearly secondary to custom cover art.
+                # At 1920px-wide output this resolves to 320px (previously 360px).
+                target_width = max(200, min(320, canvas.width // 5))
                 target_height = round(watermark.height * target_width / watermark.width)
                 watermark = watermark.resize((target_width, target_height), Image.Resampling.LANCZOS)
 
