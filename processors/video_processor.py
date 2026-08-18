@@ -6,7 +6,7 @@ Music Merger - 동영상 처리 엔진 (MoviePy 기반)
 import os
 import tempfile
 from datetime import datetime
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFilter, ImageFont
 from moviepy import AudioFileClip, ImageClip
 
 class VideoProcessor:
@@ -289,6 +289,17 @@ class VideoProcessor:
         """Apply restrained cover-art finishing without adding metadata text."""
         width, height = canvas.size
 
+        # Keep the framed image crisp while fully blurring the outer margin.
+        # The visible frame cleanly separates the editorial image from this soft edge.
+        inset = max(20, round(min(width, height) * 0.026))
+        edge_mask = Image.new('L', canvas.size, 255)
+        edge_mask_draw = ImageDraw.Draw(edge_mask)
+        edge_mask_draw.rectangle(
+            (inset, inset, width - inset - 1, height - inset - 1), fill=0
+        )
+        blurred_edges = canvas.filter(ImageFilter.GaussianBlur(radius=max(18, round(min(width, height) * 0.018))))
+        canvas.paste(blurred_edges, (0, 0), edge_mask)
+
         # Very subtle monochrome grain removes the overly clean, digital-card feel.
         grain = Image.effect_noise(canvas.size, 9).convert('RGB')
         textured = Image.blend(canvas, grain, 0.028)
@@ -315,7 +326,7 @@ class VideoProcessor:
         frame.rectangle(
             (inset, inset, width - inset - 1, height - inset - 1),
             outline=(246, 239, 224, 92),
-            width=1,
+            width=2,
         )
 
     @staticmethod
