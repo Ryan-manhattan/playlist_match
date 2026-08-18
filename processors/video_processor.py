@@ -320,15 +320,6 @@ class VideoProcessor:
             finish_draw.line((0, y, width, y), fill=(38, 25, 19, alpha))
         canvas.paste(finish, (0, 0), finish)
 
-        # Keep the frame inside the player-safe area rather than flush to the edge.
-        inset = max(20, round(min(width, height) * 0.026))
-        frame = ImageDraw.Draw(canvas, 'RGBA')
-        frame.rectangle(
-            (inset, inset, width - inset - 1, height - inset - 1),
-            outline=(246, 239, 224, 92),
-            width=2,
-        )
-
     @staticmethod
     def _add_brand_watermark(canvas, title=None, logo_path=None):
         """Composite the centered OFF logo plus restrained track title into each video frame."""
