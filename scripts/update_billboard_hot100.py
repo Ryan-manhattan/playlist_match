@@ -14,6 +14,7 @@ from bs4 import BeautifulSoup
 ROOT = Path(__file__).resolve().parent.parent
 OUTPUT_PATH = ROOT / 'app' / 'static' / 'data' / 'billboard_hot100.json'
 CHART_URL = 'https://www.billboard.com/charts/hot-100'
+ITUNES_SEARCH_URL = 'https://itunes.apple.com/search'
 MAX_TRACKS = 5
 DEFAULT_PAYLOAD = {
     'source': 'Billboard Hot 100',
@@ -76,7 +77,34 @@ class BillboardParser:
 def fetch_chart_tracks() -> list[dict]:
     resp = requests.get(CHART_URL, headers={'User-Agent': 'Mozilla/5.0'})
     resp.raise_for_status()
-    return BillboardParser.parse(resp.text, limit=MAX_TRACKS)
+    tracks = BillboardParser.parse(resp.text, limit=MAX_TRACKS)
+    for track in tracks:
+        cover_url, external_link = lookup_artwork(track.get('title', ''), track.get('artist', ''))
+        track['cover_url'] = cover_url
+        track['external_link'] = external_link
+    return tracks
+
+
+def lookup_artwork(title: str, artist: str) -> tuple[str, str]:
+    term = f'{artist} {title}'.strip()
+    if not term:
+        return '', ''
+
+    try:
+        response = requests.get(
+            ITUNES_SEARCH_URL,
+            params={'term': term, 'entity': 'song', 'limit': 1},
+            headers={'User-Agent': 'Mozilla/5.0'},
+            timeout=15,
+        )
+        response.raise_for_status()
+        results = response.json().get('results') or []
+        if not results:
+            return '', ''
+        item = results[0]
+        return item.get('artworkUrl100', ''), item.get('trackViewUrl', '')
+    except Exception:
+        return '', ''
 
 
 def save(payload: dict):

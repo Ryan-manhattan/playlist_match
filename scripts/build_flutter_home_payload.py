@@ -18,6 +18,19 @@ def load_json(relative_path: str) -> dict[str, Any]:
         return json.load(file)
 
 
+def compact_value(value: Any) -> str:
+    try:
+        number = int(value)
+    except Exception:
+        return str(value or "")
+
+    if number >= 1_000_000:
+        return f"{number / 1_000_000:.1f}M"
+    if number >= 1_000:
+        return f"{number / 1_000:.1f}K"
+    return str(number)
+
+
 def build_payload() -> dict[str, Any]:
     cultural_insights = load_json("app/static/data/cultural_insights.json")
     culture_rss = load_json("app/static/data/culture_rss.json")
@@ -27,10 +40,50 @@ def build_payload() -> dict[str, Any]:
     cta_momentum = load_json("app/static/data/cta_momentum.json")
     promo = load_json("app/static/data/promo.json")
     lead_summary = load_json("app/static/data/lead_summary.json")
+    billboard = load_json("app/static/data/billboard_hot100.json")
+    deezer = load_json("app/static/data/deezer_chart.json")
+    spotify = load_json("app/static/data/spotify_daily_chart.json")
     data_asset_status = load_json("app/static/data/data_asset_status.json")
     pipeline_health = load_json("app/static/data/pipeline_health.json")
     culture_items_latest = load_json("data/derived/culture_items_latest.json")
     culture_items_manifest = load_json("data/derived/culture_items_manifest.json")
+
+    battle_tracks = []
+    for index, track in enumerate(spotify.get("top_tracks", [])[:4], start=1):
+        battle_tracks.append(
+            {
+                "id": f"spotify-{index}",
+                "title": track.get("title", ""),
+                "artist": track.get("artist", ""),
+                "source": "Spotify Daily",
+                "stat_label": "Rank",
+                "stat_value": f"#{track.get('rank', index)}",
+            }
+        )
+
+    leaderboard = []
+    for index, track in enumerate(spotify.get("top_tracks", [])[:3], start=1):
+        leaderboard.append(
+            {
+                "id": f"leader-spotify-{index}",
+                "title": track.get("title", ""),
+                "artist": track.get("artist", ""),
+                "source": "Spotify",
+                "stat_label": "Daily streams",
+                "stat_value": compact_value(track.get("daily_streams", 0)),
+            }
+        )
+    for index, track in enumerate(deezer.get("top_tracks", [])[:2], start=1):
+        leaderboard.append(
+            {
+                "id": f"leader-deezer-{index}",
+                "title": track.get("title", ""),
+                "artist": track.get("artist", ""),
+                "source": "Deezer",
+                "stat_label": "Chart spot",
+                "stat_value": f"#{track.get('position', index)}",
+            }
+        )
 
     return {
         "generated_at": culture_items_latest.get("generated_at", ""),
@@ -49,39 +102,57 @@ def build_payload() -> dict[str, Any]:
             "culture_items_manifest": "data/derived/culture_items_manifest.json",
         },
         "hero": {
-            "eyebrow": "Jun taste system",
-            "title": "Culture-first community,\nshaped for an app-native future.",
+            "eyebrow": "World Cup Arcade",
+            "title": "Pick fast,\nkeep the streak alive.",
             "summary": (
-                f"{cultural_insights.get('headline', '')} "
+                "모바일에서는 월드컵이 메인입니다. "
                 f"{promo.get('hero', {}).get('subtext', '')}"
             ).strip(),
             "updated_at": promo.get("updated_at", ""),
             "metrics": [
                 {
-                    "label": "culture items",
-                    "value": culture_items_manifest.get("count", 0),
+                    "label": "battle pool",
+                    "value": len(battle_tracks),
                 },
                 {
-                    "label": "fresh ratio",
-                    "value": f"{pipeline_health.get('fresh_ratio', 0)}%",
+                    "label": "spotify leaders",
+                    "value": len(spotify.get("top_tracks", [])[:6]),
                 },
                 {
-                    "label": "offers",
-                    "value": len(promo.get("offers", [])),
+                    "label": "deezer picks",
+                    "value": len(deezer.get("top_tracks", [])[:6]),
                 },
                 {
-                    "label": "leads",
+                    "label": "brand leads",
                     "value": lead_summary.get("total_leads", 0),
                 },
             ],
             "primary_cta": {
-                "label": promo.get("hero", {}).get("ctas", [{}])[0].get("text", "Explore"),
-                "link": promo.get("hero", {}).get("ctas", [{}])[0].get("link", "/"),
+                "label": "PLAY NOW",
+                "link": "/worldcup",
             },
             "secondary_cta": {
-                "label": promo.get("hero", {}).get("ctas", [{}, {}])[1].get("text", "View Studio"),
-                "link": promo.get("hero", {}).get("ctas", [{}, {}])[1].get("link", "/brand-studio"),
+                "label": "OPEN FULL BOARD",
+                "link": "/worldcup",
             },
+        },
+        "worldcup": {
+            "eyebrow": "Main Feature",
+            "title": "One-tap battles built like a mini game.",
+            "summary": (
+                "Spotify, Deezer, Billboard 신호를 바로 대결 카드로 묶었습니다. "
+                "앱에서는 다음 페어가 끊기지 않게 빠르게 이어집니다."
+            ),
+            "metrics": [
+                {"label": "spotify", "value": len(spotify.get("top_tracks", [])[:6])},
+                {"label": "deezer", "value": len(deezer.get("top_tracks", [])[:6])},
+                {"label": "billboard", "value": len(billboard.get("top_tracks", [])[:5])},
+                {"label": "7d leads", "value": lead_summary.get("recent_seven_days", 0)},
+            ],
+            "battle_tracks": battle_tracks,
+            "leaderboard": leaderboard,
+            "primary_cta": {"label": "Play full world cup", "link": "/worldcup"},
+            "secondary_cta": {"label": "Add more tracks", "link": "/playlists"},
         },
         "culture_pulse": {
             "headline": cultural_insights.get("headline", "Culture pulse"),

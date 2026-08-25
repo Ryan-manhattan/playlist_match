@@ -3,6 +3,7 @@ class HomePayload {
     required this.generatedAt,
     required this.sourceFiles,
     required this.hero,
+    required this.worldcup,
     required this.culturePulse,
     required this.identity,
     required this.monetization,
@@ -12,6 +13,7 @@ class HomePayload {
   final String generatedAt;
   final Map<String, String> sourceFiles;
   final HomeHero hero;
+  final WorldcupSection worldcup;
   final CulturePulseSection culturePulse;
   final IdentitySection identity;
   final MonetizationSection monetization;
@@ -24,6 +26,9 @@ class HomePayload {
       hero: HomeHero.fromJson(
         json['hero'] as Map<String, dynamic>? ?? const {},
       ),
+      worldcup: WorldcupSection.fromJson(
+        json['worldcup'] as Map<String, dynamic>? ?? const {},
+      ),
       culturePulse: CulturePulseSection.fromJson(
         json['culture_pulse'] as Map<String, dynamic>? ?? const {},
       ),
@@ -35,6 +40,55 @@ class HomePayload {
       ),
       dataAssets: DataAssetsSection.fromJson(
         json['data_assets'] as Map<String, dynamic>? ?? const {},
+      ),
+    );
+  }
+}
+
+class WorldcupSection {
+  const WorldcupSection({
+    required this.eyebrow,
+    required this.title,
+    required this.summary,
+    required this.metrics,
+    required this.battleTracks,
+    required this.leaderboard,
+    required this.primaryCta,
+    required this.secondaryCta,
+  });
+
+  final String eyebrow;
+  final String title;
+  final String summary;
+  final List<MetricChipModel> metrics;
+  final List<WorldcupTrackModel> battleTracks;
+  final List<WorldcupTrackModel> leaderboard;
+  final CtaLink primaryCta;
+  final CtaLink secondaryCta;
+
+  factory WorldcupSection.fromJson(Map<String, dynamic> json) {
+    return WorldcupSection(
+      eyebrow: json['eyebrow'] as String? ?? '',
+      title: json['title'] as String? ?? '',
+      summary: json['summary'] as String? ?? '',
+      metrics: (json['metrics'] as List? ?? const [])
+          .map((item) => MetricChipModel.fromJson(item as Map<String, dynamic>))
+          .toList(),
+      battleTracks: (json['battle_tracks'] as List? ?? const [])
+          .map(
+            (item) => WorldcupTrackModel.fromJson(item as Map<String, dynamic>),
+          )
+          .toList(),
+      leaderboard: (json['leaderboard'] as List? ?? const [])
+          .map(
+            (item) => WorldcupTrackModel.fromJson(item as Map<String, dynamic>),
+          )
+          .toList(),
+      primaryCta: CtaLink.fromJson(
+        json['primary_cta'] as Map<String, dynamic>? ?? const {},
+      ),
+      secondaryCta: CtaLink.fromJson(
+        json['secondary_cta'] as Map<String, dynamic>? ?? const {},
       ),
     );
   }
@@ -469,6 +523,35 @@ class DataAssetModel {
       metricLabel: json['metric_label'] as String? ?? '',
       metricValue: json['metric_value']?.toString() ?? '',
       updatedAt: json['updated_at'] as String? ?? '',
+    );
+  }
+}
+
+class WorldcupTrackModel {
+  const WorldcupTrackModel({
+    required this.id,
+    required this.title,
+    required this.artist,
+    required this.source,
+    required this.statLabel,
+    required this.statValue,
+  });
+
+  final String id;
+  final String title;
+  final String artist;
+  final String source;
+  final String statLabel;
+  final String statValue;
+
+  factory WorldcupTrackModel.fromJson(Map<String, dynamic> json) {
+    return WorldcupTrackModel(
+      id: json['id'] as String? ?? '',
+      title: json['title'] as String? ?? '',
+      artist: json['artist'] as String? ?? '',
+      source: json['source'] as String? ?? '',
+      statLabel: json['stat_label'] as String? ?? '',
+      statValue: json['stat_value']?.toString() ?? '',
     );
   }
 }

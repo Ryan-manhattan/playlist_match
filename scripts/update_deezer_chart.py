@@ -41,6 +41,10 @@ def fetch_top_tracks() -> list[dict]:
             'artist': artist_info.get('name') or 'Unknown Artist',
             'duration': entry.get('duration'),
             'popularity': popularity,
+            'cover_url': (entry.get('album') or {}).get('cover_big')
+            or (entry.get('album') or {}).get('cover_medium')
+            or (entry.get('album') or {}).get('cover'),
+            'link': entry.get('link') or '',
         })
     return tracks
 

@@ -19,6 +19,7 @@ HEADERS = {
     "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
 }
 MAX_TRACKS = 6
+ITUNES_SEARCH_URL = "https://itunes.apple.com/search"
 
 
 def _to_int(value: str) -> int:
@@ -41,6 +42,28 @@ def _to_int(value: str) -> int:
 
 def _clean_text(value: str) -> str:
     return " ".join(value.split()) if isinstance(value, str) else ""
+
+
+def _lookup_artwork(title: str, artist: str) -> tuple[str, str]:
+    term = f"{artist} {title}".strip()
+    if not term:
+        return "", ""
+
+    try:
+        response = requests.get(
+            ITUNES_SEARCH_URL,
+            params={"term": term, "entity": "song", "limit": 1},
+            headers=HEADERS,
+            timeout=15,
+        )
+        response.raise_for_status()
+        results = response.json().get("results") or []
+        if not results:
+            return "", ""
+        item = results[0]
+        return item.get("artworkUrl100", ""), item.get("trackViewUrl", "")
+    except Exception:
+        return "", ""
 
 
 def fetch_top_tracks() -> List[Dict[str, str]]:
@@ -67,11 +90,15 @@ def fetch_top_tracks() -> List[Dict[str, str]]:
         if link and not link.startswith("http"):
             link = f"https://kworb.net/spotify/{link.lstrip('./') if link.startswith('./') else link.lstrip('..')}"
 
+        artwork_url, external_link = _lookup_artwork(title=title, artist=artist)
+
         tracks.append({
             "rank": position,
             "artist": artist,
             "title": title,
             "link": link,
+            "cover_url": artwork_url,
+            "external_link": external_link or link,
             "days_on_chart": _to_int(cells[3].get_text()),
             "peak_position": _to_int(cells[4].get_text()),
             "peak_multiplier": _clean_text(cells[5].get_text()),

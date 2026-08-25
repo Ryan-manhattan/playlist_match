@@ -2,32 +2,42 @@
   "source": "Billboard Hot 100",
   "source_url": "https://www.billboard.com/charts/hot-100",
   "insight_line": "Jun의 레이더는 Billboard Hot 100에 집중합니다.",
-  "captured_at": "2026-04-03T10:06:00.018580Z",
+  "captured_at": "2026-08-25T06:41:56.485122Z",
   "top_tracks": [
     {
       "rank": 1,
-      "title": "Swim",
-      "artist": "BTS"
+      "title": "Choosin' Texas",
+      "artist": "Ella Langley",
+      "cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/e2/91/4d/e2914d0a-7f1d-f04c-fbf4-c50b38548838/196873638690.jpg/100x100bb.jpg",
+      "external_link": "https://music.apple.com/us/album/choosin-texas/1844932149?i=1844932150&uo=4"
     },
     {
       "rank": 2,
-      "title": "Choosin' Texas",
-      "artist": "Ella Langley"
+      "title": "I Knew It, I Knew You",
+      "artist": "Taylor Swift",
+      "cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/34/35/6c/34356cb4-bd0b-3bac-b118-1a6d7264dc64/26UMGIM69942.rgb.jpg/100x100bb.jpg",
+      "external_link": "https://music.apple.com/us/album/i-knew-it-i-knew-you-from-toy-story-5/6775527442?i=6775527443&uo=4"
     },
     {
       "rank": 3,
-      "title": "Man I Need",
-      "artist": "Olivia Dean"
+      "title": "Been By Now",
+      "artist": "Morgan Wallen",
+      "cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/9f/8d/52/9f8d52a0-b6d9-d038-327b-4fe58bedce67/26UMGIM94572.rgb.jpg/100x100bb.jpg",
+      "external_link": "https://music.apple.com/us/album/been-by-now/6792676858?i=6792676860&uo=4"
     },
     {
       "rank": 4,
-      "title": "I Just Might",
-      "artist": "Bruno Mars"
+      "title": "Boston",
+      "artist": "Stella Lefty",
+      "cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/7c/de/5e/7cde5e7a-612d-9714-d34c-1eb234c85ebb/810129961546.jpg/100x100bb.jpg",
+      "external_link": "https://music.apple.com/us/album/boston/1884403092?i=1884403093&uo=4"
     },
     {
       "rank": 5,
-      "title": "Ordinary",
-      "artist": "Alex Warren"
+      "title": "Hate That I Made You Love Me",
+      "artist": "Ariana Grande",
+      "cover_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/56/f4/96/56f49612-02dd-83f4-44fe-d2118cc70707/26UMGIM51129.rgb.jpg/100x100bb.jpg",
+      "external_link": "https://music.apple.com/us/album/hate-that-i-made-you-love-me/1895420874?i=6763656725&uo=4"
     }
   ]
 }

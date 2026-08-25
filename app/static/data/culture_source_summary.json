@@ -1,21 +1,21 @@
 {
-  "generated_at": "2026-04-03T12:39:45.731801+00:00",
+  "generated_at": "2026-08-25T06:42:10.490573+00:00",
   "total_items": 18,
   "source_counts": [
     {
       "source": "culture_rss",
       "count": 7,
-      "latest_collected_at": "2026-04-03T12:05:44.489652+00:00"
+      "latest_collected_at": "2026-08-25T06:42:10.450758+00:00"
     },
     {
       "source": "deezer_chart",
       "count": 6,
-      "latest_collected_at": "2026-04-03T12:05:44.489805+00:00"
+      "latest_collected_at": "2026-08-25T06:42:10.450970+00:00"
     },
     {
       "source": "billboard_hot100",
       "count": 5,
-      "latest_collected_at": "2026-04-03T12:05:44.489728+00:00"
+      "latest_collected_at": "2026-08-25T06:42:10.450869+00:00"
     }
   ],
   "notes": "scripts/build_culture_items.py에서 culture RSS·차트 데이터를 정규화한 뒤 이 스크립트를 실행하면 Culture Source Pulse 카드가 각 소스의 컬렉션 횟수와 최신 수집 시점을 보여줍니다."

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-03T12:08:27.559505+00:00",
+  "generated_at": "2026-08-25T06:41:47.878023+00:00",
   "total_leads": 0,
   "sources": [],
   "notes": "scripts/update_lead_source_spread.py가 리드 요약에서 유입 소스 점유율을 계산합니다."

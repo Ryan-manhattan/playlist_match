@@ -1,32 +1,32 @@
 {
-  "generated_at": "2026-04-03T12:05:42.552151+00:00",
+  "generated_at": "2026-08-25T06:42:04.662967+00:00",
   "hero_line": "Pitchfork Signal: Jun의 브랜드 제안에 글로벌 음악 트렌드를 포갭니다.",
-  "summary_line": "Pitchfork가 U2 Return with New EP Easter Lily를 주목하고 있습니다. Jun은 이 신호를 브랜드/멤버십 서사에 녹입니다.",
+  "summary_line": "Pitchfork가 Pitchfork Music Festival CDMX 2026 Announces Full Lineup를 주목하고 있습니다. Jun은 이 신호를 브랜드/멤버십 서사에 녹입니다.",
   "source_url": "https://pitchfork.com/rss/news/",
   "entries": [
     {
-      "title": "U2 Return with New EP Easter Lily",
-      "link": "https://pitchfork.com/news/u2-return-with-new-ep-easter-lily/",
-      "summary": "The band’s second EP in as many months features Brian Eno",
-      "published": "2026-04-03"
+      "title": "Pitchfork Music Festival CDMX 2026 Announces Full Lineup",
+      "link": "https://pitchfork.com/story/pitchfork-music-festival-cdmx-2026-announces-full-lineup/",
+      "summary": "Wendy Eisenberg, Safety Trance, and Tygapaw are among this year’s acts",
+      "published": "2026-08-24"
     },
     {
-      "title": "Pooh Shiesty Arrested on Robbery, Kidnapping Charges Over Alleged Gucci Mane Label Dispute",
-      "link": "https://pitchfork.com/news/pooh-shiesty-arrested-on-robbery-kidnapping-charges-over-alleged-gucci-mane-label-dispute/",
-      "summary": "The rapper was arrested on April 1 along with seven other suspects",
-      "published": "2026-04-02"
+      "title": "Big Thief Debut New Triple Album, Horsepower, Live in Nashville",
+      "link": "https://pitchfork.com/story/big-thief-debut-new-triple-album-horsepower-live-in-nashville/",
+      "summary": "The 29-song album was performed in full at the Ryman Auditorium alongside special guests Lucinda Williams, Gillian Welch, Iris DeMent, and more",
+      "published": "2026-08-24"
     },
     {
-      "title": "King Princess to Star in Aimee Mann’s Girl, Interrupted Musical",
-      "link": "https://pitchfork.com/news/king-princess-to-star-in-aimee-manns-girl-interrupted-musical/",
-      "summary": "Mikaela Straus will make her theatrical debut as Lisa, the same role Angelina Jolie played in the 1999 film",
-      "published": "2026-04-02"
+      "title": "Tinashe, Mike Shabb, Lucy Bedroque, and More: This Week’s Pitchfork Selects Playlist",
+      "link": "https://pitchfork.com/story/tinashe-mike-shabb-lucy-bedroque-this-weeks-pitchfork-selects-playlist/",
+      "summary": "Our weekly playlist highlights songs that our writers, editors, and contributors are listening to on repeat",
+      "published": "2026-08-24"
     },
     {
-      "title": "Olivia Rodrigo Announces New Album You Seem Pretty Sad for a Girl So in Love",
-      "link": "https://pitchfork.com/news/olivia-rodrigo-announces-new-album-you-seem-pretty-sad-for-a-girl-so-in-love/",
-      "summary": "The Guts follow-up is officially out in June",
-      "published": "2026-04-02"
+      "title": "Listen to Olivia Rodrigo’s New Song “Serena Joy”",
+      "link": "https://pitchfork.com/story/listen-to-olivia-rodrigos-new-song-serena-joy/",
+      "summary": "The one-off single takes its name from a female character in Margaret Atwood’s The Handmaid’s Tale",
+      "published": "2026-08-24"
     }
   ],
   "notes": "scripts/update_pitchfork_rss.py를 실행해 Pitchfork 뉴스 피드에서 최근 시그널을 기록하세요."

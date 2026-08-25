@@ -1,81 +1,12 @@
 {
-  "generated_at": "2026-04-03T12:05:45.247055+00:00",
+  "generated_at": "2026-08-25T06:42:11.629945+00:00",
   "log_path": "/tmp/off-community-hourly.log",
-  "last_run": "2026-04-03T11:05:41.514904+00:00",
-  "next_expected_run_utc": "2026-04-03T12:05:41.514904+00:00",
-  "next_expected_run_local": "2026-04-03 21:05 KST",
-  "status": "failed",
-  "notes": "One or more scripts failed (see above). Exiting with failure code for scheduler alerting.",
-  "timeline": [
-    {
-      "label": "growth summary (update_growth_summary.py)",
-      "detail": "OK in 0.0s"
-    },
-    {
-      "label": "promo refresh (update_promo.py)",
-      "detail": "OK in 0.0s"
-    },
-    {
-      "label": "Billboard Hot 100 (update_billboard_hot100.py)",
-      "detail": "FAIL in 0.1s"
-    },
-    {
-      "label": "Deezer global chart (update_deezer_chart.py)",
-      "detail": "OK in 0.4s"
-    },
-    {
-      "label": "Spotify Global Daily (update_spotify_kworb.py)",
-      "detail": "FAIL in 0.1s"
-    },
-    {
-      "label": "culture RSS (update_culture_rss.py)",
-      "detail": "FAIL in 0.1s"
-    },
-    {
-      "label": "Pitchfork signal (update_pitchfork_rss.py)",
-      "detail": "OK in 0.2s"
-    },
-    {
-      "label": "identity tags (compile_identity_tags.py)",
-      "detail": "OK in 0.0s"
-    },
-    {
-      "label": "identity context feed (compile_identity_context_feed.py)",
-      "detail": "OK in 0.0s"
-    },
-    {
-      "label": "Guardian music feed (update_guardian_music.py)",
-      "detail": "FAIL in 0.1s"
-    },
-    {
-      "label": "signal insights (compile_signal_insights.py)",
-      "detail": "OK in 0.0s"
-    },
-    {
-      "label": "CTA momentum (compile_cta_momentum.py)",
-      "detail": "OK in 1.7s"
-    },
-    {
-      "label": "cultural insights (update_cultural_insights.py)",
-      "detail": "OK in 0.0s"
-    },
-    {
-      "label": "culture item build (build_culture_items.py)",
-      "detail": "OK in 0.0s"
-    },
-    {
-      "label": "culture items Supabase import (import_culture_items_supabase.py)",
-      "detail": "FAIL in 0.6s"
-    },
-    {
-      "label": "data asset status (log_data_asset_status.py)",
-      "detail": "OK in 0.0s"
-    },
-    {
-      "label": "pipeline health (pipeline_health.py)",
-      "detail": "OK in 0.0s"
-    }
-  ],
+  "last_run": null,
+  "next_expected_run_utc": null,
+  "next_expected_run_local": null,
+  "status": "unknown",
+  "notes": "Batch log capture is available in /tmp/off-community-hourly.log",
+  "timeline": [],
   "recent_lines": [
     "File \"/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/contextlib.py\", line 135, in __exit__",
     "self.gen.throw(type, value, traceback)",

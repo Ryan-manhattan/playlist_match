@@ -1,80 +1,121 @@
 {% extends "base.html" %}
 
+{% block title %}Music Video Publisher | OFF THE COMMUNITY{% endblock %}
+
+{% block extra_css %}
+<style>
+  .publisher-shell { max-width: 760px; margin: 0 auto; padding: 72px 24px 120px; }
+  .publisher-card { border: 1px solid rgba(255,255,255,.2); padding: 28px; background: rgba(255,255,255,.025); }
+  .publisher-card input, .publisher-card textarea, .publisher-card select { width: 100%; margin-top: 7px; margin-bottom: 18px; padding: 12px; background: transparent; border: 1px solid rgba(255,255,255,.3); color: inherit; }
+  .publisher-card textarea { min-height: 100px; resize: vertical; }
+  .publisher-card button { padding: 12px 17px; border: 1px solid currentColor; background: white; color: black; font-weight: 700; cursor: pointer; }
+  .publisher-card button[disabled] { opacity: .5; cursor: wait; }
+  .publisher-status { margin: 20px 0; padding: 14px; border-left: 3px solid currentColor; white-space: pre-wrap; }
+  .publisher-muted { opacity: .65; font-size: .9rem; line-height: 1.6; }
+</style>
+{% endblock %}
+
 {% block content %}
-<div class="main-content-container video-container">
-    <!-- Header -->
-    <header class="mb-20">
-        <div class="inline-flex items-center gap-4 mb-6">
-            <span class="text-[10px] tracking-[0.4em] uppercase opacity-40">System Node: Video</span>
-            <div class="w-12 h-[1px] bg-white/20"></div>
-        </div>
-        <h2 class="text-4xl md:text-5xl font-bold serif-font leading-tight mb-4">영상 스튜디오_</h2>
-    </header>
+<section class="publisher-shell">
+  <p class="text-xs tracking-[.22em] opacity-60">AUTO PUBLISH</p>
+  <h1 class="text-4xl font-bold mt-3 mb-4">음원 하나로 YouTube 영상 만들기</h1>
+  <p class="publisher-muted mb-8">오디오를 올리면 자동 타이틀 카드로 1080p 영상을 렌더링하고 연결된 YouTube 채널에 게시합니다. 기본 공개 상태는 비공개입니다.</p>
 
-    <div class="space-y-12">
-        <!-- Input Section -->
-        <section class="pixel-card p-6 md:p-12">
-            <div class="max-w-2xl mx-auto">
-                <h3 class="text-xs uppercase tracking-[0.3em] opacity-40 mb-8 text-center">Video_Source_Input</h3>
-                <div class="flex flex-col md:flex-row gap-4">
-                    <input type="url" id="videoUrl" placeholder="https://www.youtube.com/watch?v=..." 
-                           class="flex-1 bg-black border-2 border-[#222] p-4 text-sm focus:border-white outline-none font-pixel">
-                    <button class="btn-pixel md:px-8" onclick="processVideo()">Process</button>
-                </div>
-                <p class="text-[10px] mt-4 opacity-30 text-center uppercase tracking-widest">Archive_ID extraction via YouTube Link</p>
-            </div>
-        </section>
+  <div class="publisher-card">
+    <div id="connection" class="publisher-status">YouTube 연결 상태 확인 중…</div>
+    <button id="connectButton" type="button" hidden>YOUTUBE 채널 연결</button>
 
-        <!-- Status / Progress -->
-        <section id="statusSection" class="hidden py-12">
-            <div class="pixel-card p-8 border-[#222]">
-                <div class="flex items-center justify-between mb-4">
-                    <span id="statusTitle" class="text-xs uppercase tracking-widest font-bold">Initializing_Link_Node</span>
-                    <span id="progressPercent" class="text-[10px] opacity-40 tracking-tighter">0%</span>
-                </div>
-                <div class="progress-container">
-                    <div id="videoProgressBar" class="progress-fill" style="width: 0%"></div>
-                </div>
-                <p id="statusDetail" class="text-[10px] mt-4 opacity-40 uppercase tracking-widest">Waiting for response...</p>
-            </div>
-        </section>
-
-        <!-- Output Selection -->
-        <section id="outputSection" class="hidden grid grid-cols-1 md:grid-cols-2 gap-8">
-            <!-- Audio Extraction -->
-            <div class="pixel-card">
-                <h3 class="text-xs uppercase tracking-[0.3em] opacity-40 mb-6 pb-2 border-b border-[#111]">Audio_Extraction</h3>
-                <div class="space-y-6">
-                    <p class="text-sm opacity-60">영상에서 음원 파일만 추출하여 아카이브 합니다.</p>
-                    <button class="btn-pixel w-full" onclick="downloadAudio()">Download_MP3</button>
-                </div>
-            </div>
-
-            <!-- Video with Lyrics (Subtitles) -->
-            <div class="pixel-card">
-                <h3 class="text-xs uppercase tracking-[0.3em] opacity-40 mb-6 pb-2 border-b border-[#111]">Visual_Archive</h3>
-                <div class="space-y-6">
-                    <p class="text-sm opacity-60">가사가 포함된 커스텀 영상을 생성하여 저장합니다.</p>
-                    <button class="btn-outline w-full text-xs tracking-widest" onclick="generateLyricVideo()">Generate_Video</button>
-                </div>
-            </div>
-        </section>
-
-        <!-- Final Result -->
-        <section id="videoResult" class="hidden text-center py-12">
-            <div class="pixel-card p-12">
-                <div class="text-4xl mb-6">📂</div>
-                <h3 class="text-2xl font-bold serif-font mb-8">Process_Complete</h3>
-                <div id="videoPlayerContainer" class="max-w-3xl mx-auto mb-12">
-                    <!-- Video player or audio link will be inserted here -->
-                </div>
-                <button class="btn-outline text-xs tracking-widest" onclick="resetVideoStudio()">RESTART_MODULE</button>
-            </div>
-        </section>
-    </div>
-</div>
+    <form id="publishForm" class="mt-7">
+      <label>음원 파일
+        <input type="file" name="audio" accept="audio/*,.m4a,.flac,.webm" required>
+      </label>
+      <label>영상 제목
+        <input type="text" name="title" maxlength="100" placeholder="비워두면 파일명을 사용합니다">
+      </label>
+      <label>설명
+        <textarea name="description" maxlength="5000" placeholder="Official audio"></textarea>
+      </label>
+      <label>태그 (쉼표로 구분)
+        <input type="text" name="tags" placeholder="indie, official audio">
+      </label>
+      <label>공개 상태
+        <select name="privacy_status">
+          <option value="private">비공개 (권장)</option>
+          <option value="unlisted">일부 공개</option>
+          <option value="public">공개</option>
+        </select>
+      </label>
+      <button id="publishButton" type="submit">영상 생성 후 YouTube 업로드</button>
+    </form>
+    <div id="jobStatus" class="publisher-status" hidden></div>
+  </div>
+</section>
 {% endblock %}
 
 {% block extra_js %}
-<script src="{{ url_for('static', filename='js/music_video.js') }}"></script>
+<script>
+  const connection = document.getElementById('connection');
+  const connectButton = document.getElementById('connectButton');
+  const form = document.getElementById('publishForm');
+  const publishButton = document.getElementById('publishButton');
+  const jobStatus = document.getElementById('jobStatus');
+
+  async function loadConnection() {
+    const response = await fetch('/api/youtube/upload/status');
+    const data = await response.json();
+    if (!data.configured) {
+      connection.textContent = 'YouTube OAuth 설정이 아직 없습니다. 서버 운영자에게 설정을 요청하세요.';
+      publishButton.disabled = true;
+      return;
+    }
+    if (!data.allowed) {
+      connection.textContent = '현재 계정에는 이 YouTube 채널의 업로드 권한이 없습니다.';
+      publishButton.disabled = true;
+      return;
+    }
+    if (!data.authorized) {
+      connection.textContent = 'YouTube 채널 연결이 필요합니다.';
+      connectButton.hidden = false;
+      publishButton.disabled = true;
+      return;
+    }
+    connection.textContent = 'YouTube 채널이 연결되었습니다.';
+    connectButton.hidden = true;
+    publishButton.disabled = false;
+  }
+
+  connectButton.addEventListener('click', () => { window.location.href = '/api/youtube/upload/authorize'; });
+
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    publishButton.disabled = true;
+    jobStatus.hidden = false;
+    jobStatus.textContent = '업로드 요청 중…';
+    const response = await fetch('/api/music-video/publish', { method: 'POST', body: new FormData(form) });
+    const data = await response.json();
+    if (!response.ok) {
+      jobStatus.textContent = data.error || '요청을 시작하지 못했습니다.';
+      publishButton.disabled = false;
+      return;
+    }
+    pollJob(data.status_url);
+  });
+
+  async function pollJob(url) {
+    const response = await fetch(url);
+    const job = await response.json();
+    if (!response.ok) { jobStatus.textContent = job.error || '작업 상태를 찾을 수 없습니다.'; publishButton.disabled = false; return; }
+    jobStatus.textContent = `${job.progress || 0}% · ${job.message || '처리 중…'}`;
+    if (job.status === 'completed') {
+      const result = job.result || {};
+      const youtubeUrl = result.youtube && result.youtube.url;
+      jobStatus.innerHTML = `완료했습니다.${youtubeUrl ? ` <a href="${youtubeUrl}" target="_blank" rel="noopener">YouTube에서 보기</a>` : ''}`;
+      publishButton.disabled = false;
+      return;
+    }
+    if (job.status === 'error') { publishButton.disabled = false; return; }
+    window.setTimeout(() => pollJob(url), 2000);
+  }
+  loadConnection().catch(() => { connection.textContent = 'YouTube 연결 상태를 읽지 못했습니다.'; });
+</script>
 {% endblock %}

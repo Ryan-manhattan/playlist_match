@@ -1,2600 +1,1118 @@
 {% extends "base.html" %}
 
 {% block title %}OFF THE COMMUNITY{% endblock %}
-{% block meta_description %}음악 아카이브, 감정 기록, 월드컵 투표, 브랜드 제휴 문의까지 이어지는 수익화형 커뮤니티 플랫폼.{% endblock %}
+{% block meta_description %}메인 화면은 바로 선택하는 월드컵 배틀만 남긴 OFF THE COMMUNITY.{% endblock %}
 
 {% block extra_css %}
 <style>
-    .home-grid {
-        display: grid;
-        grid-template-columns: 1.65fr 1fr;
-        gap: 1.5rem;
-        margin-bottom: 1.5rem;
+    :root {
+        --home-battle-border: rgba(255, 255, 255, 0.1);
+        --home-stage-bg: linear-gradient(180deg, rgba(10, 10, 11, 0.98), rgba(4, 4, 5, 0.98));
+        --home-stage-core: rgba(5, 5, 5, 0.98);
+        --home-card-border: rgba(255, 255, 255, 0.08);
+        --home-card-overlay-a: rgba(0, 0, 0, 0.12);
+        --home-card-overlay-b: rgba(0, 0, 0, 0.72);
+        --home-card-base: rgba(255, 255, 255, 0.02);
+        --home-card-hover-border: rgba(255, 255, 255, 0.85);
+        --home-card-hover-bg: rgba(255, 255, 255, 0.04);
+        --home-cover-fade-a: rgba(4, 4, 5, 0.08);
+        --home-cover-fade-b: rgba(4, 4, 5, 0.92);
+        --home-pill-border: rgba(255, 255, 255, 0.14);
+        --home-empty-border: rgba(255, 255, 255, 0.12);
+        --home-overlay-bg: rgba(0, 0, 0, 0.76);
+        --home-panel-bg: linear-gradient(180deg, rgba(12, 12, 14, 0.98), rgba(5, 5, 6, 0.98));
+        --home-panel-border: rgba(255, 255, 255, 0.1);
+        --home-mini-track-border: rgba(255, 255, 255, 0.1);
+        --home-mini-track-bg: rgba(255, 255, 255, 0.04);
+        --home-mini-target-bg: rgba(255, 255, 255, 0.12);
+        --home-runner-bg: #fff;
+        --home-runner-glow: rgba(255, 255, 255, 0.65);
+        --home-playfield-bg: linear-gradient(180deg, rgba(11, 11, 13, 0.96), rgba(6, 6, 7, 0.98));
+        --home-playfield-dot: rgba(255, 255, 255, 0.08);
+        --home-playfield-peg: rgba(255, 255, 255, 0.14);
+        --home-playfield-ball: #ffffff;
+        --home-playfield-ball-glow: rgba(255, 255, 255, 0.28);
     }
 
-    @media (max-width: 1024px) {
-        .home-grid {
-            grid-template-columns: 1fr;
-        }
+    :root[data-theme="light"] {
+        --home-battle-border: rgba(23, 20, 18, 0.12);
+        --home-stage-bg: linear-gradient(180deg, rgba(255, 251, 243, 0.98), rgba(243, 235, 224, 0.98));
+        --home-stage-core: rgba(255, 249, 240, 0.98);
+        --home-card-border: rgba(23, 20, 18, 0.12);
+        --home-card-overlay-a: rgba(255, 255, 255, 0.05);
+        --home-card-overlay-b: rgba(255, 248, 238, 0.7);
+        --home-card-base: rgba(23, 20, 18, 0.03);
+        --home-card-hover-border: rgba(23, 20, 18, 0.42);
+        --home-card-hover-bg: rgba(23, 20, 18, 0.06);
+        --home-cover-fade-a: rgba(255, 255, 255, 0.02);
+        --home-cover-fade-b: rgba(255, 250, 244, 0.9);
+        --home-pill-border: rgba(23, 20, 18, 0.18);
+        --home-empty-border: rgba(23, 20, 18, 0.16);
+        --home-overlay-bg: rgba(245, 241, 232, 0.84);
+        --home-panel-bg: linear-gradient(180deg, rgba(255, 252, 245, 0.98), rgba(243, 235, 224, 0.98));
+        --home-panel-border: rgba(23, 20, 18, 0.14);
+        --home-mini-track-border: rgba(23, 20, 18, 0.12);
+        --home-mini-track-bg: rgba(23, 20, 18, 0.06);
+        --home-mini-target-bg: rgba(23, 20, 18, 0.15);
+        --home-runner-bg: var(--pixel-white);
+        --home-runner-glow: rgba(23, 20, 18, 0.25);
+        --home-playfield-bg: linear-gradient(180deg, rgba(255, 252, 245, 0.98), rgba(243, 235, 224, 0.98));
+        --home-playfield-dot: rgba(23, 20, 18, 0.08);
+        --home-playfield-peg: rgba(23, 20, 18, 0.16);
+        --home-playfield-ball: #171412;
+        --home-playfield-ball-glow: rgba(23, 20, 18, 0.16);
     }
 
-    .offer-grid {
-        display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 1rem;
-    }
-
-    .culture-section {
-        border: 1px solid rgba(255, 255, 255, 0.12);
-        background: rgba(255, 255, 255, 0.02);
-        border-radius: 20px;
-    }
-
-    .culture-header {
+    .main-content-container {
+        max-width: none;
+        width: min(100%, 1480px);
+        min-height: calc(100vh - 60px);
         display: flex;
-        justify-content: space-between;
         align-items: center;
-        margin-bottom: 1rem;
+        padding-left: 2.4rem;
+        padding-right: 2.4rem;
     }
 
-    .culture-header span:first-child {
+    .worldcup-home-shell {
+        width: 100%;
+        display: grid;
+        gap: 1rem;
+    }
+
+    .worldcup-home-topline {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
         font-size: 10px;
-        letter-spacing: 0.4em;
+        letter-spacing: 0.32em;
         text-transform: uppercase;
-        opacity: 0.6;
+        opacity: 0.46;
     }
 
-    .culture-updated {
+    .worldcup-home-topline .pulse {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.55rem;
+    }
+
+    .worldcup-home-topline .pulse-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 999px;
+        background: var(--pixel-white);
+        box-shadow: 0 0 12px var(--accent-glow);
+    }
+
+    .worldcup-home-stage {
+        border: 1px solid var(--home-battle-border);
+        border-radius: 28px;
+        background: var(--home-stage-bg);
+        padding: 1.35rem;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .worldcup-home-interactive {
+        display: grid;
+        grid-template-columns: minmax(0, 1.15fr) minmax(260px, 0.85fr);
+        gap: 1rem;
+    }
+
+    .dot-drift-panel {
+        border: 1px solid var(--home-battle-border);
+        border-radius: 24px;
+        background: var(--home-playfield-bg);
+        overflow: hidden;
+        position: relative;
+    }
+
+    .dot-drift-canvas {
+        width: 100%;
+        height: 220px;
+        display: block;
+        background:
+            radial-gradient(circle at 1px 1px, var(--home-playfield-dot) 0.8px, transparent 1px);
+        background-size: 22px 22px;
+    }
+
+    .dot-drift-hud {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        padding: 1rem 1.1rem;
+        border-top: 1px solid var(--home-battle-border);
         font-size: 10px;
-        opacity: 0.5;
-    }
-
-    .culture-hero-line {
-        font-size: 1rem;
-        font-family: var(--font-serif);
-        margin-bottom: 1.25rem;
-        color: rgba(255, 255, 255, 0.85);
-    }
-
-    .culture-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-        gap: 1rem;
-        margin-bottom: 1rem;
-    }
-
-    .culture-card {
-        border: 1px solid rgba(255, 255, 255, 0.15);
-        border-radius: 16px;
-        padding: 1rem;
-        background: rgba(0, 0, 0, 0.25);
-    }
-
-    .culture-card h4 {
-        margin: 0 0 0.35rem;
-        font-size: 1rem;
-    }
-
-    .culture-card p {
-        margin: 0;
-        opacity: 0.7;
-        font-size: 0.85rem;
-    }
-
-    .culture-diaries {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-        gap: 0.75rem;
-    }
-
-    .culture-diary {
-        border: 1px dashed rgba(255, 255, 255, 0.2);
-        border-radius: 14px;
-        padding: 0.85rem;
-        background: rgba(255, 255, 255, 0.02);
-        min-height: 120px;
-    }
-
-    .culture-diary h5 {
-        margin: 0 0 0.25rem;
-        font-size: 0.95rem;
-    }
-
-    .culture-diary p {
-        font-size: 0.78rem;
-        opacity: 0.6;
-        margin-bottom: 0.25rem;
-    }
-
-    .culture-rss-section {
-        border: 1px solid rgba(255, 255, 255, 0.12);
-        background: rgba(3, 3, 6, 0.82);
-        border-radius: 20px;
-    }
-
-    .culture-rss-header {
-        display: flex;
-        align-items: flex-end;
-        justify-content: space-between;
-        gap: 1rem;
-    }
-
-    .culture-rss-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-        gap: 1rem;
-    }
-
-    .culture-rss-card {
-        border: 1px solid rgba(255, 255, 255, 0.12);
-        border-radius: 16px;
-        padding: 1rem;
-        background: rgba(255, 255, 255, 0.02);
-        min-height: 220px;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-    }
-
-    .culture-rss-card ul {
-        margin: 1rem 0 0;
-        padding: 0;
-        list-style: none;    
-    }
-
-    .culture-rss-card li {
-        border-top: 1px solid rgba(255, 255, 255, 0.08);
-        padding-top: 0.65rem;
-        margin-top: 0.65rem;
-    }
-
-    .culture-rss-card li:first-child {
-        border-top: none;
-        padding-top: 0;
-        margin-top: 0;
-    }
-
-    .culture-rss-card a {
-        color: inherit;
-        text-decoration: none;
-    }
-
-    .culture-rss-card a:hover {
-        color: #f4f4f5;
-    }
-
-    .culture-rss-meta {
-        font-size: 10px;
-        letter-spacing: 0.35em;
+        letter-spacing: 0.22em;
         text-transform: uppercase;
-        opacity: 0.45;
     }
 
-    .culture-rss-card .entry-summary {
-        font-size: 0.78rem;
-        opacity: 0.65;
-        margin-top: 0.35rem;
-    }
-
-    .culture-rss-card .entry-title {
-        font-size: 1rem;
-        font-weight: 600;
-        display: inline-block;
-        max-width: 100%;
-    }
-
-    .culture-rss-card .entry-date {
-        font-size: 9px;
-        text-transform: uppercase;
-        letter-spacing: 0.3em;
-        opacity: 0.5;
-        margin-top: 0.2rem;
-    }
-
-    .culture-rss-empty {
-        font-size: 0.9rem;
-        opacity: 0.6;
-    }
-
-    .pitchfork-section {
-        border: 1px solid rgba(255, 255, 255, 0.12);
-        background: rgba(5, 5, 10, 0.85);
-        border-radius: 20px;
-    }
-
-    .pitchfork-header {
-        display: flex;
-        align-items: flex-end;
-        justify-content: space-between;
-        gap: 1rem;
-    }
-
-    .pitchfork-hero-line {
-        font-size: 1.1rem;
-        font-family: var(--font-serif);
-        margin-top: 0.4rem;
-        margin-bottom: 0.8rem;
-        color: rgba(255, 255, 255, 0.85);
-    }
-
-    .pitchfork-summary-line {
-        font-size: 0.9rem;
-        opacity: 0.6;
-        margin-bottom: 1.25rem;
-    }
-
-    .pitchfork-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-        gap: 0.9rem;
-    }
-
-    .pitchfork-card {
-        border: 1px solid rgba(255, 255, 255, 0.12);
-        border-radius: 16px;
-        padding: 1rem;
-        background: rgba(255, 255, 255, 0.02);
-        min-height: 180px;
-        display: flex;
-        flex-direction: column;
-        gap: 0.35rem;
-    }
-
-    .pitchfork-card h4 {
-        margin: 0;
-        font-size: 1rem;
-        line-height: 1.3;
-    }
-
-    .pitchfork-summary {
-        font-size: 0.78rem;
-        opacity: 0.65;
-        line-height: 1.4;
-        flex-grow: 1;
-    }
-
-    .pitchfork-meta {
-        font-size: 9px;
-        text-transform: uppercase;
-        letter-spacing: 0.35em;
-        opacity: 0.45;
-        display: flex;
-        justify-content: space-between;
-    }
-
-    .pitchfork-link {
-        font-size: 0.7rem;
-        letter-spacing: 0.35em;
-        text-transform: uppercase;
-        opacity: 0.6;
-    }
-
-    .pitchfork-notes {
-        font-size: 0.65rem;
-        letter-spacing: 0.35em;
-        text-transform: uppercase;
-        opacity: 0.45;
-        margin-top: 1rem;
-    }
-
-    .identity-section {
-        border: 1px solid rgba(255, 255, 255, 0.12);
-        background: rgba(5, 5, 10, 0.7);
-        border-radius: 18px;
-    }
-
-    .identity-feed-section {
-        border: 1px solid rgba(255, 255, 255, 0.12);
-        background: rgba(4, 4, 8, 0.75);
-        border-radius: 18px;
-    }
-
-    .identity-feed-tags {
+    .dot-drift-meta {
         display: flex;
         flex-wrap: wrap;
-        gap: 0.6rem;
-        margin-bottom: 0.75rem;
-    }
-
-    .identity-feed-chip {
-        border: 1px solid rgba(255, 255, 255, 0.15);
-        border-radius: 999px;
-        padding: 0.3rem 0.9rem;
-        font-size: 0.7rem;
-        letter-spacing: 0.35em;
-        text-transform: uppercase;
-        opacity: 0.55;
-    }
-
-    .identity-feed-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
         gap: 1rem;
+        opacity: 0.72;
     }
 
-    .identity-feed-card {
-        border: 1px solid rgba(255, 255, 255, 0.12);
-        border-radius: 14px;
-        padding: 1rem;
-        background: rgba(255, 255, 255, 0.02);
-        min-height: 160px;
-        display: flex;
-        flex-direction: column;
-        gap: 0.4rem;
-    }
-
-    .identity-feed-tag {
-        font-size: 0.7rem;
-        letter-spacing: 0.3em;
+    .dot-drift-pill {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 38px;
+        padding: 0.65rem 0.95rem;
+        border-radius: 999px;
+        border: 1px solid var(--home-pill-border);
+        font-size: 10px;
+        letter-spacing: 0.24em;
         text-transform: uppercase;
-        opacity: 0.4;
     }
 
-    .identity-feed-context {
+    .dot-drift-copy {
+        border: 1px solid var(--home-battle-border);
+        border-radius: 24px;
+        background: var(--home-panel-bg);
+        padding: 1.1rem 1.2rem;
+        display: grid;
+        gap: 0.85rem;
+        align-content: start;
+    }
+
+    .dot-drift-kicker {
+        font-size: 10px;
+        letter-spacing: 0.32em;
+        text-transform: uppercase;
+        opacity: 0.42;
+    }
+
+    .dot-drift-title {
         margin: 0;
-        font-size: 0.95rem;
-        line-height: 1.5;
-        opacity: 0.75;
+        font-family: var(--font-serif);
+        font-size: clamp(1.7rem, 4vw, 2.3rem);
+        line-height: 0.95;
     }
 
-    .identity-feed-meta {
-        font-size: 0.65rem;
-        letter-spacing: 0.3em;
-        text-transform: uppercase;
-        opacity: 0.45;
-        display: flex;
-        justify-content: space-between;
+    .dot-drift-text {
+        margin: 0;
+        font-size: 0.92rem;
+        line-height: 1.6;
+        opacity: 0.72;
     }
 
-    .identity-feed-meta span {
-        display: inline-block;
-    }
-
-    .identity-feed-meta span:first-child {
-        max-width: 60%;
-    }
-
-    .identity-feed-meta span:last-child {
-        text-align: right;
-    }
-
-    .identity-feed-notes {
-        font-size: 0.65rem;
-        letter-spacing: 0.35em;
-        text-transform: uppercase;
-        opacity: 0.45;
-        margin-top: 0.5rem;
-    }
-
-    .insight-section {
-        border: 1px solid rgba(255, 255, 255, 0.12);
-        background: rgba(8, 6, 12, 0.8);
-        border-radius: 18px;
-    }
-
-    .insight-keywords {
+    .dot-drift-controls {
         display: flex;
         flex-wrap: wrap;
         gap: 0.55rem;
-        margin-bottom: 1rem;
-    }
-
-    .insight-keyword {
-        border: 1px solid rgba(255, 255, 255, 0.15);
-        border-radius: 999px;
-        padding: 0.35rem 0.9rem;
-        font-size: 0.75rem;
-        letter-spacing: 0.3em;
-        text-transform: uppercase;
-        opacity: 0.7;
-    }
-
-    .insight-stories {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-        gap: 0.9rem;
-        margin-bottom: 1rem;
-    }
-
-    .insight-story {
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        border-radius: 14px;
-        padding: 1rem;
-        background: rgba(255, 255, 255, 0.02);
-        min-height: 140px;
-        display: flex;
-        flex-direction: column;
-        gap: 0.4rem;
-    }
-
-    .insight-story h4 {
-        margin: 0;
-        font-size: 1rem;
-    }
-
-    .insight-story p {
-        margin: 0;
-        font-size: 0.85rem;
-        opacity: 0.65;
-        line-height: 1.4;
-    }
-
-    .insight-story a {
-        font-size: 0.72rem;
-        letter-spacing: 0.35em;
-        text-transform: uppercase;
-        opacity: 0.6;
-    }
-
-    .insight-charts {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 0.8rem;
-        margin-top: 0.5rem;
-    }
-
-    .chart-highlight {
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        border-radius: 14px;
-        padding: 0.85rem 1rem;
-        background: rgba(255, 255, 255, 0.02);
-        min-height: 110px;
-    }
-
-    .chart-highlight .chart-source {
-        font-size: 0.7rem;
-        opacity: 0.5;
-        letter-spacing: 0.4em;
-        text-transform: uppercase;
-    }
-
-    .chart-highlight .chart-title {
-        font-size: 1rem;
-        margin: 0.4rem 0 0.2rem;
-    }
-
-    .chart-highlight .chart-artist {
-        font-size: 0.7rem;
-        opacity: 0.55;
-        text-transform: uppercase;
-        letter-spacing: 0.3em;
-    }
-
-    .insight-notes {
-        font-size: 0.65rem;
-        letter-spacing: 0.35em;
-        text-transform: uppercase;
-        opacity: 0.45;
-    }
-
-    .identity-tags-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 1rem;
-        margin-bottom: 0.75rem;
-    }
-
-    .identity-tag-card {
-        border: 1px solid rgba(255, 255, 255, 0.14);
-        border-radius: 14px;
-        padding: 1rem;
-        background: rgba(255, 255, 255, 0.02);
-    }
-
-    .identity-tag {
-        font-size: 1.1rem;
-        font-weight: 600;
-        letter-spacing: 0.2em;
-        text-transform: uppercase;
-        opacity: 0.8;
-    }
-
-    .identity-count {
-        font-size: 0.85rem;
-        opacity: 0.6;
-        margin-top: 0.4rem;
-    }
-
-    .identity-context {
-        font-size: 0.75rem;
-        opacity: 0.55;
-        margin-top: 0.4rem;
-        line-height: 1.4;
-    }
-
-    .billboard-section {
-        border: 1px solid rgba(255, 255, 255, 0.12);
-        background: rgba(10, 9, 15, 0.65);
-        border-radius: 20px;
-    }
-
-    .billboard-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
-        gap: 0.85rem;
-    }
-
-    .billboard-track {
-        border: 1px solid rgba(255, 255, 255, 0.12);
-        border-radius: 16px;
-        padding: 0.9rem;
-        background: rgba(0, 0, 0, 0.3);
-        display: flex;
-        gap: 0.8rem;
-        align-items: center;
-    }
-
-    .billboard-rank {
-        font-family: var(--font-serif);
-        font-size: 1.7rem;
-        opacity: 0.65;
-        min-width: 40px;
-        text-align: center;
-    }
-
-    .billboard-artist {
-        font-size: 0.8rem;
-        opacity: 0.6;
-        letter-spacing: 0.12em;
-        text-transform: uppercase;
-    }
-
-    .deezer-section {
-        border: 1px solid rgba(255, 255, 255, 0.14);
-        background: rgba(5, 5, 10, 0.65);
-        border-radius: 20px;
-    }
-
-    .deezer-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 0.9rem;
-        margin-bottom: 1rem;
-    }
-
-    .deezer-card {
-        border: 1px solid rgba(255, 255, 255, 0.12);
-        border-radius: 16px;
-        padding: 0.85rem 1rem;
-        background: rgba(255, 255, 255, 0.02);
-        display: flex;
-        gap: 0.8rem;
-        align-items: flex-start;
-    }
-
-    .deezer-rank {
-        font-family: var(--font-serif);
-        font-size: 1.8rem;
-        opacity: 0.65;
-        min-width: 38px;
-        text-align: center;
-    }
-
-    .deezer-card strong {
-        display: block;
-        font-size: 1rem;
-    }
-
-    .deezer-meta-line {
         font-size: 10px;
-        opacity: 0.55;
-        letter-spacing: 0.3em;
+        letter-spacing: 0.24em;
         text-transform: uppercase;
-        margin-top: 0.25rem;
+        opacity: 0.55;
     }
 
-    .spotify-section {
-        border: 1px solid rgba(255, 255, 255, 0.14);
-        background: rgba(9, 7, 12, 0.75);
-        border-radius: 18px;
-    }
-
-    .spotify-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-        gap: 1rem;
-        margin-top: 1rem;
-    }
-
-    .spotify-card {
-        border: 1px solid rgba(255, 255, 255, 0.12);
-        border-radius: 14px;
-        padding: 1rem;
-        background: rgba(255, 255, 255, 0.02);
-        min-height: 150px;
+    .worldcup-home-stage::before {
+        content: "VS";
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        width: 62px;
+        height: 62px;
+        border-radius: 999px;
+        border: 1px solid var(--home-card-border);
         display: flex;
-        flex-direction: column;
-        gap: 0.4rem;
-    }
-
-    .spotify-rank {
+        align-items: center;
+        justify-content: center;
         font-family: var(--font-serif);
-        font-size: 1.4rem;
-        opacity: 0.5;
+        font-size: 1.2rem;
+        opacity: 0.14;
+        background: var(--home-stage-core);
+        pointer-events: none;
+        z-index: 1;
     }
 
-    .spotify-card strong {
-        font-size: 1.1rem;
-        display: block;
-    }
-
-    .spotify-artist {
-        font-size: 0.8rem;
-        opacity: 0.6;
-        letter-spacing: 0.35em;
-        text-transform: uppercase;
-    }
-
-    .spotify-meta {
-        font-size: 0.75rem;
-        opacity: 0.55;
-        letter-spacing: 0.3em;
-        text-transform: uppercase;
-    }
-
-    .spotify-notes {
-        font-size: 0.7rem;
-        opacity: 0.5;
-        letter-spacing: 0.3em;
-        text-transform: uppercase;
-    }
-
-    @media (max-width: 980px) {
-        .offer-grid {
-            grid-template-columns: 1fr;
-        }
-    }
-
-    .proof-grid {
-        display: grid;
-        grid-template-columns: repeat(4, minmax(0, 1fr));
-        gap: 1rem;
-    }
-
-    @media (max-width: 900px) {
-        .proof-grid {
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-        }
-    }
-
-    @media (max-width: 640px) {
-        .proof-grid {
-            grid-template-columns: 1fr;
-        }
-    }
-
-    .conversion-grid {
+    .worldcup-home-grid {
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 1.5rem;
     }
 
-    @media (max-width: 980px) {
-        .conversion-grid {
-            grid-template-columns: 1fr;
-        }
-    }
-
-    .offer-card {
-        min-height: 100%;
+    .worldcup-home-card {
+        min-height: 420px;
+        border-radius: 24px;
+        border: 1px solid var(--home-card-border);
+        background:
+            linear-gradient(180deg, var(--home-card-overlay-a), var(--home-card-overlay-b)),
+            var(--home-card-base);
+        padding: 1.4rem;
         display: flex;
         flex-direction: column;
+        justify-content: space-between;
+        cursor: pointer;
+        transition: transform 0.15s ease, border-color 0.15s ease, background 0.15s ease, opacity 0.15s ease;
+        position: relative;
+        z-index: 2;
     }
 
-    .offer-card ul {
-        margin: 1rem 0 1.5rem;
-        padding-left: 1rem;
-        line-height: 1.9;
-        opacity: 0.72;
+    .worldcup-home-card:hover,
+    .worldcup-home-card.is-selected {
+        transform: translateY(-3px);
+        border-color: var(--home-card-hover-border);
+        background: var(--home-card-hover-bg);
     }
 
-    .metric-value {
-        display: block;
-        font-size: 2rem;
-        font-family: var(--font-serif);
-        margin-top: 0.35rem;
+    .worldcup-home-card.is-dimmed {
+        opacity: 0.38;
     }
 
-    .inline-code {
+    .worldcup-home-source {
         font-size: 10px;
-        letter-spacing: 0.22em;
-        text-transform: uppercase;
-        opacity: 0.35;
-    }
-
-    .lead-pulse-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-        gap: 1rem;
-        margin-top: 1rem;
-    }
-
-    .lead-type-card {
-        border: 1px solid rgba(255, 255, 255, 0.15);
-        border-radius: 16px;
-        padding: 1rem;
-        min-height: 120px;
-        background: rgba(0, 0, 0, 0.32);
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-    }
-
-    .lead-type-count {
-        font-size: 2.25rem;
-        font-family: var(--font-serif);
-        margin: 0.35rem 0;
-    }
-
-    .lead-type-meta {
-        font-size: 10px;
-        opacity: 0.6;
-    }
-
-    .lead-source-section {
-        border: 1px solid rgba(255, 255, 255, 0.16);
-        background: rgba(8, 7, 12, 0.85);
-        border-radius: 18px;
-    }
-
-    .lead-source-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 1rem;
-        margin-top: 1rem;
-    }
-
-    .lead-source-card {
-        border: 1px solid rgba(255, 255, 255, 0.12);
-        border-radius: 14px;
-        padding: 1rem;
-        background: rgba(255, 255, 255, 0.02);
-        min-height: 140px;
-        display: flex;
-        flex-direction: column;
-        gap: 0.35rem;
-    }
-
-    .lead-source-label {
-        font-size: 0.75rem;
-        letter-spacing: 0.35em;
-        text-transform: uppercase;
-        opacity: 0.6;
-    }
-
-    .lead-source-count {
-        font-family: var(--font-serif);
-        font-size: 2rem;
-        opacity: 0.8;
-    }
-
-    .lead-source-meta {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        font-size: 0.75rem;
-        opacity: 0.65;
-    }
-
-    .lead-source-percent {
-        letter-spacing: 0.35em;
-        text-transform: uppercase;
-        color: #38bdf8;
-    }
-
-    .lead-source-note {
-        font-size: 0.7rem;
-        opacity: 0.55;
-        text-align: right;
-    }
-
-    .keyword-chip {
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        border-radius: 999px;
-        padding: 0.35rem 0.8rem;
-        font-size: 11px;
-        opacity: 0.85;
-    }
-
-    .lead-meta-line {
-        font-size: 10px;
-        letter-spacing: 0.35em;
-        text-transform: uppercase;
-        opacity: 0.45;
-        margin-top: 0.75rem;
-    }
-
-    .data-asset-section {
-        border: 1px solid rgba(255, 255, 255, 0.16);
-        background: rgba(8, 7, 12, 0.85);
-        border-radius: 18px;
-    }
-
-    .asset-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-        gap: 1rem;
-        margin-top: 1rem;
-    }
-
-    .asset-card {
-        border: 1px solid rgba(255, 255, 255, 0.12);
-        border-radius: 14px;
-        padding: 1rem;
-        background: rgba(0, 0, 0, 0.3);
-        min-height: 140px;
-        display: flex;
-        flex-direction: column;
-        gap: 0.35rem;
-    }
-
-    .asset-value {
-        font-size: 1rem;
-        font-family: var(--font-serif);
-        letter-spacing: 0.35em;
-        opacity: 0.8;
-    }
-
-    .asset-notes {
-        font-size: 0.78rem;
-        opacity: 0.63;
-        line-height: 1.4;
-        flex: 1;
-    }
-
-    .asset-meta {
-        font-size: 0.65rem;
-        letter-spacing: 0.35em;
-        text-transform: uppercase;
-        opacity: 0.45;
-    }
-
-
-    .pipeline-health-section {
-        border: 1px solid rgba(255, 255, 255, 0.12);
-        background: rgba(8, 7, 12, 0.85);
-        border-radius: 18px;
-    }
-
-    .pipeline-health-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
-        gap: 1rem;
-        margin-top: 1rem;
-    }
-
-    .pipeline-health-metric {
-        border: 1px solid rgba(255, 255, 255, 0.12);
-        border-radius: 14px;
-        padding: 1rem;
-        background: rgba(255, 255, 255, 0.02);
-        min-height: 120px;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-    }
-
-    .pipeline-health-label {
-        font-size: 0.65rem;
-        letter-spacing: 0.3em;
-        text-transform: uppercase;
-        opacity: 0.45;
-    }
-
-    .pipeline-health-value {
-        font-size: 1.7rem;
-        font-family: var(--font-serif);
-        margin-top: 0.35rem;
-    }
-
-    .pipeline-health-subtext {
-        font-size: 0.7rem;
-        opacity: 0.6;
-        margin-top: 0.4rem;
-    }
-
-    .pipeline-health-stale {
-        margin-top: 1.25rem;
-    }
-
-    .pipeline-health-chip-wrap {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.6rem;
-        margin-top: 0.65rem;
-    }
-
-    .pipeline-health-chip {
-        border: 1px solid rgba(255, 255, 255, 0.12);
-        border-radius: 999px;
-        padding: 0.35rem 0.9rem;
-        font-size: 0.68rem;
-        letter-spacing: 0.3em;
-        text-transform: uppercase;
-        opacity: 0.6;
-    }
-
-    .pipeline-health-subline {
-        font-size: 0.75rem;
-        opacity: 0.55;
-        margin-top: 0.75rem;
-    }
-
-    .automation-log-panel {
-        margin-top: 1.8rem;
-        padding-top: 1rem;
-        border-top: 1px dashed rgba(255, 255, 255, 0.2);
-        display: flex;
-        flex-direction: column;
-        gap: 0.4rem;
-    }
-
-    .automation-log-heading {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        font-size: 0.75rem;
-        letter-spacing: 0.35em;
-        text-transform: uppercase;
-        opacity: 0.6;
-    }
-
-    .automation-log-status {
-        padding: 0.2rem 0.8rem;
-        border-radius: 999px;
-        font-size: 0.6rem;
-        letter-spacing: 0.4em;
-    }
-
-    .automation-log-status-success {
-        background: rgba(56, 189, 248, 0.25);
-        color: #22d3ee;
-    }
-
-    .automation-log-status-failed {
-        background: rgba(248, 113, 113, 0.2);
-        color: #fb7185;
-    }
-
-    .automation-log-status-missing,
-    .automation-log-status-unknown {
-        background: rgba(255, 255, 255, 0.07);
-        color: rgba(255, 255, 255, 0.7);
-    }
-
-    .automation-log-subline {
-        font-size: 0.8rem;
-        opacity: 0.55;
-    }
-
-    .automation-log-lines {
-        font-size: 0.75rem;
-        line-height: 1.4;
-        opacity: 0.55;
-        display: grid;
-        gap: 0.35rem;
-    }
-
-    .automation-log-timeline {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.5rem;
-        font-size: 0.7rem;
-        letter-spacing: 0.25em;
-        opacity: 0.5;
-    }
-
-    .analysis-section {
-        border: 1px solid rgba(255, 255, 255, 0.12);
-        background: rgba(6, 6, 12, 0.85);
-        border-radius: 18px;
-    }
-
-    .analysis-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-        gap: 1rem;
-        margin-top: 1rem;
-    }
-
-    .analysis-card {
-        border: 1px solid rgba(255, 255, 255, 0.12);
-        border-radius: 14px;
-        padding: 1rem;
-        background: rgba(255, 255, 255, 0.02);
-        min-height: 150px;
-        display: flex;
-        flex-direction: column;
-        gap: 0.6rem;
-    }
-
-    .analysis-card-label {
-        font-size: 0.7rem;
-        letter-spacing: 0.35em;
-        text-transform: uppercase;
-        opacity: 0.5;
-    }
-
-    .analysis-list {
-        list-style: none;
-        margin: 0;
-        padding: 0;
-        display: grid;
-        gap: 0.35rem;
-    }
-
-    .analysis-list li {
-        display: flex;
-        justify-content: space-between;
-        font-size: 0.85rem;
-        opacity: 0.75;
-    }
-
-    .analysis-tag-stack {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.4rem;
-    }
-
-    .analysis-tag {
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        border-radius: 999px;
-        padding: 0.35rem 0.8rem;
-        font-size: 0.7rem;
-        letter-spacing: 0.3em;
-        text-transform: uppercase;
-        opacity: 0.6;
-    }
-
-    .analysis-stat {
-        font-size: 0.85rem;
-        display: flex;
-        flex-direction: column;
-        gap: 0.2rem;
-    }
-
-    .analysis-stat-value {
-        font-family: var(--font-serif);
-        font-size: 1.8rem;
-        opacity: 0.7;
-    }
-
-    .analysis-recent {
-        margin-top: 1.5rem;
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-        gap: 0.9rem;
-    }
-
-    .analysis-recent-card {
-        border: 1px dashed rgba(255, 255, 255, 0.2);
-        border-radius: 12px;
-        padding: 0.9rem;
-        background: rgba(0, 0, 0, 0.25);
-        min-height: 110px;
-        display: flex;
-        flex-direction: column;
-        gap: 0.4rem;
-    }
-
-    .analysis-recent-card h5 {
-        margin: 0;
-        font-size: 1rem;
-    }
-
-    .analysis-recent-meta {
-        font-size: 0.7rem;
-        text-transform: uppercase;
-        letter-spacing: 0.3em;
-        opacity: 0.5;
-    }
-
-    .analysis-energy-line {
-        display: flex;
-        justify-content: space-between;
-        font-size: 0.78rem;
-        opacity: 0.65;
-    }
-
-    .analysis-energy {
-        display: flex;
-        flex-direction: column;
-        gap: 0.3rem;
-        margin-top: 0.4rem;
-    }
-
-    .signal-section {
-        border: 1px solid rgba(255, 255, 255, 0.12);
-        background: rgba(10, 8, 12, 0.75);
-        border-radius: 18px;
-    }
-
-    .signal-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-        gap: 0.9rem;
-        margin-top: 1rem;
-    }
-
-    .signal-card {
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        border-radius: 14px;
-        padding: 1rem;
-        background: rgba(255, 255, 255, 0.02);
-        min-height: 140px;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-    }
-
-    .signal-card h4 {
-        font-size: 1rem;
-        margin-bottom: 0.25rem;
-    }
-
-    .signal-context {
-        font-size: 0.8rem;
-        opacity: 0.65;
-        line-height: 1.4;
-    }
-
-    .signal-chip {
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        border-radius: 999px;
-        padding: 0.35rem 0.9rem;
-        font-size: 10px;
-        text-transform: uppercase;
-        letter-spacing: 0.25em;
-        opacity: 0.75;
-    }
-
-    .momentum-section {
-        border: 1px solid rgba(255, 255, 255, 0.12);
-        background: rgba(8, 6, 12, 0.8);
-        border-radius: 18px;
-    }
-
-    .momentum-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-        gap: 0.9rem;
-        margin-top: 1rem;
-    }
-
-    .momentum-card {
-        border: 1px solid rgba(255, 255, 255, 0.12);
-        border-radius: 14px;
-        padding: 1rem;
-        background: rgba(255, 255, 255, 0.02);
-        min-height: 170px;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-    }
-
-    .momentum-tag {
-        font-size: 0.85rem;
-        letter-spacing: 0.4em;
-        text-transform: uppercase;
-        opacity: 0.48;
-    }
-
-    .momentum-message {
-        margin: 0.85rem 0;
-        font-size: 0.9rem;
-        opacity: 0.7;
-        line-height: 1.5;
-    }
-
-    .momentum-meta {
-        font-size: 0.75rem;
         letter-spacing: 0.32em;
         text-transform: uppercase;
-        opacity: 0.45;
+        opacity: 0.38;
     }
 
-    .guardian-section {
-        border: 1px solid rgba(255, 255, 255, 0.12);
-        background: rgba(7, 7, 12, 0.85);
-        border-radius: 18px;
+    .worldcup-home-cover {
+        position: absolute;
+        inset: 0;
+        background-size: cover;
+        background-position: center;
+        opacity: 0.34;
+        z-index: -1;
+        filter: saturate(0.9);
     }
 
-    .guardian-header {
-        display: flex;
-        align-items: flex-end;
-        justify-content: space-between;
-        gap: 1rem;
+    .worldcup-home-cover::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(180deg, var(--home-cover-fade-a), var(--home-cover-fade-b));
     }
 
-    .guardian-link {
-        font-size: 0.65rem;
-        letter-spacing: 0.4em;
-        text-transform: uppercase;
-        opacity: 0.55;
-    }
-
-    .guardian-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-        gap: 0.9rem;
-    }
-
-    .guardian-card {
-        border: 1px solid rgba(255, 255, 255, 0.15);
-        border-radius: 14px;
-        padding: 1.1rem;
-        background: rgba(255, 255, 255, 0.02);
-        min-height: 190px;
+    .worldcup-home-body {
         display: flex;
         flex-direction: column;
-        justify-content: space-between;
-    }
-
-    .guardian-title {
-        font-size: 1.05rem;
-        font-weight: 600;
-        margin-bottom: 0.5rem;
-    }
-
-    .guardian-summary {
-        font-size: 0.85rem;
-        opacity: 0.65;
-        line-height: 1.5;
-        flex-grow: 1;
-    }
-
-    .guardian-meta {
-        display: flex;
-        justify-content: space-between;
-        font-size: 0.7rem;
-        letter-spacing: 0.35em;
-        text-transform: uppercase;
-        opacity: 0.45;
-        margin-top: 0.9rem;
-    }
-
-    .guardian-meta .guardian-author {
-        opacity: 0.6;
-    }
-
-    .guardian-card a {
-        font-size: 0.7rem;
-        letter-spacing: 0.35em;
-        text-transform: uppercase;
-        opacity: 0.55;
-        margin-top: 0.5rem;
-    }
-
-    .guardian-notes {
-        font-size: 0.65rem;
-        letter-spacing: 0.35em;
-        text-transform: uppercase;
-        opacity: 0.45;
-        margin-top: 1rem;
-    }
-    .culture-highlight-section {
-        border: 1px solid rgba(255, 255, 255, 0.15);
-        background: rgba(6, 6, 12, 0.95);
-        border-radius: 20px;
-    }
-    .culture-highlight-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-end;
         gap: 0.5rem;
-        margin-bottom: 1rem;
     }
-    .culture-highlight-meta {
-        font-size: 0.75rem;
-        letter-spacing: 0.3em;
-        text-transform: uppercase;
-        opacity: 0.55;
-    }
-    .culture-highlight-main {
-        border: 1px solid rgba(255, 255, 255, 0.12);
-        border-radius: 18px;
-        padding: 1rem;
-        background: rgba(255, 255, 255, 0.02);
-        display: flex;
-        flex-direction: column;
-        gap: 0.6rem;
-    }
-    .culture-highlight-main h4 {
+
+    .worldcup-home-title {
         margin: 0;
-        font-size: 1.3rem;
+        font-family: var(--font-serif);
+        font-size: clamp(2.4rem, 5vw, 4.4rem);
+        line-height: 0.9;
+        letter-spacing: -0.04em;
     }
-    .culture-highlight-main p {
+
+    .worldcup-home-artist {
         margin: 0;
-        opacity: 0.7;
-        line-height: 1.4;
         font-size: 0.9rem;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        opacity: 0.58;
     }
-    .culture-highlight-tags {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.5rem;
+
+    .worldcup-home-meta {
+        font-size: 10px;
+        letter-spacing: 0.26em;
+        text-transform: uppercase;
+        opacity: 0.34;
     }
-    .culture-highlight-chip {
-        border: 1px solid rgba(255, 255, 255, 0.12);
+
+    .worldcup-home-pick {
+        width: 100%;
+        min-height: 48px;
         border-radius: 999px;
-        padding: 0.3rem 0.8rem;
-        font-size: 0.65rem;
-        letter-spacing: 0.35em;
+        border: 1px solid var(--home-pill-border);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 11px;
+        letter-spacing: 0.28em;
         text-transform: uppercase;
-        opacity: 0.6;
-    }
-    .culture-highlight-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-        gap: 0.9rem;
-        margin-top: 1rem;
-    }
-    .culture-highlight-mini {
-        border: 1px solid rgba(255, 255, 255, 0.12);
-        border-radius: 16px;
-        padding: 0.9rem;
-        background: rgba(255, 255, 255, 0.02);
-    }
-    .culture-highlight-mini strong {
-        font-size: 0.95rem;
-        margin-bottom: 0.35rem;
-        display: block;
-    }
-    .culture-highlight-mini span {
-        font-size: 0.65rem;
-        letter-spacing: 0.35em;
-        text-transform: uppercase;
-        opacity: 0.55;
-    }
-    .culture-highlight-cta {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.6rem;
     }
 
-    .culture-source-section {
-        border: 1px solid rgba(255, 255, 255, 0.12);
-        background: rgba(3, 3, 6, 0.85);
-        border-radius: 20px;
-    }
-    .culture-source-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-        gap: 1rem;
-        margin-bottom: 1rem;
-    }
-    .culture-source-card {
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        border-radius: 16px;
-        padding: 1rem;
-        background: rgba(255, 255, 255, 0.02);
-        min-height: 130px;
+    .worldcup-home-bottomline {
         display: flex;
-        flex-direction: column;
+        align-items: center;
         justify-content: space-between;
-    }
-    .culture-source-card strong {
-        font-size: 1rem;
-        margin-bottom: 0.35rem;
-        display: block;
-    }
-    .culture-source-card .source-count {
-        font-size: 0.85rem;
-        opacity: 0.65;
-        margin-bottom: 0.25rem;
-    }
-    .culture-source-card .source-meta {
-        font-size: 0.65rem;
-        letter-spacing: 0.35em;
+        gap: 1rem;
+        font-size: 10px;
+        letter-spacing: 0.28em;
         text-transform: uppercase;
-        opacity: 0.45;
-    }
-    .culture-source-empty {
-        margin: 0;
-        font-size: 0.95rem;
+        opacity: 0.42;
+        padding: 0 0.2rem;
     }
 
+    .worldcup-home-actions {
+        display: flex;
+        gap: 0.6rem;
+        flex-wrap: wrap;
+    }
+
+    .worldcup-mini-btn {
+        border-radius: 999px;
+        border: 1px solid var(--home-pill-border);
+        padding: 0.65rem 1rem;
+        font-size: 10px;
+        letter-spacing: 0.24em;
+        text-transform: uppercase;
+        transition: border-color 0.15s ease, opacity 0.15s ease;
+    }
+
+    .worldcup-mini-btn:hover {
+        border-color: var(--pixel-white);
+        opacity: 1;
+    }
+
+    .worldcup-empty-state {
+        min-height: 420px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        border-radius: 24px;
+        border: 1px dashed var(--home-empty-border);
+        opacity: 0.6;
+        z-index: 2;
+        position: relative;
+    }
+
+    .worldcup-mini-overlay {
+        position: fixed;
+        inset: 0;
+        background: var(--home-overlay-bg);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 1.5rem;
+        z-index: 5000;
+        backdrop-filter: blur(10px);
+    }
+
+    .worldcup-mini-overlay.is-open {
+        display: flex;
+    }
+
+    .worldcup-mini-panel {
+        width: min(520px, 100%);
+        border-radius: 28px;
+        border: 1px solid var(--home-panel-border);
+        background: var(--home-panel-bg);
+        padding: 1.3rem;
+        display: grid;
+        gap: 1rem;
+    }
+
+    .worldcup-mini-kicker {
+        font-size: 10px;
+        letter-spacing: 0.32em;
+        text-transform: uppercase;
+        opacity: 0.42;
+    }
+
+    .worldcup-mini-title {
+        margin: 0;
+        font-family: var(--font-serif);
+        font-size: clamp(2rem, 5vw, 3rem);
+        line-height: 0.95;
+    }
+
+    .worldcup-mini-copy {
+        margin: 0;
+        font-size: 0.9rem;
+        opacity: 0.64;
+        line-height: 1.5;
+    }
+
+    .worldcup-mini-track {
+        position: relative;
+        height: 22px;
+        border-radius: 999px;
+        border: 1px solid var(--home-mini-track-border);
+        background: var(--home-mini-track-bg);
+        overflow: hidden;
+    }
+
+    .worldcup-mini-target {
+        position: absolute;
+        top: 2px;
+        bottom: 2px;
+        border-radius: 999px;
+        background: var(--home-mini-target-bg);
+    }
+
+    .worldcup-mini-runner {
+        position: absolute;
+        top: 3px;
+        width: 16px;
+        height: 16px;
+        border-radius: 999px;
+        background: var(--home-runner-bg);
+        box-shadow: 0 0 14px var(--home-runner-glow);
+    }
+
+    .worldcup-mini-meta {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        font-size: 10px;
+        letter-spacing: 0.24em;
+        text-transform: uppercase;
+        opacity: 0.46;
+    }
+
+    .worldcup-mini-actions {
+        display: flex;
+        gap: 0.65rem;
+        flex-wrap: wrap;
+    }
+
+    @media (max-width: 900px) {
+        .main-content-container {
+            width: 100%;
+            min-height: auto;
+            display: block;
+            padding-left: 1.25rem;
+            padding-right: 1.25rem;
+        }
+
+        .worldcup-home-interactive {
+            grid-template-columns: 1fr;
+        }
+
+        .worldcup-home-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .worldcup-home-stage::before {
+            top: 50%;
+        }
+
+        .worldcup-home-card {
+            min-height: 280px;
+        }
+
+        .worldcup-home-title {
+            font-size: clamp(2rem, 11vw, 3.3rem);
+        }
+
+        .worldcup-home-bottomline,
+        .worldcup-home-topline {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+    }
 </style>
 {% endblock %}
 
 {% block content %}
 <div class="main-content-container">
-    {% set promo = promo_content or {} %}
-    {% set hero = promo.hero or {} %}
-    {% set hero_heading = hero.heading or '감정 기록을\n멤버십과 브랜드 매출로 연결합니다.' %}
-    {% set hero_subtext = hero.subtext or 'OFF THE COMMUNITY는 음악 아카이브, 감정 기반 다이어리, 월드컵 참여 데이터를 한 곳에 모아 크리에이터 멤버십과 브랜드 협업 리드를 동시에 확보하는 구조로 확장되고 있습니다.' %}
-    {% set hero_flash = hero.flash_line %}
-    {% set hero_ctas = hero.ctas or [] %}
-    {% set primary_cta = hero_ctas[0] if hero_ctas else {'text': 'ADD YOUR TRACK', 'link': url_for('playlists'), 'style': 'primary'} %}
-    {% set secondary_cta = hero_ctas[1] if hero_ctas|length > 1 else {'text': 'REQUEST MEDIA KIT', 'link': url_for('brand_studio'), 'style': 'secondary'} %}
-    {% set primary_class = 'btn-pixel' if primary_cta.style == 'primary' else 'btn-outline' %}
-    {% set secondary_class = 'btn-outline' if secondary_cta.style == 'secondary' else 'btn-pixel' %}
-    {% set metrics = promo.metrics or {'tracks': growth_snapshot.total_tracks, 'diaries': growth_snapshot.total_posts, 'votes': growth_snapshot.total_votes, 'visits': growth_snapshot.today_visits} %}
-    {% set culture = culture_content or {'hero_line': 'Cultural signals fuel the archive—every track blends with story.', 'top_tracks': [], 'film_diaries': [], 'updated_at': None} %}
-    {% set promo_updated = promo.updated_at if promo.updated_at else None %}
-    {% set culture_updated = culture.updated_at[:16].replace('T', ' ') if culture.updated_at else None %}
-    {% set culture_rss = culture_rss or {'summary_line': 'Jun은 일상의 문화 신호를 스캔하며 다음 멤버십/브랜드 스토리를 준비하고 있습니다.', 'sources': []} %}
-    {% set culture_rss_updated = culture_rss.generated_at[:16].replace('T', ' ') if culture_rss.generated_at else None %}
-    {% set pitchfork_feed = pitchfork_rss or {'hero_line': 'Pitchfork Signal: Jun의 브랜드/멤버십 내러티브에 글로벌 음악 트렌드를 포개고 있습니다.', 'summary_line': 'Pitchfork 뉴스가 Jun의 신호를 새롭게 기록하는 중입니다.', 'entries': [], 'source_url': 'https://pitchfork.com/rss/news/', 'notes': 'scripts/update_pitchfork_rss.py를 실행해 Pitchfork에서 빈틈없는 커버리지를 수집하세요.'} %}
-    {% set pitchfork_updated = pitchfork_feed.generated_at[:16].replace('T', ' ') if pitchfork_feed.generated_at else None %}
-    {% set guardian_feed = guardian_feed or {'hero_line': 'Guardian의 music 지면을 통해 Jun의 감성과 브랜드 피치를 새로운 문맥으로 연결합니다.', 'entries': [], 'generated_at': None, 'source_url': 'https://www.theguardian.com/music', 'notes': 'scripts/update_guardian_music.py를 실행해 Guardian music feed를 갱신하세요.'} %}
-    {% set guardian_feed_updated = guardian_feed.generated_at[:16].replace('T', ' ') if guardian_feed.generated_at else None %}
-    {% set spotify_chart = spotify_daily_chart or {'hero_line': 'Spotify Global Daily 신호가 Jun의 브랜드와 멤버십 라인을 가볍게 스캔 중입니다.', 'captured_at': None, 'source_url': 'https://kworb.net/spotify/country/global_daily.html', 'top_tracks': [], 'notes': 'scripts/update_spotify_kworb.py를 실행해 Kworb chart를 저장하세요.'} %}
-    {% set spotify_updated = spotify_chart.captured_at[:16].replace('T', ' ') if spotify_chart.captured_at else None %}
-    {% set identity_tags = identity_tags or {'hero_line': 'Jun의 문화 레이더가 새로운 감성 태그를 기록 중입니다.', 'tags': [], 'generated_at': None} %}
-    {% set identity_updated = identity_tags.generated_at[:16].replace('T', ' ') if identity_tags.generated_at else None %}
-    {% set identity_context_feed = identity_context_feed or {'headline': 'Jun의 문화 컨텍스트 피드가 곧 정리됩니다.', 'summary': 'scripts/compile_identity_context_feed.py를 실행해 identity_tags를 모아서 브랜드/멤버십 CTA 흐름을 강화하세요.', 'top_tags': [], 'contexts': [], 'cta': {'label': 'Share this pulse with Brand Studio', 'link': url_for('brand_studio')}, 'notes': 'Run scripts/compile_identity_context_feed.py after identity tags refresh to keep this feed alive.'} %}
-    {% set identity_feed_updated = identity_context_feed.generated_at[:19].replace('T', ' ') if identity_context_feed.generated_at else None %}
-    {% set signal_insights = signal_insights or {'hero_line': 'Jun의 레이더가 정체성과 리드 의도를 연결하고 있습니다.', 'top_tags': [], 'keyword_intents': [], 'cta': {'label': 'Share signal with Brand Studio', 'link': url_for('brand_studio')}, 'alt_cta': {'label': 'Document a Reaction', 'link': url_for('diary')}} %}
-    {% set signal_updated = signal_insights.generated_at[:16].replace('T', ' ') if signal_insights.generated_at else None %}
-    {% set billboard_data = billboard_data or {'insight_line': 'Billboard Hot 100 신호가 곧 나타납니다.', 'top_tracks': [], 'captured_at': None} %}
-    {% set billboard_updated = billboard_data.captured_at[:16].replace('T', ' ') if billboard_data.captured_at else None %}
-    {% set deezer_updated = deezer_data.captured_at[:16].replace('T', ' ') if deezer_data.captured_at else None %}
-    <div class="hidden md:flex items-center justify-between mb-6 pb-4 border-b border-white/10">
-        <div class="flex items-center gap-2 text-[10px] uppercase tracking-widest opacity-40 font-pixel">
-            <span>ROOT</span>
-            <span>/</span>
-            <span class="opacity-70">MONETIZATION_HOME</span>
-        </div>
-        <div class="flex items-center gap-3">
-            <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-            <span class="text-[10px] uppercase tracking-widest opacity-60 font-pixel">PIPELINE: ACTIVE</span>
-        </div>
-    </div>
-
-    <div class="mb-8 overflow-x-auto -mx-4 px-4 md:mx-0 md:px-0">
-        <div class="flex items-center gap-3 md:gap-6 text-[9px] md:text-[10px] uppercase tracking-widest opacity-50 font-pixel whitespace-nowrap">
-            <span>DATE: <span class="text-red-400">{{ today_date }}</span></span>
-            <span class="hidden sm:inline">///</span>
-            <span>TODAY VISITS: <span class="text-blue-400">{{ growth_snapshot.today_visits }}</span></span>
-            <span class="hidden sm:inline">///</span>
-            <span>TOTAL VOTES: <span class="text-green-400">{{ growth_snapshot.total_votes }}</span></span>
-            {% if promo_updated %}
-            <span class="hidden md:inline">///</span>
-            <span>PROMO REFRESH: <span class="text-yellow-400">{{ promo_updated[:16].replace('T', ' ') }}</span></span>
-            {% endif %}
-        </div>
-    </div>
-
-    <div class="home-grid">
-        <section class="pixel-card p-6 md:p-10 relative overflow-hidden">
-            <div class="absolute inset-y-0 right-0 w-2/5 bg-gradient-to-l from-white/10 to-transparent pointer-events-none"></div>
-            <div class="relative z-10">
-                <div class="inline-flex items-center gap-3 mb-5">
-                    <span class="text-[10px] uppercase tracking-[0.35em] opacity-45">Emotion Commerce Stack</span>
-                    <div class="w-10 h-[1px] bg-white/20"></div>
-                </div>
-                <h1 class="serif-font text-4xl md:text-6xl leading-tight mb-5">
-                    {{ hero_heading.replace('\n', '<br>') | safe }}
-                </h1>
-                <p class="text-sm md:text-base opacity-70 leading-relaxed max-w-2xl mb-4">
-                    {{ hero_subtext }}
-                </p>
-                {% if hero_flash %}
-                <p class="text-[10px] uppercase tracking-[0.3em] opacity-40 mb-5">{{ hero_flash }}</p>
-                {% endif %}
-
-                <div class="flex flex-col sm:flex-row gap-3 mb-10">
-                    <a href="{{ primary_cta.link }}" class="{{ primary_class }} text-xs tracking-widest px-6 py-3 justify-center">{{ primary_cta.text }}</a>
-                    <a href="{{ secondary_cta.link }}" class="{{ secondary_class }} text-xs tracking-widest px-6 py-3 text-center">{{ secondary_cta.text }}</a>
-                </div>
-                {% if not is_authenticated %}
-                <p class="text-xs uppercase tracking-[0.4em] opacity-40 mb-6">로그인하면 커뮤니티 데이터가 멤버십/브랜드 기회로 연결됩니다.</p>
-                {% endif %}
-
-                <div class="proof-grid">
-                    <div class="border border-white/10 p-4 bg-white/3">
-                        <span class="inline-code">Tracks</span>
-                        <strong class="metric-value">{{ metrics.tracks or growth_snapshot.total_tracks }}</strong>
-                    </div>
-                    <div class="border border-white/10 p-4 bg-white/3">
-                        <span class="inline-code">Diaries</span>
-                        <strong class="metric-value">{{ metrics.diaries or growth_snapshot.total_posts }}</strong>
-                    </div>
-                    <div class="border border-white/10 p-4 bg-white/3">
-                        <span class="inline-code">Votes</span>
-                        <strong class="metric-value">{{ metrics.votes or growth_snapshot.total_votes }}</strong>
-                    </div>
-                    <div class="border border-white/10 p-4 bg-white/3">
-                        <span class="inline-code">Today Visits</span>
-                        <strong class="metric-value">{{ metrics.visits or growth_snapshot.today_visits }}</strong>
-                    </div>
-                </div>
+    <section class="worldcup-home-shell">
+        <div class="worldcup-home-topline">
+            <div class="pulse">
+                <span class="pulse-dot"></span>
+                <span>World Cup Only</span>
             </div>
-        </section>
+            <div id="homeWorldcupStatsLine">Loading battle stats</div>
+        </div>
 
-        <div class="space-y-6">
-            <section class="pixel-card p-5 md:p-6">
-                <div class="text-[10px] uppercase tracking-[0.3em] opacity-40 mb-3">Live Broadcast</div>
-                {% if featured_track %}
-                <h2 class="serif-font text-2xl md:text-3xl leading-tight mb-3">{{ featured_track.title }}</h2>
-                <p class="text-sm opacity-60 mb-5">{{ featured_track.artist or 'Archive featured track' }}</p>
-                <div class="flex flex-col gap-3">
-                    <a href="{{ url_for('track_detail', track_id=featured_track.id) }}" class="btn-pixel text-xs tracking-widest justify-center">PLAY NOW</a>
-                    <div class="text-[10px] uppercase tracking-widest opacity-35">
-                        {% if featured_track.duration_str %}{{ featured_track.duration_str }} · {% endif %}{{ featured_track.source }}
+        <div class="worldcup-home-interactive">
+            <section class="dot-drift-panel" aria-label="Dot drift interactive playground">
+                <canvas class="dot-drift-canvas" id="dotDriftCanvas" width="720" height="220"></canvas>
+                <div class="dot-drift-hud">
+                    <div class="dot-drift-meta">
+                        <span id="dotDriftScore">Score 000</span>
+                        <span id="dotDriftDots">Dots 00</span>
+                        <span id="dotDriftSpeed">Flow 0.0</span>
                     </div>
-                </div>
-                {% elif is_authenticated %}
-                <h2 class="serif-font text-2xl leading-tight mb-3">새로운 트랙을 추가해보세요</h2>
-                <p class="text-sm opacity-60 mb-5">개인 아카이브가 커질수록 월드컵, 코멘트, 리드 전환 접점이 늘어납니다.</p>
-                <a href="{{ url_for('playlists') }}" class="btn-pixel text-xs tracking-widest justify-center">BUILD ARCHIVE</a>
-                {% else %}
-                <h2 class="serif-font text-2xl leading-tight mb-3">로그인 후 아카이브를 시작하세요</h2>
-                <p class="text-sm opacity-60 mb-5">멤버십 전환과 리텐션의 시작은 직접 쌓는 아카이브입니다.</p>
-                <a href="{{ url_for('login') }}" class="btn-pixel text-xs tracking-widest justify-center">LOGIN</a>
-                {% endif %}
-            </section>
-
-            <section class="pixel-card p-5 md:p-6">
-                <div class="text-[10px] uppercase tracking-[0.3em] opacity-40 mb-3">Revenue Levers</div>
-                <div class="space-y-4">
-                    <div class="border border-white/8 p-4">
-                        <div class="inline-code">Membership</div>
-                        <div class="serif-font text-xl mt-2">Archive Pass Beta</div>
-                        <p class="text-sm opacity-60 mt-2">크리에이터 전용 피드, 통계 싱크, 우선 피처 출시.</p>
-                    </div>
-                    <div class="border border-white/8 p-4">
-                        <div class="inline-code">B2B</div>
-                        <div class="serif-font text-xl mt-2">Brand Studio</div>
-                        <p class="text-sm opacity-60 mt-2">브랜드 플레이리스트, 감정 인사이트, 참여형 캠페인 제안.</p>
-                    </div>
-                    <div class="border border-white/8 p-4">
-                        <div class="inline-code">Retention</div>
-                        <div class="serif-font text-xl mt-2">Founder List</div>
-                        <p class="text-sm opacity-60 mt-2">출시 알림, 미디어킷, 초기 가격 혜택으로 재방문 확보.</p>
-                    </div>
+                    <button type="button" class="dot-drift-pill" id="dotDriftResetBtn">Reset Run</button>
                 </div>
             </section>
-        </div>
-    </div>
-
-    <section class="culture-section pixel-card p-6 md:p-8 mb-10">
-        <div class="culture-header">
-            <span>Culture Pulse</span>
-            {% if culture_updated %}<span class="culture-updated">Updated {{ culture_updated }}</span>{% endif %}
-        </div>
-        <p class="culture-hero-line">{{ culture.hero_line }}</p>
-        <div class="culture-grid">
-            {% if culture.top_tracks %}
-                {% for track in culture.top_tracks[:3] %}
-                <article class="culture-card">
-                    <h4>{{ track.title or 'Untitled Track' }}</h4>
-                    <p>{{ track.artist or 'Unknown Artist' }} · {{ track.wins or 0 }} wins</p>
-                    {% if track.duration %}<p class="text-xs uppercase tracking-[0.3em]">{{ (track.duration | int / 60)|round(1) }} min</p>{% endif %}
-                </article>
-                {% endfor %}
-            {% else %}
-                <article class="culture-card">
-                    <h4>No trending track yet</h4>
-                    <p>Collecting votes and cues from the community.</p>
-                </article>
-            {% endif %}
-        </div>
-        <div class="culture-diaries">
-            {% if culture.film_diaries %}
-                {% for diary in culture.film_diaries %}
-                <article class="culture-diary">
-                    <h5>{{ diary.title or 'Untitled Diary' }}</h5>
-                    <p>{{ diary.snippet or 'Cultural reflections will show here.' }}</p>
-                    <p class="text-[10px] uppercase tracking-[0.4em] opacity-50">{{ diary.author or 'Anonymous' }}</p>
-                </article>
-                {% endfor %}
-            {% else %}
-                <article class="culture-diary">
-                    <h5>No cultural notes yet</h5>
-                    <p>We are syncing diaries and film notes for the next drop.</p>
-                </article>
-            {% endif %}
-        </div>
-    </section>
-
-    <section class="pixel-card culture-rss-section p-6 md:p-8 mb-10">
-        <div class="culture-rss-header">
-            <div>
-                <span class="text-[10px] uppercase tracking-[0.3em] opacity-40">Cultural Notes</span>
-                <h3 class="serif-font text-2xl mt-2 leading-tight">Jun이 수집한 문화 RSS 스캔</h3>
-            </div>
-            {% if culture_rss_updated %}
-            <span class="text-[10px] uppercase tracking-[0.35em] opacity-50">Updated {{ culture_rss_updated }}</span>
-            {% endif %}
-        </div>
-        <p class="text-sm opacity-60 leading-relaxed mb-6">{{ culture_rss.summary_line }}</p>
-        <div class="culture-rss-grid">
-            {% if culture_rss.sources %}
-                {% for source in culture_rss.sources %}
-                <article class="culture-rss-card">
-                    <div class="inline-code">{{ source.tagline or source.name }}</div>
-                    {% set highlight = source.entries[0] if source.entries else None %}
-                    <h4 class="serif-font text-xl mt-3 leading-tight">{{ highlight.title if highlight else 'Latest cultural notes incoming' }}</h4>
-                    {% if highlight and highlight.summary %}
-                    <p class="culture-rss-meta">{{ highlight.summary }}</p>
-                    {% endif %}
-                    {% if source.entries %}
-                    <ul>
-                        {% for entry in source.entries[:3] %}
-                        <li>
-                            <a href="{{ entry.link }}" target="_blank" rel="noreferrer" class="entry-title">{{ entry.title }}</a>
-                            {% if entry.published %}
-                            <p class="entry-date">{{ entry.published }}</p>
-                            {% endif %}
-                            {% if entry.summary %}
-                            <p class="entry-summary">{{ entry.summary }}</p>
-                            {% endif %}
-                        </li>
-                        {% endfor %}
-                    </ul>
-                    {% else %}
-                    <p class="culture-rss-empty">피드 항목이 없습니다. 스크립트를 실행해 최신 콘텐츠를 가져오세요.</p>
-                    {% endif %}
-                </article>
-                {% endfor %}
-            {% else %}
-                <p class="culture-rss-empty">문화 RSS 피드를 가져오는 중입니다. 스크립트를 실행하면 최신 글이 표시됩니다.</p>
-            {% endif %}
-        </div>
-        <div class="mt-6 flex flex-wrap gap-3">
-            <a href="{{ url_for('diary') }}" class="btn-outline text-xs tracking-widest justify-center">Document Reaction</a>
-            <a href="{{ url_for('brand_studio') }}" class="btn-outline text-xs tracking-widest justify-center">Share with Partner</a>
-        </div>
-    </section>
-
-    <section class="pixel-card guardian-section p-6 md:p-8 mb-10">
-        <div class="guardian-header">
-            <div>
-                <span class="text-[10px] uppercase tracking-[0.3em] opacity-40">Guardian Music Radar</span>
-                <h3 class="serif-font text-2xl mt-2 leading-tight">Jun의 브랜드/멤버십 내러티브를 Guardian 커버리지와 연결합니다.</h3>
-            </div>
-            <div class="text-right space-y-1">
-                {% if guardian_feed_updated %}
-                <span class="text-[10px] uppercase tracking-[0.35em] opacity-50">Updated {{ guardian_feed_updated }}</span>
-                {% endif %}
-                <a href="{{ guardian_feed.source_url or 'https://www.theguardian.com/music' }}" target="_blank" rel="noreferrer" class="guardian-link">Open Guardian</a>
-            </div>
-        </div>
-        <p class="text-sm opacity-60 leading-relaxed mb-5">{{ guardian_feed.hero_line }}</p>
-        <div class="guardian-grid">
-            {% if guardian_feed.entries %}
-                {% for article in guardian_feed.entries %}
-                <article class="guardian-card">
-                    <div class="guardian-title">{{ article.title or 'Guardian story' }}</div>
-                    {% if article.summary %}
-                    <p class="guardian-summary">{{ article.summary }}</p>
-                    {% endif %}
-                    <div class="guardian-meta">
-                        <span>{{ article.published_at[:16].replace('T', ' ') if article.published_at else 'Latest' }}</span>
-                        {% if article.author %}
-                        <span class="guardian-author">{{ article.author }}</span>
-                        {% endif %}
-                    </div>
-                    <a href="{{ article.url }}" target="_blank" rel="noreferrer">Read on Guardian</a>
-                </article>
-                {% endfor %}
-            {% else %}
-                <p class="text-sm opacity-60">Guardian music feed를 준비 중입니다. scripts/update_guardian_music.py를 실행하면 최신 Guardian 커버리지를 확보합니다.</p>
-            {% endif %}
-        </div>
-        {% if guardian_feed.notes %}
-        <p class="guardian-notes">{{ guardian_feed.notes }}</p>
-        {% endif %}
-    </section>
-
-    <section class="pixel-card pitchfork-section p-6 md:p-8 mb-10">
-        <div class="pitchfork-header">
-            <div>
-                <span class="text-[10px] uppercase tracking-[0.3em] opacity-40">Pitchfork Signal</span>
-                <h3 class="serif-font text-2xl mt-2 leading-tight">Jun의 브랜드 내러티브에 Pitchfork 커버리지를 덧씁니다.</h3>
-            </div>
-            <div class="text-right space-y-1">
-                {% if pitchfork_updated %}
-                <span class="text-[10px] uppercase tracking-[0.35em] opacity-50">Updated {{ pitchfork_updated }}</span>
-                {% endif %}
-                <a href="{{ pitchfork_feed.source_url or 'https://pitchfork.com/rss/news/' }}" target="_blank" rel="noreferrer" class="guardian-link">Open Pitchfork</a>
-            </div>
-        </div>
-        <p class="pitchfork-hero-line">{{ pitchfork_feed.hero_line }}</p>
-        <p class="pitchfork-summary-line">{{ pitchfork_feed.summary_line }}</p>
-        <div class="pitchfork-grid">
-            {% if pitchfork_feed.entries %}
-                {% for entry in pitchfork_feed.entries[:3] %}
-                <article class="pitchfork-card">
-                    <div class="pitchfork-meta">
-                        <span>{{ entry.published or 'Latest' }}</span>
-                        <span>Pitchfork</span>
-                    </div>
-                    <h4 class="serif-font text-lg leading-tight">{{ entry.title }}</h4>
-                    {% if entry.summary %}
-                    <p class="pitchfork-summary">{{ entry.summary }}</p>
-                    {% endif %}
-                    {% if entry.link %}
-                    <a href="{{ entry.link }}" target="_blank" rel="noreferrer" class="pitchfork-link">Read on Pitchfork</a>
-                    {% endif %}
-                </article>
-                {% endfor %}
-            {% else %}
-                <p class="pitchfork-summary-line">Pitchfork signal을 가져오는 중입니다. scripts/update_pitchfork_rss.py를 실행하면 최신 내용이 나타납니다.</p>
-            {% endif %}
-        </div>
-        <div class="mt-6 flex flex-wrap gap-3">
-            <a href="{{ url_for('brand_studio') }}" class="btn-outline text-xs tracking-widest justify-center">Share with Partner</a>
-            <a href="{{ url_for('diary') }}" class="btn-outline text-xs tracking-widest justify-center">Document Reaction</a>
-        </div>
-        {% if pitchfork_feed.notes %}
-        <p class="pitchfork-notes">{{ pitchfork_feed.notes }}</p>
-        {% endif %}
-    </section>
-
-    <section class="pixel-card identity-section p-6 md:p-8 mb-10">
-        <div class="flex items-center justify-between mb-4">
-            <div>
-                <span class="text-[10px] uppercase tracking-[0.3em] opacity-40">Identity Tags</span>
-                <h3 class="serif-font text-2xl mt-2 leading-tight">Jun의 문화 태그를 브랜드/멤버십 큐에 연결합니다.</h3>
-            </div>
-            {% if identity_updated %}
-            <span class="text-[10px] uppercase tracking-[0.35em] opacity-50">Updated {{ identity_updated }}</span>
-            {% endif %}
-        </div>
-        <p class="text-sm opacity-60 leading-relaxed mb-5">{{ identity_tags.hero_line }}</p>
-        <div class="identity-tags-grid">
-            {% if identity_tags.tags %}
-                {% for tag in identity_tags.tags[:6] %}
-                <article class="identity-tag-card">
-                    <div class="identity-tag">{{ tag.tag }}</div>
-                    <div class="identity-count">{{ tag.count }} mentions</div>
-                    {% if tag.contexts %}
-                    <p class="identity-context">{{ tag.contexts | join(' · ') }}</p>
-                    {% endif %}
-                </article>
-                {% endfor %}
-            {% else %}
-                <p class="text-sm opacity-60">Identity tags are being generated. Run the data script to refresh the signals.</p>
-            {% endif %}
-        </div>
-        <div class="mt-6 flex flex-wrap gap-3">
-            <a href="{{ url_for('diary') }}" class="btn-outline text-xs tracking-widest justify-center">Document a Reaction</a>
-            <a href="{{ url_for('brand_studio') }}" class="btn-outline text-xs tracking-widest justify-center">Share with Brand Studio</a>
-        </div>
-    </section>
-
-    <section class="pixel-card identity-feed-section p-6 md:p-8 mb-10">
-        <div class="flex items-start justify-between mb-4">
-            <div>
-                <span class="text-[10px] uppercase tracking-[0.3em] opacity-40">Identity Context Feed</span>
-                <h3 class="serif-font text-2xl mt-2 leading-tight">Jun의 문화 맥락을 브랜드/멤버십 CTA로 녹입니다.</h3>
-            </div>
-            {% if identity_feed_updated %}
-            <span class="text-[10px] uppercase tracking-[0.35em] opacity-50">Updated {{ identity_feed_updated }}</span>
-            {% endif %}
-        </div>
-        {% if identity_context_feed.headline %}
-        <p class="serif-font text-xl leading-loose mb-2">{{ identity_context_feed.headline }}</p>
-        {% endif %}
-        <p class="text-sm opacity-60 leading-relaxed mb-4">{{ identity_context_feed.summary }}</p>
-        {% if identity_context_feed.top_tags %}
-        <div class="identity-feed-tags mb-4">
-            {% for tag in identity_context_feed.top_tags %}
-            <span class="identity-feed-chip">{{ tag.tag }} · {{ tag.count }}</span>
-            {% endfor %}
-        </div>
-        {% endif %}
-        {% if identity_context_feed.contexts %}
-        <div class="identity-feed-grid mb-4">
-            {% for context in identity_context_feed.contexts %}
-            <article class="identity-feed-card">
-                <div class="identity-feed-tag">{{ context.tag }}</div>
-                <p class="identity-feed-context">{{ context.context }}</p>
-                <div class="identity-feed-meta">
-                    <span>{{ context.source or 'identity_tags' }}</span>
-                    <span>{{ context.tag_count }} mentions</span>
+            <aside class="dot-drift-copy">
+                <div class="dot-drift-kicker">Interactive</div>
+                <div>
+                    <h2 class="dot-drift-title">Dot Drift.</h2>
+                    <p class="dot-drift-text">공을 도트 필드 안에서 튕기고 굴리세요. 좌우 방향을 주면서 점을 먹는 짧은 인터랙션입니다.</p>
                 </div>
-            </article>
-            {% endfor %}
-        </div>
-        {% else %}
-        <p class="text-sm opacity-60 leading-relaxed mb-4">컨텍스트 피드를 준비하려면 scripts/compile_identity_context_feed.py를 실행해주세요.</p>
-        {% endif %}
-        <div class="flex flex-wrap gap-3 items-center">
-            <a href="{{ identity_context_feed.cta.link or url_for('brand_studio') }}" class="btn-outline text-xs tracking-widest justify-center">{{ identity_context_feed.cta.label or 'Share this pulse with Brand Studio' }}</a>
-            {% if identity_context_feed.notes %}
-            <span class="identity-feed-notes">{{ identity_context_feed.notes }}</span>
-            {% endif %}
-        </div>
-    </section>
-
-    <section class="pixel-card insight-section p-6 md:p-8 mb-10">
-        <div class="flex items-start justify-between mb-4">
-            <div>
-                <span class="text-[10px] uppercase tracking-[0.3em] opacity-40">Cultural Insight Brief</span>
-                <h3 class="serif-font text-2xl mt-2 leading-tight">Jun의 RSS와 차트 신호를 브랜드 이야기로 묶습니다.</h3>
-            </div>
-            {% if cultural_insights.generated_at %}
-            <span class="text-[10px] uppercase tracking-[0.35em] opacity-50">Updated {{ cultural_insights.generated_at[:16].replace('T', ' ') }}</span>
-            {% endif %}
-        </div>
-        <p class="text-sm opacity-60 leading-relaxed mb-5">{{ cultural_insights.headline }}</p>
-        {% if cultural_insights.keywords %}
-        <div class="insight-keywords">
-            {% for keyword in cultural_insights.keywords %}
-            <span class="insight-keyword">{{ keyword.keyword }} · {{ keyword.count }}</span>
-            {% endfor %}
-        </div>
-        {% endif %}
-        {% if cultural_insights.stories %}
-        <div class="insight-stories">
-            {% for story in cultural_insights.stories %}
-            <article class="insight-story">
-                <div class="text-[10px] uppercase tracking-[0.35em] opacity-45">{{ story.source }}</div>
-                {% if story.title %}
-                <h4 class="serif-font text-lg leading-tight">{{ story.title }}</h4>
-                {% endif %}
-                {% if story.summary %}
-                <p>{{ story.summary }}</p>
-                {% endif %}
-                {% if story.link %}
-                <a href="{{ story.link }}" target="_blank" rel="noreferrer">Read story</a>
-                {% endif %}
-            </article>
-            {% endfor %}
-        </div>
-        {% else %}
-        <p class="text-sm opacity-60">문화 RSS와 차트 데이터를 조합해 다음 브랜드 리드를 위한 이야기 거리를 정리 중입니다.</p>
-        {% endif %}
-        {% if cultural_insights.chart_highlights %}
-        <div class="insight-charts">
-            {% for highlight in cultural_insights.chart_highlights %}
-            <div class="chart-highlight">
-                <div class="chart-source">{{ highlight.source }}</div>
-                {% if highlight.title %}
-                <p class="chart-title serif-font">{{ highlight.title }}</p>
-                {% endif %}
-                {% if highlight.artist %}
-                <p class="chart-artist">{{ highlight.artist }}</p>
-                {% endif %}
-            </div>
-            {% endfor %}
-        </div>
-        {% endif %}
-        <div class="mt-6 flex flex-wrap gap-3 items-center">
-            <a href="{{ cultural_insights.cta.link }}" class="btn-outline text-xs tracking-widest justify-center">{{ cultural_insights.cta.label }}</a>
-            <span class="insight-notes">{{ cultural_insights.notes }}</span>
-        </div>
-    </section>
-
-    <section class="pixel-card signal-section p-6 md:p-8 mb-10">
-        <div class="flex items-start justify-between mb-4">
-            <div>
-                <span class="text-[10px] uppercase tracking-[0.3em] opacity-40">Signal Intelligence</span>
-                <h3 class="serif-font text-2xl mt-2 leading-tight">Jun의 정체성과 리드 의도를 한 호흡에 보여줍니다.</h3>
-            </div>
-            {% if signal_updated %}
-            <span class="text-[10px] uppercase tracking-[0.35em] opacity-50">Updated {{ signal_updated }}</span>
-            {% endif %}
-        </div>
-        <p class="text-sm opacity-60 leading-relaxed mb-5">{{ signal_insights.hero_line }}</p>
-        <div class="signal-grid">
-            {% if signal_insights.top_tags %}
-                {% for tag in signal_insights.top_tags[:4] %}
-                <article class="signal-card">
-                    <div class="inline-code">{{ tag.source or 'Identity' }}</div>
-                    <h4 class="serif-font text-lg mt-1">{{ tag.tag or 'Signal Tag' }}</h4>
-                    <p class="signal-context">{{ tag.context_summary or 'Context syncing...' }}</p>
-                    <p class="text-[10px] uppercase tracking-[0.3em] opacity-45 mt-4">{{ tag.count }} mentions</p>
-                </article>
-                {% endfor %}
-            {% else %}
-                <article class="signal-card">
-                    <h4 class="serif-font text-lg">Signals are warming up</h4>
-                    <p class="signal-context">Run scripts/compile_signal_insights.py to merge identity tags and lead intents for the homepage.</p>
-                </article>
-            {% endif %}
-        </div>
-        {% if signal_insights.keyword_intents %}
-        <div class="mt-5">
-            <div class="text-[10px] uppercase tracking-[0.35em] opacity-35">Intent Keywords</div>
-            <div class="mt-3 flex flex-wrap gap-2">
-                {% for keyword in signal_insights.keyword_intents[:6] %}
-                <span class="signal-chip">{{ keyword.keyword or 'intent' }} · {{ keyword.count }}</span>
-                {% endfor %}
-            </div>
-        </div>
-        {% endif %}
-        <div class="mt-6 flex flex-wrap gap-3">
-            <a href="{{ signal_insights.cta.link or url_for('brand_studio') }}" class="btn-outline text-xs tracking-widest justify-center">{{ signal_insights.cta.label or 'Share signal with Brand Studio' }}</a>
-            <a href="{{ signal_insights.alt_cta.link or url_for('diary') }}" class="btn-pixel text-xs tracking-widest justify-center">{{ signal_insights.alt_cta.label or 'Document a Reaction' }}</a>
-        </div>
-    </section>
-
-    <section class="pixel-card momentum-section p-6 md:p-8 mb-10">
-        <div class="flex items-start justify-between mb-4">
-            <div>
-                <span class="text-[10px] uppercase tracking-[0.3em] opacity-40">CTA Momentum</span>
-                <h3 class="serif-font text-2xl mt-2 leading-tight">Jun의 감성과 리드 신호를 CTA로 녹입니다.</h3>
-            </div>
-            {% if cta_momentum.generated_at %}
-            <span class="text-[10px] uppercase tracking-[0.35em] opacity-50">Updated {{ cta_momentum.generated_at[:16].replace('T', ' ') }}</span>
-            {% endif %}
-        </div>
-        <p class="text-sm opacity-60 leading-relaxed mb-5">{{ cta_momentum.context_line or 'Signals are being compiled for CTA combos.' }}</p>
-        <div class="momentum-grid">
-            {% if cta_momentum.entries %}
-                {% for entry in cta_momentum.entries %}
-                <article class="momentum-card">
-                    <div class="momentum-tag">{{ entry.tag }}</div>
-                    <p class="momentum-message">{{ entry.message }}</p>
-                    <div class="momentum-meta">
-                        {{ entry.intent_label }} · {{ entry.keyword }} · {{ entry.tag_count }} / {{ entry.keyword_count }}
-                    </div>
-                    <a href="{{ entry.cta.link }}" class="btn-outline text-xs tracking-widest justify-center mt-4">{{ entry.cta.label }}</a>
-                </article>
-                {% endfor %}
-            {% else %}
-                <p class="text-sm opacity-60">CTA momentum을 계산하려면 scripts/compile_cta_momentum.py를 실행하세요.</p>
-            {% endif %}
-        </div>
-    </section>
-
-    <section class="pixel-card deezer-section p-6 md:p-8 mb-10">
-        <div class="flex items-center justify-between mb-3">
-            <div class="text-[10px] uppercase tracking-[0.3em] opacity-40">Deezer Global Pulse</div>
-            {% if deezer_updated %}
-            <span class="text-[10px] uppercase tracking-[0.35em] opacity-50">Updated {{ deezer_updated }}</span>
-            {% endif %}
-        </div>
-        <p class="culture-hero-line mb-5">{{ deezer_data.insight_line }}</p>
-        <div class="deezer-grid">
-            {% if deezer_data.top_tracks %}
-                {% for track in deezer_data.top_tracks %}
-                <article class="deezer-card">
-                    <span class="deezer-rank">{{ track.position }}</span>
-                    <div>
-                        <strong class="serif-font text-lg leading-tight">{{ track.title }}</strong>
-                        <p class="text-[10px] opacity-60 uppercase tracking-[0.3em]">{{ track.artist }}</p>
-                        {% if track.duration %}
-                        <p class="deezer-meta-line">Length {{ (track.duration // 60)|int }}m {{ track.duration % 60 }}s</p>
-                        {% endif %}
-                        {% if track.popularity %}
-                        <p class="deezer-meta-line">pop {{ track.popularity }}</p>
-                        {% endif %}
-                    </div>
-                </article>
-                {% endfor %}
-            {% else %}
-                <p class="text-sm opacity-60">Deezer 글로벌 차트 데이터를 수집 중입니다. 스크립트를 실행하면 최신 신호가 나타납니다.</p>
-            {% endif %}
-        </div>
-        <div class="mt-6 flex flex-wrap gap-3">
-            <a href="{{ url_for('playlists') }}" class="btn-outline text-xs tracking-widest justify-center">ADD TO ARCHIVE</a>
-            <a href="{{ url_for('brand_studio') }}" class="btn-outline text-xs tracking-widest justify-center">SHOW DATA TO PARTNERS</a>
-        </div>
-    </section>
-
-    <section class="pixel-card spotify-section p-6 md:p-8 mb-10">
-        <div class="flex items-start justify-between mb-4">
-            <div>
-                <span class="text-[10px] uppercase tracking-[0.3em] opacity-40">Spotify Radar</span>
-                <h3 class="serif-font text-2xl mt-2 leading-tight">Jun의 Global Daily Spotify 감성이 브랜드/멤버십 CTA 앞에 뜹니다.</h3>
-            </div>
-            <div class="text-right space-y-1">
-                {% if spotify_updated %}
-                <span class="text-[10px] uppercase tracking-[0.35em] opacity-50">Updated {{ spotify_updated }}</span>
-                {% endif %}
-                <a href="{{ spotify_chart.source_url }}" target="_blank" rel="noreferrer" class="guardian-link">Open Kworb</a>
-            </div>
-        </div>
-        <p class="text-sm opacity-60 leading-relaxed mb-4">{{ spotify_chart.hero_line }}</p>
-        <div class="spotify-grid">
-            {% if spotify_chart.top_tracks %}
-                {% for track in spotify_chart.top_tracks[:6] %}
-                <article class="spotify-card">
-                    <div class="spotify-rank">#{{ track.rank or '—' }}</div>
-                    <strong>{{ track.title or 'Untitled Track' }}</strong>
-                    <p class="spotify-artist">{{ track.artist or 'Unknown Artist' }}</p>
-                    {% if track.link %}
-                    <a href="{{ track.link }}" target="_blank" rel="noreferrer" class="text-[10px] uppercase tracking-[0.3em] opacity-45">View chart entry</a>
-                    {% endif %}
-                    {% if track.daily_streams %}
-                    <p class="spotify-meta">Daily {{ '{:,}'.format(track.daily_streams) }} · Total {{ '{:,}'.format(track.total_streams) if track.total_streams else '—' }}</p>
-                    {% endif %}
-                    {% if track.daily_change or track.weekly_change %}
-                    <p class="spotify-notes">Δ {{ track.daily_change|int }} / {{ track.weekly_change|int }} · {{ track.peak_position or '—' }} peak · {{ track.days_on_chart or '—' }} days</p>
-                    {% endif %}
-                </article>
-                {% endfor %}
-            {% else %}
-                <article class="spotify-card">
-                    <p class="text-sm opacity-60">Spotify Global Daily 데이터를 수집 중입니다. scripts/update_spotify_kworb.py를 실행하면 이 블록을 채울 수 있습니다.</p>
-                </article>
-            {% endif %}
-        </div>
-        <div class="mt-6 flex flex-wrap gap-3">
-            <a href="{{ url_for('diary') }}" class="btn-outline text-xs tracking-widest justify-center">Document Reaction</a>
-            <a href="{{ url_for('brand_studio') }}" class="btn-outline text-xs tracking-widest justify-center">Share with Brand Studio</a>
-        </div>
-        {% if spotify_chart.notes %}
-        <p class="spotify-notes mt-4">{{ spotify_chart.notes }}</p>
-        {% endif %}
-    </section>
-
-    <section class="pixel-card billboard-section p-6 md:p-8 mb-10">
-        <div class="flex items-center justify-between mb-3">
-            <div class="text-[10px] uppercase tracking-[0.3em] opacity-40">Billboard Signal</div>
-            {% if billboard_updated %}
-            <span class="text-[10px] uppercase tracking-[0.35em] opacity-50">Updated {{ billboard_updated }}</span>
-            {% endif %}
-        </div>
-        <p class="culture-hero-line mb-5">{{ billboard_data.insight_line }}</p>
-        <div class="billboard-grid">
-            {% if billboard_data.top_tracks %}
-                {% for track in billboard_data.top_tracks %}
-                <article class="billboard-track">
-                    <span class="billboard-rank">{{ track.rank }}</span>
-                    <div>
-                        <strong class="serif-font text-lg leading-tight">{{ track.title }}</strong>
-                        <p class="billboard-artist">{{ track.artist }}</p>
-                    </div>
-                </article>
-                {% endfor %}
-            {% else %}
-                <p class="text-sm opacity-60">Billboard Hot 100 데이터를 수집 중입니다. 스크립트를 실행하면 최신 목록이 나타납니다.</p>
-            {% endif %}
-        </div>
-        <div class="mt-6 flex flex-wrap gap-3">
-            <a href="{{ url_for('playlists') }}" class="btn-outline text-xs tracking-widest justify-center">ADD THESE TO ARCHIVE</a>
-            <a href="{{ url_for('brand_studio') }}" class="btn-outline text-xs tracking-widest justify-center">SHOW DATA TO PARTNERS</a>
-        </div>
-    </section>
-
-    <section class="mb-10">
-        <div class="inline-flex items-center gap-4 mb-6">
-            <span class="text-[10px] tracking-[0.4em] uppercase opacity-40">Monetization Offers</span>
-            <div class="w-12 h-[1px] bg-white/20"></div>
-        </div>
-        {% set promo_offers = promo.offers or [] %}
-        <div class="offer-grid">
-            {% if promo_offers %}
-                {% for offer in promo_offers %}
-                <article class="pixel-card offer-card">
-                    <div class="inline-code">{{ offer.tagline }}</div>
-                    <h3 class="serif-font text-2xl mt-3">{{ offer.title }}</h3>
-                    <p class="text-sm opacity-60 mt-3">{{ offer.description }}</p>
-                    <div class="serif-font text-3xl mt-5">{{ offer.price }}</div>
-                    {% if offer.bullets %}
-                    <ul>
-                        {% for bullet in offer.bullets %}
-                        <li>{{ bullet }}</li>
-                        {% endfor %}
-                    </ul>
-                    {% endif %}
-                    {% if offer.cta.type == 'form' %}
-                    <form data-growth-form class="mt-auto space-y-3">
-                        <input type="hidden" name="lead_type" value="{{ offer.cta.lead_type }}">
-                        <input type="hidden" name="source_page" value="{{ offer.cta.source_page }}">
-                        <input type="email" name="email" placeholder="이메일" class="pixel-input" required>
-                        <button type="submit" class="btn-pixel text-xs tracking-widest justify-center">{{ offer.cta.label }}</button>
-                        <div class="status-message" data-growth-status></div>
-                    </form>
-                    {% elif offer.cta.type == 'link' %}
-                    <a href="{{ offer.cta.href }}" class="btn-outline text-xs tracking-widest text-center mt-auto">{{ offer.cta.label }}</a>
-                    {% endif %}
-                </article>
-                {% endfor %}
-            {% else %}
-                <article class="pixel-card offer-card">
-                    <div class="inline-code">Launch Offer</div>
-                    <h3 class="serif-font text-2xl mt-3">Archive Pass Beta</h3>
-                    <p class="text-sm opacity-60 mt-3">월 구독 기반 크리에이터 멤버십. 아카이브 운영 도구와 우선 기능을 제공합니다.</p>
-                    <div class="serif-font text-3xl mt-5">9,900 KRW<span class="text-sm opacity-40"> / month</span></div>
-                    <ul>
-                        <li>트랙 지표 우선 동기화</li>
-                        <li>멤버 전용 큐레이션 배지</li>
-                        <li>베타 기능 우선 오픈</li>
-                    </ul>
-                    <form data-growth-form class="mt-auto space-y-3">
-                        <input type="hidden" name="lead_type" value="creator_membership">
-                        <input type="hidden" name="source_page" value="home_archive_pass">
-                        <input type="email" name="email" placeholder="멤버십 오픈 알림 이메일" class="pixel-input" required>
-                        <button type="submit" class="btn-pixel text-xs tracking-widest justify-center">JOIN BETA</button>
-                        <div class="status-message" data-growth-status></div>
-                    </form>
-                </article>
-
-                <article class="pixel-card offer-card">
-                    <div class="inline-code">B2B Campaign</div>
-                    <h3 class="serif-font text-2xl mt-3">Brand Studio Sprint</h3>
-                    <p class="text-sm opacity-60 mt-3">브랜드가 음악 맥락 안에서 노출되고 반응 데이터를 회수할 수 있는 협업 패키지.</p>
-                    <div class="serif-font text-3xl mt-5">690,000 KRW<span class="text-sm opacity-40">+</span></div>
-                    <ul>
-                        <li>브랜드 큐레이션 페이지</li>
-                        <li>투표/참여형 이벤트 설계</li>
-                        <li>성과 리포트 초안 제공</li>
-                    </ul>
-                    <a href="{{ url_for('brand_studio') }}" class="btn-outline text-xs tracking-widest text-center mt-auto">OPEN BRAND STUDIO</a>
-                </article>
-
-                <article class="pixel-card offer-card">
-                    <div class="inline-code">Insight Product</div>
-                    <h3 class="serif-font text-2xl mt-3">Audience Insight Report</h3>
-                    <p class="text-sm opacity-60 mt-3">감정 기록, 코멘트, 참여 데이터를 정리한 경량 인사이트 리포트형 상품.</p>
-                    <div class="serif-font text-3xl mt-5">290,000 KRW<span class="text-sm opacity-40">+</span></div>
-                    <ul>
-                        <li>반응 키워드 요약</li>
-                        <li>콘텐츠 포맷 제안</li>
-                        <li>브랜드/아티스트 협업 방향 정리</li>
-                    </ul>
-                    <form data-growth-form class="mt-auto space-y-3">
-                        <input type="hidden" name="lead_type" value="insight_report">
-                        <input type="hidden" name="source_page" value="home_insight_report">
-                        <input type="email" name="email" placeholder="리포트 문의 이메일" class="pixel-input" required>
-                        <input type="text" name="company" placeholder="브랜드 또는 팀명" class="pixel-input">
-                        <button type="submit" class="btn-pixel text-xs tracking-widest justify-center">REQUEST REPORT</button>
-                        <div class="status-message" data-growth-status></div>
-                    </form>
-                </article>
-            {% endif %}
-        </div>
-    </section>
-
-    <section class="conversion-grid mb-10">
-        <article class="pixel-card p-6 md:p-8">
-            <div class="inline-code">Creator Conversion Form</div>
-            <h3 class="serif-font text-3xl mt-3 mb-4">Creator Membership Waitlist</h3>
-            <p class="text-sm opacity-60 leading-relaxed mb-6">
-                감정 기반 아카이브를 꾸준히 운영하는 크리에이터를 위해 멤버십 우선 모집을 시작합니다.
-            </p>
-            <form data-growth-form class="space-y-4">
-                <input type="hidden" name="lead_type" value="premium_waitlist">
-                <input type="hidden" name="source_page" value="home_creator_waitlist">
-                <input type="text" name="name" placeholder="이름 또는 활동명" class="pixel-input">
-                <input type="email" name="email" placeholder="이메일" class="pixel-input" required>
-                <textarea name="goal" placeholder="멤버십에서 가장 기대하는 기능이나 운영 목적" class="pixel-textarea"></textarea>
-                <button type="submit" class="btn-pixel text-xs tracking-widest justify-center">APPLY FOR FOUNDING MEMBER</button>
-                <div class="status-message" data-growth-status></div>
-            </form>
-        </article>
-
-        <article class="pixel-card p-6 md:p-8">
-            <div class="inline-code">Brand Lead Form</div>
-            <h3 class="serif-font text-3xl mt-3 mb-4">Brand Partnership Inquiry</h3>
-            <p class="text-sm opacity-60 leading-relaxed mb-6">
-                음악 취향과 감정 기록 맥락 안에서 브랜드 캠페인을 설계하려는 팀을 위한 문의 폼입니다.
-            </p>
-            <form data-growth-form class="space-y-4">
-                <input type="hidden" name="lead_type" value="brand_partnership">
-                <input type="hidden" name="source_page" value="home_brand_partnership">
-                <input type="text" name="name" placeholder="담당자 이름" class="pixel-input">
-                <input type="email" name="email" placeholder="업무용 이메일" class="pixel-input" required>
-                <input type="text" name="company" placeholder="회사명" class="pixel-input">
-                <select name="budget_range" class="pixel-select">
-                    <option value="">예산 범위 선택</option>
-                    <option value="under_300k">Under 300,000 KRW</option>
-                    <option value="300k_1m">300,000 to 1,000,000 KRW</option>
-                    <option value="1m_3m">1,000,000 to 3,000,000 KRW</option>
-                    <option value="3m_plus">3,000,000 KRW+</option>
-                </select>
-                <textarea name="goal" placeholder="원하는 캠페인 목표나 협업 방향" class="pixel-textarea"></textarea>
-                <button type="submit" class="btn-pixel text-xs tracking-widest justify-center">REQUEST BRAND CALL</button>
-                <div class="status-message" data-growth-status></div>
-            </form>
-        </article>
-    </section>
-
-    <section class="pixel-card p-6 md:p-8 mb-10">
-        <div class="flex items-end justify-between gap-4 mb-4">
-            <div>
-                <span class="inline-code">Lead Pulse</span>
-                <h3 class="serif-font text-3xl mt-2">Realtime Monetization Signals</h3>
-            </div>
-            {% if lead_summary.generated_at %}
-            <div class="text-[10px] uppercase tracking-[0.35em] opacity-55">{{ lead_summary.generated_at[:16].replace('T', ' ') }}</div>
-            {% endif %}
-        </div>
-        <p class="text-sm opacity-60 leading-relaxed">
-            {{ lead_summary.total_leads }}개의 수익화 리드를 포착했고, 지난 7일간 {{ lead_summary.recent_seven_days or 0 }}건이 추가되었습니다.
-        </p>
-        <div class="lead-pulse-grid">
-            {% for type in lead_summary.ordered_lead_types %}
-            <div class="lead-type-card">
-                <span class="text-[10px] uppercase tracking-[0.3em] opacity-40">{{ type.label }}</span>
-                <strong class="lead-type-count">{{ type.count }}</strong>
-                <span class="lead-type-meta">{{ type.recent_count }} / 7d</span>
-            </div>
-            {% endfor %}
-        </div>
-        {% if lead_summary.goal_keywords %}
-        <div class="mt-6">
-            <div class="text-[10px] uppercase tracking-[0.4em] opacity-35">Trending Intents</div>
-            <div class="mt-3 flex flex-wrap gap-2">
-                {% for keyword in lead_summary.goal_keywords[:6] %}
-                <span class="keyword-chip">{{ keyword.keyword }} · {{ keyword.count }}</span>
-                {% endfor %}
-            </div>
-        </div>
-        {% endif %}
-        {% if lead_summary.top_sources %}
-        <p class="lead-meta-line">
-            주요 유입: {% for source_entry in lead_summary.top_sources[:3] %}{{ source_entry.source }}{% if not loop.last %}, {% endif %}{% endfor %}
-        </p>
-        {% endif %}
-    </section>
-
-    <section class="pixel-card lead-source-section p-6 md:p-8 mb-10">
-        <div class="flex items-start justify-between mb-4">
-            <div>
-                <span class="text-[10px] uppercase tracking-[0.3em] opacity-40">Lead Source Spotlight</span>
-                <h3 class="serif-font text-2xl mt-2 leading-tight">Jun의 리드 유입 채널을 한눈에</h3>
-            </div>
-            {% if lead_source_spread.generated_at %}
-            <span class="text-[10px] uppercase tracking-[0.35em] opacity-55">Updated {{ lead_source_spread.generated_at[:16].replace('T', ' ') }}</span>
-            {% endif %}
-        </div>
-        <p class="text-sm opacity-60 leading-relaxed mb-5">{{ lead_source_spread.notes }}</p>
-        <div class="lead-source-grid">
-            {% if lead_source_spread.sources %}
-                {% for source in lead_source_spread.sources[:3] %}
-                <article class="lead-source-card">
-                    <div class="lead-source-label">{{ source.source }}</div>
-                    <strong class="lead-source-count">{{ source.count }}</strong>
-                    <div class="lead-source-meta">
-                        <span class="lead-source-percent">
-                            {{ '{:.1f}'.format(source.percent) if source.percent is not none else '0.0' }}%
-                        </span>
-                        {% if source.detail %}
-                        <span class="lead-source-note">{{ source.detail }}</span>
-                        {% endif %}
-                    </div>
-                </article>
-                {% endfor %}
-            {% else %}
-                <p class="text-sm opacity-60">리드 파이프라인이 데이터를 수집하면 여기서 주요 유입 채널이 나타납니다.</p>
-            {% endif %}
-        </div>
-        <div class="mt-6 flex flex-wrap gap-3">
-            <a href="{{ url_for('brand_studio') }}" class="btn-outline text-xs tracking-widest justify-center">Show partners the funnel</a>
-            <a href="{{ url_for('diary') }}" class="btn-pixel text-xs tracking-widest justify-center">Document a reaction</a>
-        </div>
-    </section>
-
-    <section class="pixel-card data-asset-section p-6 md:p-8 mb-10">
-        <div class="flex items-start justify-between mb-4">
-            <div>
-                <span class="text-[10px] uppercase tracking-[0.3em] opacity-40">Data Asset Inventory</span>
-                <h3 class="serif-font text-2xl mt-2 leading-tight">Jun의 데이터 자산을 정리한 대시보드</h3>
-            </div>
-            {% if data_asset_status.generated_at %}
-            <span class="text-[10px] uppercase tracking-[0.35em] opacity-55">Updated {{ data_asset_status.generated_at[:16].replace('T', ' ') }}</span>
-            {% endif %}
-        </div>
-        <p class="text-sm opacity-60 leading-relaxed mb-5">{{ data_asset_status.notes }}</p>
-        <div class="asset-grid">
-            {% if data_asset_status.assets %}
-                {% for asset in data_asset_status.assets %}
-                <article class="asset-card">
-                    <div class="text-[10px] uppercase tracking-[0.3em] opacity-40">{{ asset.name }}</div>
-                    {% if asset.metric_value is not none and asset.metric_label %}
-                    <strong class="asset-value">{{ asset.metric_value }} {{ asset.metric_label }}</strong>
-                    {% endif %}
-                    <p class="asset-notes">{{ asset.notes or '내부 데이터 파이프라인에서 값을 다시 확인하세요.' }}</p>
-                    {% if asset.updated_at %}
-                    <p class="asset-meta">Updated {{ asset.updated_at[:16].replace('T', ' ') }}</p>
-                    {% endif %}
-                </article>
-                {% endfor %}
-            {% else %}
-                <p class="text-sm opacity-60">데이터 자산 요약을 준비 중입니다. scripts/log_data_asset_status.py를 실행하면 나타납니다.</p>
-            {% endif %}
-        </div>
-    </section>
-
-    <section class="pixel-card culture-highlight-section p-6 md:p-8 mb-10">
-        <div class="culture-highlight-header">
-            <div>
-                <span class="text-[10px] uppercase tracking-[0.3em] opacity-40">Culture Items</span>
-                <h3 class="serif-font text-2xl mt-2 leading-tight">Normalized culture signal, ready for Brand Studio</h3>
-            </div>
-            {% if culture_items_latest.generated_at %}
-            <span class="culture-highlight-meta">Updated {{ culture_items_latest.generated_at[:16].replace('T', ' ') }}</span>
-            {% endif %}
-        </div>
-        {% if culture_items_latest.count %}
-        <p class="text-[10px] uppercase tracking-[0.3em] opacity-50 mb-2">
-            {{ culture_items_latest.count }} rows · Sources: {{ (culture_items_latest.sources | join(', ')) or 'none' }}
-        </p>
-        {% endif %}
-        <p class="text-sm opacity-60 leading-relaxed mb-4">{{ culture_items_latest.notes }}</p>
-        {% set culture_highlight = culture_items_latest.items[0] if culture_items_latest.items else None %}
-        {% if culture_highlight %}
-        {% set highlight_meta = culture_highlight.metadata or {} %}
-        <div class="culture-highlight-main">
-            <div class="culture-highlight-meta">
-                {{ culture_highlight.source | replace('_', ' ') | upper }} · {{ culture_highlight.source_type | replace('_', ' ') | title }}
-                {% if highlight_meta.get('rank') %}· Rank {{ highlight_meta.get('rank') }}{% endif %}
-            </div>
-            <h4 class="serif-font">{{ culture_highlight.title }}</h4>
-            <p>{{ culture_highlight.summary or culture_highlight.title }}</p>
-            <div class="culture-highlight-tags">
-                {% for tag in (culture_highlight.tags or [])[:6] %}
-                <span class="culture-highlight-chip">{{ tag }}</span>
-                {% endfor %}
-            </div>
-            <div class="culture-highlight-cta">
-                <a href="{{ culture_highlight.url }}" target="_blank" rel="noreferrer" class="btn-outline text-xs tracking-widest justify-center">View source</a>
-                <a href="{{ url_for('brand_studio') }}" class="btn-pixel text-xs tracking-widest justify-center">Build a pitch</a>
-            </div>
-        </div>
-        <div class="culture-highlight-grid">
-            {% for item in culture_items_latest.items[:3] %}
-            <article class="culture-highlight-mini">
-                <strong>{{ item.title }}</strong>
-                <p class="text-sm opacity-60">{{ item.creator }} · {{ item.source | replace('_', ' ') | title }}</p>
-                <span>{{ item.collected_at[:16].replace('T', ' ') if item.collected_at else 'collected unknown' }}</span>
-            </article>
-            {% endfor %}
-        </div>
-        {% else %}
-        <p class="text-sm opacity-60">scripts/build_culture_items.py가 실행되어야 정규화된 문화 항목이 여기 나타납니다.</p>
-        {% endif %}
-    </section>
-
-    <section class="pixel-card culture-source-section p-6 md:p-8 mb-10">
-        <div class="flex items-start justify-between mb-4">
-            <div>
-                <span class="text-[10px] uppercase tracking-[0.3em] opacity-40">Culture Source Pulse</span>
-                <h3 class="serif-font text-2xl mt-2 leading-tight">Jun의 문화 소스를 정리한 normalized pulse</h3>
-            </div>
-            {% if culture_source_summary.generated_at %}
-            <span class="text-[10px] uppercase tracking-[0.35em] opacity-55">Updated {{ culture_source_summary.generated_at[:16].replace('T', ' ') }}</span>
-            {% endif %}
-        </div>
-        <p class="text-sm opacity-60 leading-relaxed mb-5">{{ culture_source_summary.notes }}</p>
-        <div class="culture-source-grid">
-            {% if culture_source_summary.source_counts %}
-                {% for source in culture_source_summary.source_counts[:4] %}
-                <article class="culture-source-card">
-                    <strong>{{ source.source | replace('_', ' ') | title }}</strong>
-                    <p class="source-count">{{ source.count }} normalized items</p>
-                    <p class="source-meta">{{ source.latest_collected_at[:16].replace('T', ' ') if source.latest_collected_at else 'collection pending' }}</p>
-                </article>
-                {% endfor %}
-            {% else %}
-                <p class="text-sm opacity-60 culture-source-empty">scripts/build_culture_items.py와 scripts/compile_culture_source_summary.py를 실행하면 여기에 Jun의 문화 소스별 집계가 나타납니다.</p>
-            {% endif %}
-        </div>
-        <div class="mt-4 flex flex-wrap gap-3 items-center">
-            <a href="{{ url_for('brand_studio') }}" class="btn-pixel text-xs tracking-widest justify-center">Share source pulse</a>
-            <a href="{{ url_for('diary') }}" class="btn-outline text-xs tracking-widest justify-center">Document a reaction</a>
-        </div>
-    </section>
-
-    {% set pipeline_health_context = pipeline_health or {} %}
-    {% set pipeline_last_run = pipeline_health_context.get('last_run') %}
-    {% set thresholds = pipeline_health_context.get('thresholds') or {} %}
-    {% set freshest_asset = pipeline_health_context.get('freshest_asset') %}
-    {% set stale_details = pipeline_health_context.get('stale_details') or [] %}
-
-    <section class="pixel-card pipeline-health-section p-6 md:p-8 mb-10">
-        <div class="flex items-start justify-between mb-4">
-            <div>
-                <span class="text-[10px] uppercase tracking-[0.3em] opacity-40">Pipeline Health</span>
-                <h3 class="serif-font text-2xl mt-2 leading-tight">Hourly automation keeps dataset signals trustworthy.</h3>
-            </div>
-            {% if pipeline_last_run %}
-            <span class="text-[10px] uppercase tracking-[0.35em] opacity-55">Last run {{ pipeline_last_run[:16].replace('T', ' ') }}</span>
-            {% endif %}
-        </div>
-        <p class="text-sm opacity-60 leading-relaxed mb-4">{{ pipeline_health_context.get('notes') or 'scripts/pipeline_health.py가 data_asset_status.json을 요약해 파이프라인 신뢰도를 보여줍니다.' }}</p>
-        <div class="pipeline-health-grid">
-            <article class="pipeline-health-metric">
-                <span class="pipeline-health-label">Assets tracked</span>
-                <span class="pipeline-health-value">{{ pipeline_health_context.get('asset_count', 0) }}</span>
-                <span class="pipeline-health-subtext">Landing + culture + CTA data rows</span>
-            </article>
-            <article class="pipeline-health-metric">
-                <span class="pipeline-health-label">Fresh ({{ thresholds.get('fresh_hours') or 2 }}h)</span>
-                <span class="pipeline-health-value">{{ pipeline_health_context.get('fresh_assets', 0) }}</span>
-                <span class="pipeline-health-subtext">{{ pipeline_health_context.get('fresh_ratio', 0) }}% fresh</span>
-            </article>
-            <article class="pipeline-health-metric">
-                <span class="pipeline-health-label">Stale ({{ thresholds.get('stale_hours') or 6 }}h)</span>
-                <span class="pipeline-health-value">{{ pipeline_health_context.get('stale_assets', 0) }}</span>
-                <span class="pipeline-health-subtext">Older updates need attention</span>
-            </article>
-        </div>
-        {% if freshest_asset %}
-        <p class="pipeline-health-subline">Most recent refresh: {{ freshest_asset.get('name') }} · {{ freshest_asset.get('updated_at')[:16].replace('T', ' ') if freshest_asset.get('updated_at') else 'unknown' }}</p>
-        {% endif %}
-        {% if stale_details %}
-        <div class="pipeline-health-stale">
-            <div class="text-[10px] uppercase tracking-[0.3em] opacity-40">Stale signals</div>
-            <div class="pipeline-health-chip-wrap">
-                {% for stale in stale_details %}
-                <span class="pipeline-health-chip">{{ stale.get('name') or 'Asset' }} · {{ stale.get('updated_at')[:16].replace('T', ' ') if stale.get('updated_at') else 'needs update' }}</span>
-                {% endfor %}
-            </div>
-        </div>
-        {% endif %}
-        {% set automation_log = automation_log or {} %}
-        {% set log_status = automation_log.status or automation_log.get('status', 'unknown') %}
-        <div class="automation-log-panel">
-            <div class="automation-log-heading">
-                <span>LaunchAgent log</span>
-                <span class="automation-log-status automation-log-status-{{ log_status }}">{{ log_status|upper }}</span>
-            </div>
-            <p class="automation-log-subline">
-                {% if automation_log.last_run %}
-                Last finished {{ automation_log.last_run[:16].replace('T', ' ') }}
-                {% else %}
-                LaunchAgent 로그를 기다리는 중입니다.
-                {% endif %}
-            </p>
-            {% if automation_log.next_expected_run_local %}
-            <p class="automation-log-subline">
-                Next expected run {{ automation_log.next_expected_run_local }}
-            </p>
-            {% endif %}
-            {% if automation_log.notes %}
-            <p class="automation-log-subline">{{ automation_log.notes }}</p>
-            {% endif %}
-            {% if automation_log.recent_lines %}
-            <div class="automation-log-lines">
-                {% for line in automation_log.recent_lines[:4] %}
-                <p>{{ line }}</p>
-                {% endfor %}
-            </div>
-            {% endif %}
-            {% if automation_log.timeline %}
-            <div class="automation-log-timeline">
-                {% for entry in automation_log.timeline[:4] %}
-                <span>• {{ entry.label }} · {{ entry.detail }}</span>
-                {% endfor %}
-            </div>
-            {% endif %}
-        </div>
-        <div class="mt-6 flex flex-wrap gap-3 items-center">
-            <a href="{{ url_for('brand_studio') }}" class="btn-pixel text-xs tracking-widest justify-center">Share data health</a>
-            <a href="{{ url_for('diary') }}" class="btn-outline text-xs tracking-widest justify-center">Document the data story</a>
-        </div>
-    </section>
-
-    <section class="pixel-card analysis-section p-6 md:p-8 mb-10">
-        <div class="flex items-start justify-between mb-4">
-            <div>
-                <span class="text-[10px] uppercase tracking-[0.3em] opacity-40">Analysis Summary</span>
-                <h3 class="serif-font text-2xl mt-2 leading-tight">Jun의 analysis sessions가 브랜드 내러티브로 어떻게 연결되는지 보여줍니다.</h3>
-            </div>
-            {% if analysis_summary.generated_at %}
-            <span class="text-[10px] uppercase tracking-[0.35em] opacity-50">Updated {{ analysis_summary.generated_at[:16].replace('T', ' ') }}</span>
-            {% endif %}
-        </div>
-        <p class="text-sm opacity-60 leading-relaxed">{{ analysis_summary.notes }}</p>
-        <div class="analysis-grid">
-            <article class="analysis-card">
-                <div class="analysis-card-label">Top genres</div>
-                {% if analysis_summary.top_genres %}
-                <ul class="analysis-list">
-                    {% for genre in analysis_summary.top_genres[:5] %}
-                    <li>
-                        <span>{{ genre.genre }}</span>
-                        <span>{{ genre.count }}</span>
-                    </li>
-                    {% endfor %}
-                </ul>
-                {% else %}
-                <p class="text-sm opacity-60">'analysis_sessions' 데이터를 수집하면 장르 요약이 나타납니다.</p>
-                {% endif %}
-            </article>
-
-            <article class="analysis-card">
-                <div class="analysis-card-label">Top moods</div>
-                {% if analysis_summary.top_moods %}
-                <ul class="analysis-list">
-                    {% for mood in analysis_summary.top_moods[:5] %}
-                    <li>
-                        <span>{{ mood.mood }}</span>
-                        <span>{{ mood.count }}</span>
-                    </li>
-                    {% endfor %}
-                </ul>
-                {% else %}
-                <p class="text-sm opacity-60">감정 분석이 입력되면 mood 요약이 표시됩니다.</p>
-                {% endif %}
-            </article>
-
-            <article class="analysis-card">
-                <div class="analysis-card-label">Top tags</div>
-                {% if analysis_summary.top_tags %}
-                <div class="analysis-tag-stack">
-                    {% for tag in analysis_summary.top_tags[:10] %}
-                    <span class="analysis-tag">{{ tag.tag }}</span>
-                    {% endfor %}
+                <div class="dot-drift-controls">
+                    <span>← → nudge</span>
+                    <span>Space hop</span>
+                    <span>Click pulse</span>
                 </div>
-                {% else %}
-                <p class="text-sm opacity-60">video_tags가 채워지면 주요 키워드 태그가 채워집니다.</p>
-                {% endif %}
-            </article>
-
-            <article class="analysis-card">
-                <div class="analysis-card-label">Sentiment & energy</div>
-                <div class="analysis-stat">
-                    {% if analysis_summary.sentiment_summary.average is not none %}
-                    <div class="analysis-stat-value">{{ analysis_summary.sentiment_summary.average }}</div>
-                    <div class="analysis-meta">Average sentiment · {{ analysis_summary.sentiment_summary.count }} sessions</div>
-                    {% else %}
-                    <div class="analysis-stat-value">—</div>
-                    <div class="analysis-meta">Sentiment data pending</div>
-                    {% endif %}
-                </div>
-                {% if analysis_summary.energy_distribution %}
-                <div class="analysis-energy">
-                    {% for energy in analysis_summary.energy_distribution[:3] %}
-                    <div class="analysis-energy-line">
-                        <span>{{ energy.energy }}</span>
-                        <span>{{ energy.count }}</span>
-                    </div>
-                    {% endfor %}
-                </div>
-                {% else %}
-                <p class="text-sm opacity-60">Energy_level 값이 기록되면 여기서 보여줍니다.</p>
-                {% endif %}
-            </article>
+            </aside>
         </div>
 
-        {% if analysis_summary.recent_sessions %}
-        <div class="analysis-recent">
-            {% for session in analysis_summary.recent_sessions %}
-            <article class="analysis-recent-card">
-                <h5 class="serif-font">{{ session.title }}</h5>
-                <p class="analysis-recent-meta">{{ session.channel }} · {{ session.analyzed_at[:16].replace('T', ' ') if session.analyzed_at else 'timestamp N/A' }}</p>
-                <p class="text-sm opacity-60">Sentiment {{ session.sentiment_score if session.sentiment_score is not none else '—' }}</p>
-            </article>
-            {% endfor %}
+        <div class="worldcup-home-stage">
+            <div class="worldcup-home-grid" id="homeWorldcupBattle">
+                <div class="worldcup-empty-state">Preparing battle...</div>
+            </div>
         </div>
-        {% else %}
-        <p class="text-sm opacity-60 mt-4">최근 분석 세션이 없으면 이 공간은 곧 Jun의 데이터 자산으로 채워집니다.</p>
-        {% endif %}
 
-        <div class="mt-6 flex flex-wrap gap-3 items-center">
-            <a href="{{ url_for('brand_studio') }}" class="btn-pixel text-xs tracking-widest justify-center">Share analysis with partners</a>
-            <a href="{{ url_for('diary') }}" class="btn-outline text-xs tracking-widest justify-center">Document a new reaction</a>
+        <div class="worldcup-home-bottomline">
+            <span id="homeWorldcupLeader">Leader loading</span>
+            <div class="worldcup-home-actions">
+                <button type="button" class="worldcup-mini-btn" id="homeWorldcupNextBtn">Next Pair</button>
+                <a href="{{ url_for('worldcup') }}" class="worldcup-mini-btn">Open Full Board</a>
+            </div>
         </div>
     </section>
+</div>
 
-    <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
-        <section class="col-span-1 md:col-span-5 pixel-card p-5 md:p-6">
-            <div class="flex justify-between items-start mb-5">
-                <span class="text-[10px] uppercase tracking-[0.3em] opacity-40">Recent Diaries</span>
-                <a href="{{ url_for('diary') }}" class="text-[10px] uppercase tracking-widest opacity-50 hover:opacity-100">OPEN</a>
-            </div>
-            {% if recent_diary and recent_diary|length > 0 %}
-            <div class="space-y-3">
-                {% for diary in recent_diary[:3] %}
-                <div class="border border-white/10 p-4 hover:border-white/35 transition-all cursor-pointer" onclick="window.location.href='{{ url_for('community_post', post_id=diary.id) }}'">
-                    <h4 class="serif-font text-lg mb-2">{{ diary.title }}</h4>
-                    <p class="text-sm opacity-60 line-clamp-2">{{ diary.content[:110] }}{% if diary.content|length > 110 %}...{% endif %}</p>
-                </div>
-                {% endfor %}
-            </div>
-            {% else %}
-            <p class="text-sm opacity-60">아직 공개된 기록이 없습니다. 첫 번째 기록이 커뮤니티의 톤을 만듭니다.</p>
-            {% endif %}
-        </section>
-
-        <section class="col-span-1 md:col-span-3 pixel-card p-5 md:p-6">
-            <div class="text-[10px] uppercase tracking-[0.3em] opacity-40 mb-3">World Cup Pulse</div>
-            <h3 class="serif-font text-2xl mb-3">참여 신호</h3>
-            <div class="text-sm opacity-60 leading-relaxed mb-5">
-                최근 7일간 {{ growth_snapshot.recent_battles }}개의 배틀이 발생했고 총 {{ growth_snapshot.total_votes }}표가 누적되었습니다.
-            </div>
-            <a href="{{ url_for('worldcup') }}" class="btn-outline text-xs tracking-widest text-center">JOIN VOTING</a>
-        </section>
-
-        <section class="col-span-1 md:col-span-4 pixel-card p-5 md:p-6">
-            <div class="text-[10px] uppercase tracking-[0.3em] opacity-40 mb-3">Next Revenue Step</div>
-            <h3 class="serif-font text-2xl mb-3">브랜드 페이지에서 바로 제안서 흐름으로</h3>
-            <p class="text-sm opacity-60 leading-relaxed mb-5">
-                패키지 구성, 예산 범위, 문의 폼을 한 번에 제공하는 전용 페이지를 열어 두었습니다.
-            </p>
-            <a href="{{ url_for('brand_studio') }}" class="btn-pixel text-xs tracking-widest justify-center">GO TO BRAND STUDIO</a>
-        </section>
+<div class="worldcup-mini-overlay" id="worldcupMiniOverlay" aria-hidden="true">
+    <div class="worldcup-mini-panel">
+        <div class="worldcup-mini-kicker">Bonus Round</div>
+        <div>
+            <h2 class="worldcup-mini-title">Stop the pulse.</h2>
+            <p class="worldcup-mini-copy">러너를 흰 구간 안에서 멈추면 보너스 성공입니다. 끝나면 바로 다음 배틀로 돌아갑니다.</p>
+        </div>
+        <div class="worldcup-mini-track" id="worldcupMiniTrack">
+            <div class="worldcup-mini-target" id="worldcupMiniTarget"></div>
+            <div class="worldcup-mini-runner" id="worldcupMiniRunner"></div>
+        </div>
+        <div class="worldcup-mini-meta">
+            <span id="worldcupMiniRound">Pulse challenge</span>
+            <span id="worldcupMiniResult">Ready</span>
+        </div>
+        <div class="worldcup-mini-actions">
+            <button type="button" class="worldcup-mini-btn" id="worldcupMiniStopBtn">Stop</button>
+            <button type="button" class="worldcup-mini-btn" id="worldcupMiniContinueBtn" style="display:none;">Continue</button>
+        </div>
     </div>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+const homeWorldcupState = {
+    currentTracks: [],
+    seenTrackIds: [],
+    selectedTrackId: null,
+    totalVotes: 0,
+    recentBattles: 0,
+    leader: null,
+    votesSinceMiniGame: 0,
+    pendingNextBattle: false,
+    miniGameActive: false,
+};
+
+const homeWorldcupDom = {
+    battle: document.getElementById('homeWorldcupBattle'),
+    statsLine: document.getElementById('homeWorldcupStatsLine'),
+    leader: document.getElementById('homeWorldcupLeader'),
+    nextBtn: document.getElementById('homeWorldcupNextBtn'),
+    miniOverlay: document.getElementById('worldcupMiniOverlay'),
+    miniTrack: document.getElementById('worldcupMiniTrack'),
+    miniTarget: document.getElementById('worldcupMiniTarget'),
+    miniRunner: document.getElementById('worldcupMiniRunner'),
+    miniRound: document.getElementById('worldcupMiniRound'),
+    miniResult: document.getElementById('worldcupMiniResult'),
+    miniStopBtn: document.getElementById('worldcupMiniStopBtn'),
+    miniContinueBtn: document.getElementById('worldcupMiniContinueBtn'),
+    dotDriftCanvas: document.getElementById('dotDriftCanvas'),
+    dotDriftScore: document.getElementById('dotDriftScore'),
+    dotDriftDots: document.getElementById('dotDriftDots'),
+    dotDriftSpeed: document.getElementById('dotDriftSpeed'),
+    dotDriftResetBtn: document.getElementById('dotDriftResetBtn'),
+};
+
+const miniGameState = {
+    animationFrame: null,
+    position: 0,
+    direction: 1,
+    targetStart: 36,
+    targetWidth: 18,
+    speed: 1.35,
+    resolved: false,
+};
+
+const dotDriftState = {
+    ctx: null,
+    width: 720,
+    height: 220,
+    animationFrame: null,
+    score: 0,
+    collectedDots: 0,
+    pulseUntil: 0,
+    ball: {
+        x: 150,
+        y: 46,
+        vx: 1.8,
+        vy: 0.4,
+        radius: 10,
+    },
+    pegs: [],
+    dots: [],
+};
+
+document.addEventListener('DOMContentLoaded', () => {
+    homeWorldcupDom.nextBtn?.addEventListener('click', () => loadHomeWorldcupBattle(true));
+    homeWorldcupDom.miniStopBtn?.addEventListener('click', stopMiniGame);
+    homeWorldcupDom.miniContinueBtn?.addEventListener('click', closeMiniGameAndContinue);
+    homeWorldcupDom.dotDriftResetBtn?.addEventListener('click', resetDotDrift);
+    document.addEventListener('keydown', handleMiniGameKeydown);
+    document.addEventListener('keydown', handleDotDriftKeydown);
+    homeWorldcupDom.dotDriftCanvas?.addEventListener('pointerdown', handleDotDriftPointer);
+    loadHomeWorldcupBattle();
+    refreshHomeWorldcupStats();
+    refreshHomeWorldcupLeader();
+    initDotDrift();
+});
+
+async function refreshHomeWorldcupStats() {
+    try {
+        const response = await fetch('/api/worldcup/stats');
+        const payload = await response.json();
+        if (!payload.success) throw new Error(payload.error || 'stats failed');
+        const stats = payload.stats || {};
+        homeWorldcupState.totalVotes = Number(stats.total_votes || 0);
+        homeWorldcupState.recentBattles = Number(stats.recent_battles || 0);
+        renderStatsLine();
+    } catch (error) {
+        console.warn('home stats failed', error);
+        homeWorldcupDom.statsLine.textContent = 'Battle stats unavailable';
+    }
+}
+
+async function refreshHomeWorldcupLeader() {
+    try {
+        const response = await fetch('/api/worldcup/results?limit=1');
+        const payload = await response.json();
+        const rankings = payload.rankings || [];
+        homeWorldcupState.leader = rankings[0] || null;
+        renderLeaderLine();
+    } catch (error) {
+        console.warn('home leader failed', error);
+        homeWorldcupDom.leader.textContent = 'Leader unavailable';
+    }
+}
+
+async function loadHomeWorldcupBattle(resetSeen = false) {
+    if (resetSeen) {
+        homeWorldcupState.seenTrackIds = [];
+    }
+
+    homeWorldcupDom.battle.innerHTML = '<div class="worldcup-empty-state">Loading next pair...</div>';
+
+    try {
+        const exclude = homeWorldcupState.seenTrackIds.length ? '?exclude=' + homeWorldcupState.seenTrackIds.join(',') : '';
+        const response = await fetch('/api/worldcup/tracks' + exclude);
+        const payload = await response.json();
+        const tracks = payload.tracks || [];
+
+        if (!payload.success || tracks.length < 2) {
+            homeWorldcupDom.battle.innerHTML = '<div class="worldcup-empty-state">Not enough tracks for battle</div>';
+            return;
+        }
+
+        homeWorldcupState.currentTracks = tracks;
+        homeWorldcupState.selectedTrackId = null;
+        tracks.forEach((track) => {
+            if (!homeWorldcupState.seenTrackIds.includes(track.id)) {
+                homeWorldcupState.seenTrackIds.push(track.id);
+            }
+        });
+        renderHomeWorldcupBattle();
+    } catch (error) {
+        console.warn('home battle failed', error);
+        homeWorldcupDom.battle.innerHTML = '<div class="worldcup-empty-state">Failed to load battle</div>';
+    }
+}
+
+function renderHomeWorldcupBattle() {
+    homeWorldcupDom.battle.innerHTML = homeWorldcupState.currentTracks.map((track) => `
+        <article class="worldcup-home-card" data-track-id="${track.id}">
+            ${track.thumbnail_url || track.cover_url ? `<div class="worldcup-home-cover" style="background-image:url('${escapeWorldcupAttribute(track.thumbnail_url || track.cover_url)}')"></div>` : ''}
+            <div class="worldcup-home-source">${escapeWorldcupHtml(track.source || 'archive')}</div>
+            <div class="worldcup-home-body">
+                <h2 class="worldcup-home-title">${escapeWorldcupHtml(track.title || 'Untitled')}</h2>
+                <p class="worldcup-home-artist">${escapeWorldcupHtml(track.artist || 'Unknown Artist')}</p>
+            </div>
+            <div>
+                <div class="worldcup-home-meta">${escapeWorldcupHtml(track.duration_str || 'Tap to choose')}</div>
+                <div class="worldcup-home-pick">Choose</div>
+            </div>
+        </article>
+    `).join('');
+
+    homeWorldcupDom.battle.querySelectorAll('.worldcup-home-card').forEach((card) => {
+        card.addEventListener('click', () => submitHomeWorldcupVote(card.dataset.trackId));
+    });
+}
+
+async function submitHomeWorldcupVote(trackId) {
+    if (homeWorldcupState.selectedTrackId || homeWorldcupState.currentTracks.length < 2 || homeWorldcupState.miniGameActive) return;
+    homeWorldcupState.selectedTrackId = trackId;
+
+    homeWorldcupDom.battle.querySelectorAll('.worldcup-home-card').forEach((card) => {
+        const selected = card.dataset.trackId === trackId;
+        card.classList.toggle('is-selected', selected);
+        card.classList.toggle('is-dimmed', !selected);
+    });
+
+    const [trackA, trackB] = homeWorldcupState.currentTracks;
+
+    try {
+        const response = await fetch('/api/worldcup/vote', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                track_a_id: trackA.id,
+                track_b_id: trackB.id,
+                winner_id: trackId,
+            }),
+        });
+        const payload = await response.json();
+        if (!payload.success) throw new Error(payload.error || 'vote failed');
+
+        homeWorldcupState.votesSinceMiniGame += 1;
+
+        setTimeout(async () => {
+            homeWorldcupState.selectedTrackId = null;
+            await refreshHomeWorldcupStats();
+            await refreshHomeWorldcupLeader();
+            if (shouldOpenMiniGame()) {
+                openMiniGame();
+            } else {
+                await loadHomeWorldcupBattle();
+            }
+        }, 220);
+    } catch (error) {
+        console.warn('home vote failed', error);
+        homeWorldcupState.selectedTrackId = null;
+        homeWorldcupDom.battle.querySelectorAll('.worldcup-home-card').forEach((card) => {
+            card.classList.remove('is-selected', 'is-dimmed');
+        });
+    }
+}
+
+function shouldOpenMiniGame() {
+    return homeWorldcupState.votesSinceMiniGame > 0 && homeWorldcupState.votesSinceMiniGame % 4 === 0;
+}
+
+function renderStatsLine() {
+    homeWorldcupDom.statsLine.textContent = `Votes ${homeWorldcupState.totalVotes} / Recent ${homeWorldcupState.recentBattles}`;
+}
+
+function renderLeaderLine() {
+    if (!homeWorldcupState.leader) {
+        homeWorldcupDom.leader.textContent = 'No leader yet';
+        return;
+    }
+
+    const leader = homeWorldcupState.leader;
+    homeWorldcupDom.leader.textContent = `Leader ${leader.title} / ${leader.wins || 0} wins`;
+}
+
+function escapeWorldcupHtml(text) {
+    const map = {'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;'};
+    return String(text || '').replace(/[&<>"']/g, (char) => map[char]);
+}
+
+function escapeWorldcupAttribute(text) {
+    return String(text || '').replace(/'/g, '%27').replace(/"/g, '%22');
+}
+
+function openMiniGame() {
+    homeWorldcupState.miniGameActive = true;
+    homeWorldcupState.pendingNextBattle = true;
+    miniGameState.resolved = false;
+    miniGameState.position = 0;
+    miniGameState.direction = 1;
+    miniGameState.targetStart = 24 + Math.random() * 48;
+    miniGameState.targetWidth = 14 + Math.random() * 10;
+
+    homeWorldcupDom.miniRound.textContent = `After vote ${homeWorldcupState.totalVotes}`;
+    homeWorldcupDom.miniResult.textContent = 'Hit the bright zone';
+    homeWorldcupDom.miniContinueBtn.style.display = 'none';
+    homeWorldcupDom.miniStopBtn.style.display = 'inline-flex';
+    homeWorldcupDom.miniOverlay.classList.add('is-open');
+    homeWorldcupDom.miniOverlay.setAttribute('aria-hidden', 'false');
+
+    renderMiniGame();
+    runMiniGame();
+}
+
+function renderMiniGame() {
+    homeWorldcupDom.miniTarget.style.left = `${miniGameState.targetStart}%`;
+    homeWorldcupDom.miniTarget.style.width = `${miniGameState.targetWidth}%`;
+    homeWorldcupDom.miniRunner.style.left = `calc(${miniGameState.position}% - 8px)`;
+}
+
+function runMiniGame() {
+    cancelMiniAnimation();
+    const tick = () => {
+        if (miniGameState.resolved) return;
+
+        miniGameState.position += miniGameState.speed * miniGameState.direction;
+        if (miniGameState.position >= 100) {
+            miniGameState.position = 100;
+            miniGameState.direction = -1;
+        } else if (miniGameState.position <= 0) {
+            miniGameState.position = 0;
+            miniGameState.direction = 1;
+        }
+
+        renderMiniGame();
+        miniGameState.animationFrame = requestAnimationFrame(tick);
+    };
+    miniGameState.animationFrame = requestAnimationFrame(tick);
+}
+
+function stopMiniGame() {
+    if (miniGameState.resolved) return;
+    miniGameState.resolved = true;
+    cancelMiniAnimation();
+
+    const inZone = miniGameState.position >= miniGameState.targetStart &&
+        miniGameState.position <= (miniGameState.targetStart + miniGameState.targetWidth);
+
+    homeWorldcupDom.miniResult.textContent = inZone ? 'Perfect stop' : 'Missed the zone';
+    homeWorldcupDom.miniStopBtn.style.display = 'none';
+    homeWorldcupDom.miniContinueBtn.style.display = 'inline-flex';
+}
+
+function handleMiniGameKeydown(event) {
+    if (!homeWorldcupState.miniGameActive) return;
+    if (event.code !== 'Space') return;
+
+    event.preventDefault();
+
+    if (!miniGameState.resolved) {
+        stopMiniGame();
+        return;
+    }
+
+    closeMiniGameAndContinue();
+}
+
+async function closeMiniGameAndContinue() {
+    homeWorldcupDom.miniOverlay.classList.remove('is-open');
+    homeWorldcupDom.miniOverlay.setAttribute('aria-hidden', 'true');
+    homeWorldcupState.miniGameActive = false;
+
+    if (homeWorldcupState.pendingNextBattle) {
+        homeWorldcupState.pendingNextBattle = false;
+        await loadHomeWorldcupBattle();
+    }
+}
+
+function cancelMiniAnimation() {
+    if (miniGameState.animationFrame) {
+        cancelAnimationFrame(miniGameState.animationFrame);
+        miniGameState.animationFrame = null;
+    }
+}
+
+function initDotDrift() {
+    const canvas = homeWorldcupDom.dotDriftCanvas;
+    if (!canvas) return;
+
+    dotDriftState.ctx = canvas.getContext('2d');
+    buildDotDriftField();
+    renderDotDriftHud();
+    runDotDrift();
+}
+
+function buildDotDriftField() {
+    dotDriftState.pegs = [];
+    dotDriftState.dots = [];
+
+    for (let row = 0; row < 4; row += 1) {
+        for (let col = 0; col < 7; col += 1) {
+            dotDriftState.pegs.push({
+                x: 110 + col * 78 + (row % 2 ? 34 : 0),
+                y: 62 + row * 34,
+                radius: 4,
+            });
+        }
+    }
+
+    for (let i = 0; i < 16; i += 1) {
+        dotDriftState.dots.push(createDotDriftDot(i));
+    }
+}
+
+function createDotDriftDot(index = 0) {
+    const lane = index % 4;
+    return {
+        x: 80 + Math.random() * 560,
+        y: 36 + lane * 42 + Math.random() * 28,
+        radius: 3,
+        active: true,
+    };
+}
+
+function resetDotDrift() {
+    dotDriftState.score = 0;
+    dotDriftState.collectedDots = 0;
+    dotDriftState.ball.x = 150;
+    dotDriftState.ball.y = 46;
+    dotDriftState.ball.vx = 1.8;
+    dotDriftState.ball.vy = 0.4;
+    dotDriftState.pulseUntil = 0;
+    buildDotDriftField();
+    renderDotDriftHud();
+}
+
+function handleDotDriftKeydown(event) {
+    if (!homeWorldcupDom.dotDriftCanvas) return;
+
+    if (event.code === 'ArrowLeft' || event.code === 'KeyA') {
+        dotDriftState.ball.vx -= 0.9;
+    } else if (event.code === 'ArrowRight' || event.code === 'KeyD') {
+        dotDriftState.ball.vx += 0.9;
+    } else if (event.code === 'Space' && !homeWorldcupState.miniGameActive) {
+        event.preventDefault();
+        dotDriftState.ball.vy -= 2.4;
+        dotDriftState.pulseUntil = performance.now() + 180;
+    }
+}
+
+function handleDotDriftPointer(event) {
+    const canvas = homeWorldcupDom.dotDriftCanvas;
+    if (!canvas) return;
+
+    const rect = canvas.getBoundingClientRect();
+    const xRatio = (event.clientX - rect.left) / rect.width;
+    const yRatio = (event.clientY - rect.top) / rect.height;
+    const targetX = xRatio * dotDriftState.width;
+    const targetY = yRatio * dotDriftState.height;
+
+    dotDriftState.ball.vx += (targetX - dotDriftState.ball.x) * 0.008;
+    dotDriftState.ball.vy += (targetY - dotDriftState.ball.y) * 0.006 - 1.1;
+    dotDriftState.pulseUntil = performance.now() + 200;
+}
+
+function runDotDrift() {
+    cancelDotDriftAnimation();
+
+    const tick = () => {
+        updateDotDrift();
+        renderDotDrift();
+        dotDriftState.animationFrame = requestAnimationFrame(tick);
+    };
+
+    dotDriftState.animationFrame = requestAnimationFrame(tick);
+}
+
+function cancelDotDriftAnimation() {
+    if (dotDriftState.animationFrame) {
+        cancelAnimationFrame(dotDriftState.animationFrame);
+        dotDriftState.animationFrame = null;
+    }
+}
+
+function updateDotDrift() {
+    const { ball } = dotDriftState;
+
+    ball.vy += 0.08;
+    ball.vx *= 0.996;
+    ball.vy *= 0.998;
+    ball.x += ball.vx;
+    ball.y += ball.vy;
+
+    if (ball.x - ball.radius <= 16) {
+        ball.x = 16 + ball.radius;
+        ball.vx *= -0.92;
+    } else if (ball.x + ball.radius >= dotDriftState.width - 16) {
+        ball.x = dotDriftState.width - 16 - ball.radius;
+        ball.vx *= -0.92;
+    }
+
+    if (ball.y - ball.radius <= 14) {
+        ball.y = 14 + ball.radius;
+        ball.vy *= -0.88;
+    } else if (ball.y + ball.radius >= dotDriftState.height - 14) {
+        ball.y = dotDriftState.height - 14 - ball.radius;
+        ball.vy *= -0.86;
+        ball.vx *= 0.99;
+    }
+
+    dotDriftState.pegs.forEach((peg) => {
+        const dx = ball.x - peg.x;
+        const dy = ball.y - peg.y;
+        const distance = Math.hypot(dx, dy);
+        const minDistance = ball.radius + peg.radius + 1;
+
+        if (distance > 0 && distance < minDistance) {
+            const nx = dx / distance;
+            const ny = dy / distance;
+            const overlap = minDistance - distance;
+            ball.x += nx * overlap;
+            ball.y += ny * overlap;
+
+            const impact = ball.vx * nx + ball.vy * ny;
+            ball.vx -= 1.7 * impact * nx;
+            ball.vy -= 1.7 * impact * ny;
+            dotDriftState.score += 1;
+        }
+    });
+
+    dotDriftState.dots.forEach((dot, index) => {
+        if (!dot.active) return;
+        const distance = Math.hypot(ball.x - dot.x, ball.y - dot.y);
+        if (distance < ball.radius + dot.radius + 2) {
+            dot.active = false;
+            dotDriftState.collectedDots += 1;
+            dotDriftState.score += 12;
+            dotDriftState.pulseUntil = performance.now() + 160;
+
+            setTimeout(() => {
+                dotDriftState.dots[index] = createDotDriftDot(index + Math.floor(Math.random() * 4));
+            }, 480);
+        }
+    });
+
+    renderDotDriftHud();
+}
+
+function renderDotDriftHud() {
+    if (homeWorldcupDom.dotDriftScore) {
+        homeWorldcupDom.dotDriftScore.textContent = `Score ${String(dotDriftState.score).padStart(3, '0')}`;
+    }
+    if (homeWorldcupDom.dotDriftDots) {
+        homeWorldcupDom.dotDriftDots.textContent = `Dots ${String(dotDriftState.collectedDots).padStart(2, '0')}`;
+    }
+    if (homeWorldcupDom.dotDriftSpeed) {
+        const speed = Math.hypot(dotDriftState.ball.vx, dotDriftState.ball.vy);
+        homeWorldcupDom.dotDriftSpeed.textContent = `Flow ${speed.toFixed(1)}`;
+    }
+}
+
+function renderDotDrift() {
+    const { ctx, width, height, ball, pegs, dots } = dotDriftState;
+    if (!ctx) return;
+
+    ctx.clearRect(0, 0, width, height);
+
+    ctx.save();
+    ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--home-battle-border').trim();
+    ctx.lineWidth = 1;
+    ctx.strokeRect(12.5, 12.5, width - 25, height - 25);
+
+    ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--home-playfield-peg').trim();
+    pegs.forEach((peg) => {
+        ctx.beginPath();
+        ctx.arc(peg.x, peg.y, peg.radius, 0, Math.PI * 2);
+        ctx.fill();
+    });
+
+    ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--home-playfield-dot').trim();
+    dots.forEach((dot) => {
+        if (!dot.active) return;
+        ctx.beginPath();
+        ctx.arc(dot.x, dot.y, dot.radius, 0, Math.PI * 2);
+        ctx.fill();
+    });
+
+    const pulseActive = dotDriftState.pulseUntil > performance.now();
+    ctx.shadowBlur = pulseActive ? 24 : 14;
+    ctx.shadowColor = getComputedStyle(document.documentElement).getPropertyValue('--home-playfield-ball-glow').trim();
+    ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--home-playfield-ball').trim();
+    ctx.beginPath();
+    ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+}
+</script>
 {% endblock %}

@@ -65,7 +65,7 @@ ThemeData buildAppTheme() {
     ),
     chipTheme: ChipThemeData(
       backgroundColor: elevated,
-      selectedColor: accent.withOpacity(0.15),
+      selectedColor: accent.withValues(alpha: 0.15),
       disabledColor: elevated,
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
       shape: RoundedRectangleBorder(

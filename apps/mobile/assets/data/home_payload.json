@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-03T09:05:33.551896+00:00",
+  "generated_at": "2026-04-04T01:06:52.237631+00:00",
   "source_files": {
     "cultural_insights": "app/static/data/cultural_insights.json",
     "culture_rss": "app/static/data/culture_rss.json",
@@ -15,52 +15,159 @@
     "culture_items_manifest": "data/derived/culture_items_manifest.json"
   },
   "hero": {
-    "eyebrow": "Jun taste system",
-    "title": "Culture-first community,\nshaped for an app-native future.",
-    "summary": "Jun의 레이더는 album과 arrives 신호를 문화 전선에서 동시 추적 중입니다. Hourly insight loop fueling creator membership + brand campaigns (recent 0 battles).",
-    "updated_at": "2026-04-03T09:05:30.763931Z",
+    "eyebrow": "World Cup Arcade",
+    "title": "Pick fast,\nkeep the streak alive.",
+    "summary": "모바일에서는 월드컵이 메인입니다. We refresh membership perks and brand kits hourly—0 battles this week.",
+    "updated_at": "2026-04-04T01:06:47.443210Z",
     "metrics": [
       {
-        "label": "culture items",
-        "value": 18
+        "label": "battle pool",
+        "value": 4
       },
       {
-        "label": "fresh ratio",
-        "value": "90.9%"
+        "label": "spotify leaders",
+        "value": 6
       },
       {
-        "label": "offers",
-        "value": 3
+        "label": "deezer picks",
+        "value": 6
       },
       {
-        "label": "leads",
+        "label": "brand leads",
         "value": 0
       }
     ],
     "primary_cta": {
-      "label": "ADD YOUR TRACK",
-      "link": "/playlists"
+      "label": "PLAY NOW",
+      "link": "/worldcup"
     },
     "secondary_cta": {
-      "label": "REQUEST MEDIA KIT",
-      "link": "/brand-studio"
+      "label": "OPEN FULL BOARD",
+      "link": "/worldcup"
+    }
+  },
+  "worldcup": {
+    "eyebrow": "Main Feature",
+    "title": "One-tap battles built like a mini game.",
+    "summary": "Spotify, Deezer, Billboard 신호를 바로 대결 카드로 묶었습니다. 앱에서는 다음 페어가 끊기지 않게 빠르게 이어집니다.",
+    "metrics": [
+      {
+        "label": "spotify",
+        "value": 6
+      },
+      {
+        "label": "deezer",
+        "value": 6
+      },
+      {
+        "label": "billboard",
+        "value": 5
+      },
+      {
+        "label": "7d leads",
+        "value": 0
+      }
+    ],
+    "battle_tracks": [
+      {
+        "id": "spotify-1",
+        "title": "SWIM",
+        "artist": "BTS",
+        "source": "Spotify Daily",
+        "stat_label": "Rank",
+        "stat_value": "#1"
+      },
+      {
+        "id": "spotify-2",
+        "title": "Babydoll",
+        "artist": "Dominic Fike",
+        "source": "Spotify Daily",
+        "stat_label": "Rank",
+        "stat_value": "#2"
+      },
+      {
+        "id": "spotify-3",
+        "title": "Body to Body",
+        "artist": "BTS",
+        "source": "Spotify Daily",
+        "stat_label": "Rank",
+        "stat_value": "#3"
+      },
+      {
+        "id": "spotify-4",
+        "title": "Zara Larsson",
+        "artist": "PinkPantheress",
+        "source": "Spotify Daily",
+        "stat_label": "Rank",
+        "stat_value": "#4"
+      }
+    ],
+    "leaderboard": [
+      {
+        "id": "leader-spotify-1",
+        "title": "SWIM",
+        "artist": "BTS",
+        "source": "Spotify",
+        "stat_label": "Daily streams",
+        "stat_value": "9.5M"
+      },
+      {
+        "id": "leader-spotify-2",
+        "title": "Babydoll",
+        "artist": "Dominic Fike",
+        "source": "Spotify",
+        "stat_label": "Daily streams",
+        "stat_value": "6.3M"
+      },
+      {
+        "id": "leader-spotify-3",
+        "title": "Body to Body",
+        "artist": "BTS",
+        "source": "Spotify",
+        "stat_label": "Daily streams",
+        "stat_value": "4.8M"
+      },
+      {
+        "id": "leader-deezer-1",
+        "title": "Candy Store",
+        "artist": "Jodie Steele",
+        "source": "Deezer",
+        "stat_label": "Chart spot",
+        "stat_value": "#1"
+      },
+      {
+        "id": "leader-deezer-2",
+        "title": "12 to 12",
+        "artist": "sombr",
+        "source": "Deezer",
+        "stat_label": "Chart spot",
+        "stat_value": "#2"
+      }
+    ],
+    "primary_cta": {
+      "label": "Play full world cup",
+      "link": "/worldcup"
+    },
+    "secondary_cta": {
+      "label": "Add more tracks",
+      "link": "/playlists"
     }
   },
   "culture_pulse": {
-    "headline": "Jun의 레이더는 album과 arrives 신호를 문화 전선에서 동시 추적 중입니다.",
-    "summary": "Jun은 요즘 ‘The Drama’ Review: Her Secret Is His Crisis (NYTimes Arts)를 읽으며 파트너 리드에 감성을 붙이고 있습니다.",
+    "headline": "Jun의 레이더는 our과 terms 신호를 문화 전선에서 동시 추적 중입니다.",
+    "summary": "Jun은 요즘 Seats Left Empty on Smithsonian Board as Strain With White House Persists (NYTimes Arts)를 읽으며 파트너 리드에 감성을 붙이고 있습니다.",
     "stories": [
       {
         "source": "NYTimes Arts",
-        "title": "‘The Drama’ Review: Her Secret Is His Crisis",
-        "summary": "Zendaya and Robert Pattinson play a couple upended when one confesses to coming close to committing a horrific crime.",
-        "published_at": "2026-04-02"
+        "title": "Seats Left Empty on Smithsonian Board as Strain With White House Persists",
+        "summary": "The terms of two governing members have expired, but their replacements have yet to be named as the institution faces President Trump’s effort to play a role in the selections.",
+        "published_at": "2026-04-03"
       },
       {
         "source": "NPR Music",
-        "title": "Bush: Tiny Desk Concert",
-        "summary": "If you think you know \"Machinehead\" and \"Glycerine,\" prepare to be surprised by these Tiny Desk arrangements of beloved alt-rock hits.",
-        "published_at": "2026-04-02"
+        "title": "How Fab 5 Freddy projected hip-hop to the world",
+        "summary": "On the heels of a new memoir sharing the recipes of a rich cultural life, rap's first tour guide talks aging with the culture, seeing its influence all over, Basquiat's lasting leg...",
+        "published_at": "2026-04-03"
       },
       {
         "source": "Rolling Stone Music News",
@@ -74,96 +181,96 @@
         "source": "Billboard Hot 100",
         "title": "Swim",
         "artist": "BTS",
-        "captured_at": "2026-04-03T07:06:41.851928Z"
+        "captured_at": "2026-04-03T10:06:00.018580Z"
       },
       {
         "source": "Deezer Global Chart",
         "title": "Candy Store",
         "artist": "Jodie Steele",
-        "captured_at": "2026-04-03T09:05:31.263519+00:00"
+        "captured_at": "2026-04-04T01:06:48.069755+00:00"
       }
     ],
     "normalized_items": [
       {
-        "title": "‘The Drama’ Review: Her Secret Is His Crisis",
+        "title": "Seats Left Empty on Smithsonian Board as Strain With White House Persists",
         "creator": "NYTimes Arts",
         "source_type": "rss_article",
-        "published_at": "2026-04-02"
+        "published_at": "2026-04-03"
       },
       {
-        "title": "Kanye West Plays First American Concert Since 2021",
+        "title": "On ‘Company Retreat,’ Anthony Norman Finished the Job",
         "creator": "NYTimes Arts",
         "source_type": "rss_article",
-        "published_at": "2026-04-02"
+        "published_at": "2026-04-03"
       },
       {
-        "title": "Danish Shows to Watch While We’re Still at Peace",
+        "title": "‘Jimmy & the Demons’ Review",
         "creator": "NYTimes Arts",
         "source_type": "rss_article",
-        "published_at": "2026-04-02"
+        "published_at": "2026-04-03"
       },
       {
-        "title": "Bush: Tiny Desk Concert",
+        "title": "How Fab 5 Freddy projected hip-hop to the world",
         "creator": "NPR Music",
         "source_type": "rss_article",
-        "published_at": "2026-04-02"
+        "published_at": "2026-04-03"
       }
     ]
   },
   "identity": {
-    "headline": "Jun은 요즘 ‘The Drama’ Review: Her Secret Is His Crisis (NYTimes Arts)를 읽으며 파트너 리드에 감성을 붙이고 있습니다.",
+    "headline": "Jun은 요즘 Seats Left Empty on Smithsonian Board as Strain With White House Persists (NYTimes Arts)를 읽으며 파트너 리드에 감성을 붙이고 있습니다.",
     "summary": "Derived from culture_rss snapshots. Run scripts/compile_identity_tags.py to refresh.",
     "top_tags": [
       {
-        "tag": "Crisis",
+        "tag": "Board",
         "count": 2,
         "source": "culture_rss"
       },
       {
-        "tag": "Drama",
+        "tag": "Empty",
         "count": 2,
         "source": "culture_rss"
       },
       {
-        "tag": "First",
+        "tag": "Left",
         "count": 2,
         "source": "culture_rss"
       }
     ],
     "contexts": [
       {
-        "tag": "Drama",
+        "tag": "Seats",
         "context": "Summary line",
         "source": "culture_rss",
         "tag_count": 2
       },
       {
-        "tag": "Secret",
+        "tag": "Left",
         "context": "Summary line",
         "source": "culture_rss",
         "tag_count": 2
       },
       {
-        "tag": "Crisis",
+        "tag": "Empty",
         "context": "Summary line",
         "source": "culture_rss",
         "tag_count": 2
       },
       {
-        "tag": "Drama",
-        "context": "NYTimes Arts: ‘The Drama’ Review: Her Secret Is His Crisis",
+        "tag": "Smithsonian",
+        "context": "Summary line",
         "source": "culture_rss",
         "tag_count": 2
       },
       {
-        "tag": "Secret",
-        "context": "NYTimes Arts: ‘The Drama’ Review: Her Secret Is His Crisis",
+        "tag": "Board",
+        "context": "Summary line",
         "source": "culture_rss",
         "tag_count": 2
       },
       {
-        "tag": "Crisis",
-        "context": "NYTimes Arts: ‘The Drama’ Review: Her Secret Is His Crisis",
+        "tag": "Strain",
+        "context": "Summary line",
         "source": "culture_rss",
         "tag_count": 2
       }
@@ -174,7 +281,7 @@
     }
   },
   "monetization": {
-    "context_line": "Seoul 16.1°C · Partly Cloudy · Signals lean toward brand partnership.",
+    "context_line": "Seoul 10.8°C · Overcast · Signals lean toward brand partnership.",
     "lead_summary": {
       "total_leads": 0,
       "recent_seven_days": 0,
@@ -220,30 +327,30 @@
     ],
     "momentum_entries": [
       {
-        "tag": "Drama",
+        "tag": "Seats",
         "intent_label": "Brand Partnership",
-        "message": "Drama 감성과 'summary' 키워드가 Brand Partnership 문의를 자극하는 신호를 만들고 있습니다. Summary line에서 힘을 얻은 제안으로 CTA를 강화하세요.",
+        "message": "Seats 감성과 'summary' 키워드가 Brand Partnership 문의를 자극하는 신호를 만들고 있습니다. Summary line에서 힘을 얻은 제안으로 CTA를 강화하세요.",
         "cta_label": "Request Brand Call"
       },
       {
-        "tag": "Secret",
+        "tag": "Left",
         "intent_label": "Brand Partnership",
-        "message": "Secret 감성과 'line' 키워드가 Brand Partnership 문의를 자극하는 신호를 만들고 있습니다. Summary line에서 힘을 얻은 제안으로 CTA를 강화하세요.",
+        "message": "Left 감성과 'line' 키워드가 Brand Partnership 문의를 자극하는 신호를 만들고 있습니다. Summary line에서 힘을 얻은 제안으로 CTA를 강화하세요.",
         "cta_label": "Request Brand Call"
       },
       {
-        "tag": "Crisis",
+        "tag": "Empty",
         "intent_label": "Brand Partnership",
-        "message": "Crisis 감성과 'nytimes' 키워드가 Brand Partnership 문의를 자극하는 신호를 만들고 있습니다. Summary line에서 힘을 얻은 제안으로 CTA를 강화하세요.",
+        "message": "Empty 감성과 'nytimes' 키워드가 Brand Partnership 문의를 자극하는 신호를 만들고 있습니다. Summary line에서 힘을 얻은 제안으로 CTA를 강화하세요.",
         "cta_label": "Request Brand Call"
       }
     ]
   },
   "data_assets": {
     "pipeline": {
-      "fresh_ratio": 90.9,
-      "fresh_assets": 10,
-      "stale_assets": 1,
+      "fresh_ratio": 66.7,
+      "fresh_assets": 8,
+      "stale_assets": 4,
       "oldest_asset_name": "Culture Pulse"
     },
     "manifest": {
@@ -255,42 +362,42 @@
     "assets": [
       {
         "name": "Cultural Insights Brief",
-        "updated_at": "2026-04-03T09:05:33.517845+00:00",
+        "updated_at": "2026-04-04T01:06:52.192512+00:00",
         "metric_label": "keywords",
         "metric_value": 6,
         "notes": "scripts/update_cultural_insights.py가 RSS+차트 데이터를 요약합니다."
       },
       {
         "name": "CTA Momentum",
-        "updated_at": "2026-04-03T09:05:33.439808Z",
+        "updated_at": "2026-04-04T01:06:52.132131Z",
         "metric_label": "momentum entries",
         "metric_value": 3,
         "notes": "identity/lead/날씨 신호로 CTA 메시지를 정리합니다."
       },
       {
         "name": "Signal Intelligence",
-        "updated_at": "2026-04-03T09:05:31.825397Z",
+        "updated_at": "2026-04-04T01:06:50.546126Z",
         "metric_label": "top tags",
         "metric_value": 5,
         "notes": "identity + lead signal을 통합하는 scripts/compile_signal_insights.py 결과입니다."
       },
       {
         "name": "Identity Tags",
-        "updated_at": "2026-04-03T09:05:31.692339+00:00",
+        "updated_at": "2026-04-04T01:06:50.395739+00:00",
         "metric_label": "tags",
         "metric_value": 6,
         "notes": "scripts/compile_identity_tags.py가 RSS 데이터에서 추출했습니다."
       },
       {
         "name": "Pitchfork Signal",
-        "updated_at": "2026-04-03T09:05:31.655416+00:00",
+        "updated_at": "2026-04-04T01:06:50.355595+00:00",
         "metric_label": "entries",
         "metric_value": 4,
         "notes": "scripts/update_pitchfork_rss.py가 글로벌 Pitchfork 뉴스를 기록합니다."
       },
       {
         "name": "Deezer Global Pulse",
-        "updated_at": "2026-04-03T09:05:31.263519+00:00",
+        "updated_at": "2026-04-04T01:06:48.069755+00:00",
         "metric_label": "top tracks",
         "metric_value": 6,
         "notes": "Deezer 글로벌 차트 자료를 저장합니다."

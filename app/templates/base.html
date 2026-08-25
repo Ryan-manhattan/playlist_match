@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}OFF THE COMMUNITY{% endblock %}</title>
-    <meta name="description" content="{% block meta_description %}OFF THE COMMUNITY는 음악 아카이브, 감정 기록, 브랜드 협업 문의까지 연결하는 감성 기반 커뮤니티 플랫폼입니다.{% endblock %}">
+    <meta name="description" content="{% block meta_description %}OFF THE COMMUNITY는 월드컵 배틀과 커뮤니티만 남긴 가벼운 실험 공간입니다.{% endblock %}">
     <meta property="og:title" content="{% block og_title %}OFF THE COMMUNITY{% endblock %}">
-    <meta property="og:description" content="{% block og_description %}음악 기록과 팬 반응이 브랜드 협업과 멤버십 전환으로 이어지는 아카이브 플랫폼.{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}월드컵 배틀과 커뮤니티를 빠르게 즐기는 미니멀한 실험 공간입니다.{% endblock %}">
     <meta property="og:type" content="website">
     
     <!-- Tailwind CSS -->
@@ -16,6 +16,15 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic+Coding:wght@400;700&family=Nanum+Myeongjo:wght@400;700;800&display=swap" rel="stylesheet">
+    <script>
+        (function () {
+            const storageKey = 'off-community-theme';
+            const storedTheme = localStorage.getItem(storageKey);
+            const prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+            const theme = storedTheme || (prefersLight ? 'light' : 'dark');
+            document.documentElement.dataset.theme = theme;
+        })();
+    </script>
     
     <!-- Core CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v={{ range(1000, 9999) | random }}">
@@ -64,6 +73,12 @@
         @media (max-width: 768px) {
             .mobile-menu-toggle { display: block; }
         }
+
+        .mobile-menu-toggle {
+            background: var(--bg-black);
+            border: 2px solid var(--pixel-white);
+            color: var(--pixel-white);
+        }
     </style>
 </head>
 <body>
@@ -72,12 +87,12 @@
     
     <!-- Sidebar -->
     <aside class="sidebar flex flex-col" id="sidebar">
-        <div class="p-8 border-b-4 border-dashed border-[#111]">
+        <div class="p-8 border-b border-dashed border-[var(--border-soft)]">
             <a href="{{ url_for('index') }}" class="block cursor-pointer hover:opacity-80 transition-opacity">
                 <h1 class="text-2xl font-bold tracking-tighter leading-tight mb-2">
                     OFF THE<br>COMMUNITY
                 </h1>
-                <p class="text-[10px] opacity-40 serif-font uppercase tracking-widest">Sentimental Archive</p>
+                <p class="text-[10px] opacity-40 serif-font uppercase tracking-widest">World Cup + Community</p>
             </a>
             
             <div class="flex gap-1 mt-4">
@@ -90,53 +105,36 @@
         </div>
         
         <nav class="flex-1 p-4 space-y-2 mt-4">
-            <a href="{{ url_for('diary') }}" class="sidebar-item {% if request.endpoint == 'diary' %}active{% endif %}">
-                <div class="dot"></div>
-                <span>DIARY COMMUNITY</span>
-            </a>
-            <a href="{{ url_for('playlists') }}" class="sidebar-item {% if request.endpoint == 'playlists' or request.endpoint == 'playlist_detail' %}active{% endif %}">
-                <div class="dot"></div>
-                <span>SONG ARCHIVE</span>
-            </a>
             <a href="{{ url_for('worldcup') }}" class="sidebar-item {% if request.endpoint == 'worldcup' %}active{% endif %}">
                 <div class="dot"></div>
                 <span>WORLD CUP</span>
             </a>
-            <a href="{{ url_for('brand_studio') }}" class="sidebar-item {% if request.endpoint == 'brand_studio' %}active{% endif %}">
+            <a href="{{ url_for('diary') }}" class="sidebar-item {% if request.endpoint == 'diary' %}active{% endif %}">
                 <div class="dot"></div>
-                <span>BRAND STUDIO</span>
-            </a>
-            <a href="{{ url_for('music_studio') }}" class="sidebar-item {% if request.endpoint == 'music_studio' %}active{% endif %}" style="display: none;">
-                <div class="dot"></div>
-                <span>음악 스튜디오</span>
-            </a>
-            <a href="{{ url_for('music_video') }}" class="sidebar-item {% if request.endpoint == 'music_video' %}active{% endif %}" style="display: none;">
-                <div class="dot"></div>
-                <span>영상 스튜디오</span>
+                <span>COMMUNITY</span>
             </a>
         </nav>
 
-        <div class="p-4 border-t-2 border-[#111]">
-            <div class="pixel-card !p-4 !shadow-none border-white/10">
-                <div class="text-[9px] uppercase tracking-[0.25em] opacity-40 mb-2">Founder List</div>
-                <p class="text-[11px] leading-relaxed opacity-65 mb-4">
-                    멤버십 오픈, 브랜드 협업, 미디어킷 공개 소식을 먼저 받습니다.
-                </p>
-                <form data-growth-form class="space-y-3">
-                    <input type="hidden" name="lead_type" value="newsletter">
-                    <input type="hidden" name="source_page" value="sidebar">
-                    <input type="email" name="email" placeholder="email@domain.com" class="pixel-input text-xs" required>
-                    <button type="submit" class="btn-pixel text-[10px] tracking-widest w-full justify-center">JOIN WAITLIST</button>
-                    <div class="status-message" data-growth-status></div>
-                </form>
+        <div class="theme-switch">
+            <div class="theme-switch-meta">
+                <span class="theme-switch-label">Display Mode</span>
+                <span class="theme-switch-value" id="themeLabel">Dark</span>
             </div>
+            <button
+                type="button"
+                class="theme-toggle"
+                id="themeToggle"
+                aria-label="Toggle light and dark mode"
+                aria-pressed="false"
+                onclick="toggleTheme()"
+            ></button>
         </div>
         
         <!-- 로그인 상태 표시 -->
-        <div class="p-4 border-t-2 border-[#111]">
+        <div class="p-4 border-t border-[var(--border-soft)]">
             {% if current_user.is_authenticated %}
                 <div class="mb-3">
-                    <div class="text-[9px] uppercase tracking-widest opacity-40 mb-1">LOGGED_IN_AS</div>
+                    <div class="text-[9px] uppercase tracking-widest opacity-40 mb-1">CURRENT PLAYER</div>
                     <div class="text-xs font-bold">{{ current_user.username }}</div>
                 </div>
                 <a href="{{ url_for('logout') }}" class="btn-outline text-[10px] tracking-widest w-full text-center block">LOGOUT</a>
@@ -145,9 +143,9 @@
             {% endif %}
         </div>
         
-        <div class="p-8 border-t-4 border-dashed border-[#111]">
+        <div class="p-8 border-t border-dashed border-[var(--border-soft)]">
             <p class="text-[9px] opacity-30 leading-loose uppercase tracking-[0.2em]">
-                © 2025 PIXEL DIARY<br/>VER 1.0.4 ARCHIVE
+                © 2026 OFF THE COMMUNITY<br/>WORLD CUP COMMUNITY BUILD
             </p>
         </div>
     </aside>
@@ -171,18 +169,15 @@
         </div>
         
         <div class="hidden lg:block opacity-30 text-[9px]">
-            NODE: ARCHIVE-01
+            NODE: WORLDCUP-COMMUNITY
         </div>
-
-        <a href="{{ url_for('brand_studio') }}" class="hidden md:inline opacity-55 hover:opacity-100 transition-opacity text-[10px]">
-            BRAND STUDIO
-        </a>
     </footer>
 
     <!-- Scripts -->
-    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
     <script type="module" defer src="{{ url_for('static', filename='js/pretext-layout.js') }}"></script>
     <script>
+        const THEME_STORAGE_KEY = 'off-community-theme';
+
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
             const overlay = document.getElementById('mobileOverlay');
@@ -192,52 +187,26 @@
             }
         }
 
-        function bindGrowthLeadForms() {
-            document.querySelectorAll('form[data-growth-form]').forEach((form) => {
-                if (form.dataset.bound === 'true') return;
-                form.dataset.bound = 'true';
+        function applyTheme(theme) {
+            const normalizedTheme = theme === 'light' ? 'light' : 'dark';
+            document.documentElement.dataset.theme = normalizedTheme;
+            localStorage.setItem(THEME_STORAGE_KEY, normalizedTheme);
 
-                form.addEventListener('submit', async (event) => {
-                    event.preventDefault();
-                    const status = form.querySelector('[data-growth-status]');
-                    const submitBtn = form.querySelector('button[type="submit"]');
-                    const payload = Object.fromEntries(new FormData(form).entries());
-                    payload.source_page = payload.source_page || window.location.pathname;
-                    payload.referrer = document.referrer || '';
-
-                    if (status) status.textContent = '';
-                    if (submitBtn) {
-                        submitBtn.disabled = true;
-                        submitBtn.dataset.originalText = submitBtn.dataset.originalText || submitBtn.textContent;
-                        submitBtn.textContent = 'SENDING...';
-                    }
-
-                    try {
-                        const response = await fetch('/api/growth/leads', {
-                            method: 'POST',
-                            headers: {'Content-Type': 'application/json'},
-                            body: JSON.stringify(payload)
-                        });
-                        const data = await response.json();
-                        if (data.success) {
-                            if (status) status.textContent = '신청이 접수되었습니다.';
-                            form.reset();
-                        } else if (status) {
-                            status.textContent = data.error || '접수에 실패했습니다.';
-                        }
-                    } catch (error) {
-                        if (status) status.textContent = '네트워크 오류가 발생했습니다.';
-                    } finally {
-                        if (submitBtn) {
-                            submitBtn.disabled = false;
-                            submitBtn.textContent = submitBtn.dataset.originalText || 'SUBMIT';
-                        }
-                    }
-                });
-            });
+            const label = document.getElementById('themeLabel');
+            const toggle = document.getElementById('themeToggle');
+            if (label) label.textContent = normalizedTheme === 'light' ? 'Light' : 'Dark';
+            if (toggle) toggle.setAttribute('aria-pressed', String(normalizedTheme === 'light'));
         }
 
-        document.addEventListener('DOMContentLoaded', bindGrowthLeadForms);
+        function toggleTheme() {
+            const currentTheme = document.documentElement.dataset.theme === 'light' ? 'light' : 'dark';
+            applyTheme(currentTheme === 'light' ? 'dark' : 'light');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const initialTheme = document.documentElement.dataset.theme === 'light' ? 'light' : 'dark';
+            applyTheme(initialTheme);
+        });
     </script>
     {% block extra_js %}{% endblock %}
 </body>

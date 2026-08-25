@@ -12,6 +12,8 @@ void main() {
     final payload = HomePayload.fromJson(decoded);
 
     expect(payload.hero.title, isNotEmpty);
+    expect(payload.worldcup.battleTracks, isNotEmpty);
+    expect(payload.worldcup.leaderboard, isNotEmpty);
     expect(payload.culturePulse.stories, isNotEmpty);
     expect(payload.identity.topTags, isNotEmpty);
     expect(payload.monetization.offers, isNotEmpty);

@@ -2,49 +2,61 @@
   "source": "Deezer Global Chart",
   "source_url": "https://www.deezer.com/chart",
   "insight_line": "Jun의 레이더는 Deezer 글로벌 차트의 감각을 기록하고 있습니다.",
-  "captured_at": "2026-04-03T12:05:42.140506+00:00",
+  "captured_at": "2026-08-25T06:41:57.213774+00:00",
   "top_tracks": [
     {
       "position": 1,
-      "title": "Candy Store",
-      "artist": "Jodie Steele",
-      "duration": 176,
-      "popularity": 522655
+      "title": "Dracula (with JENNIE)",
+      "artist": "Tame Impala",
+      "duration": 209,
+      "popularity": 982905,
+      "cover_url": "https://cdn-images.dzcdn.net/images/cover/b868399da682f34dcd7d98af1c0de80b/500x500-000000-80-0-0.jpg",
+      "link": "https://www.deezer.com/track/3818963601"
     },
     {
       "position": 2,
-      "title": "12 to 12",
-      "artist": "sombr",
-      "duration": 242,
-      "popularity": 991896
+      "title": "Choosin' Texas",
+      "artist": "Ella Langley",
+      "duration": 232,
+      "popularity": 947218,
+      "cover_url": "https://cdn-images.dzcdn.net/images/cover/749ad2ad7609ec768e342bec41078095/500x500-000000-80-0-0.jpg",
+      "link": "https://www.deezer.com/track/3602074142"
     },
     {
       "position": 3,
-      "title": "OLD EL PASO (Radio Edit)",
-      "artist": "Nivk",
-      "duration": 161,
-      "popularity": 547834
+      "title": "Boston",
+      "artist": "STELLA LEFTY",
+      "duration": 170,
+      "popularity": 873262,
+      "cover_url": "https://cdn-images.dzcdn.net/images/cover/66d6baca9df5092af22a710ce10d39cf/500x500-000000-80-0-0.jpg",
+      "link": "https://www.deezer.com/track/3895241341"
     },
     {
       "position": 4,
-      "title": "I Luv U",
-      "artist": "Fred again..",
-      "duration": 198,
-      "popularity": 594198
+      "title": "Man I Need",
+      "artist": "Olivia Dean",
+      "duration": 184,
+      "popularity": 991622,
+      "cover_url": "https://cdn-images.dzcdn.net/images/cover/73eb46e655061c72096b67f70a8dc609/500x500-000000-80-0-0.jpg",
+      "link": "https://www.deezer.com/track/3503857201"
     },
     {
       "position": 5,
-      "title": "Simple Life",
-      "artist": "Benny Sings",
-      "duration": 94,
-      "popularity": 250218
+      "title": "I Just Might",
+      "artist": "Bruno Mars",
+      "duration": 212,
+      "popularity": 995346,
+      "cover_url": "https://cdn-images.dzcdn.net/images/cover/d68fc5f1f260273691180b9f4b77b354/500x500-000000-80-0-0.jpg",
+      "link": "https://www.deezer.com/track/3763842212"
     },
     {
       "position": 6,
-      "title": "Get Lucky (Radio Edit - feat. Pharrell Williams and Nile Rodgers)",
-      "artist": "Daft Punk",
-      "duration": 248,
-      "popularity": 954234
+      "title": "hate that i made you love me",
+      "artist": "Ariana Grande",
+      "duration": 198,
+      "popularity": 999011,
+      "cover_url": "https://cdn-images.dzcdn.net/images/cover/020b1804e8c8a2aba6770f5b2763847b/500x500-000000-80-0-0.jpg",
+      "link": "https://www.deezer.com/track/4045817471"
     }
   ]
 }
